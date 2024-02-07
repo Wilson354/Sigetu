@@ -1,9 +1,12 @@
 /*!
-=========================================================
-
-Opciones para el usuario en la barra lateral izquierda
 
 =========================================================
+
+Opciones para el usuario en la barra lateral izquierda alumno
+se manda a llamar desde el Alumno.js en layouts
+
+=========================================================
+
 */
 import { useState } from "react";
 import { NavLink as NavLinkRRD, Link } from "react-router-dom";
@@ -43,15 +46,18 @@ var ps;
 
 const Sidebar = (props) => {
   const [collapseOpen, setCollapseOpen] = useState();
+
   const activeRoute = (routeName) => {
     return props.location.pathname.indexOf(routeName) > -1 ? "active" : "";
   };
+
   const toggleCollapse = () => {
     setCollapseOpen((data) => !data);
   };
   const closeCollapse = () => {
     setCollapseOpen(false);
   };
+  // crea los links que aparecen en el menu izquierdo sidebar
   const createLinks = (routes) => {
     return routes.map((prop, key) => {
       return (
@@ -69,7 +75,7 @@ const Sidebar = (props) => {
     });
   };
 
-  const { bgColor, routes, logo, routes1 } = props;
+  const { bgColor, routes, logo } = props;
   let navbarBrandProps;
   if (logo && logo.innerLink) {
     navbarBrandProps = {
@@ -127,7 +133,7 @@ const Sidebar = (props) => {
             </DropdownToggle>
             <DropdownMenu className="dropdown-menu-arrow" right>
               <DropdownItem className="noti-title" header tag="div">
-                <h6 className="text-overflow m-0">Bienvenido</h6>     {/* cuando es en telefono sale en el usuario */}
+                <h6 className="text-overflow m-0">Bienvenido alumno</h6>     {/* cuando es en telefono sale en el usuario */}
               </DropdownItem>
               <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
                 <i className="ni ni-user-run" />
@@ -169,7 +175,7 @@ const Sidebar = (props) => {
           {/* 
 ==========================================================================================
 
-Barra lateral web para la Navegacion 
+Barra lateral web para la Navegacion alumno
 
 ========================================================================================
 */}
@@ -183,7 +189,9 @@ Barra lateral web para la Navegacion
                 <DropdownItem>
                   Opcion1
                 </DropdownItem>
-                <DropdownItem>Option 2</DropdownItem>
+                <DropdownItem>
+                  Option 2
+                </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
           </Nav>

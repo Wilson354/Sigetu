@@ -1,9 +1,8 @@
 /*!
-
 Barra de navegacion superior
 */
 import { Link } from "react-router-dom";
-// reactstrap components
+
 import {
   DropdownMenu,
   DropdownItem,

@@ -1,4 +1,5 @@
 
+import { Link } from "react-router-dom";
 import {
     Button,
     Card,
@@ -68,9 +69,9 @@ import {
                   </label>
                 </div>
                 <div className="text-center">
-                  <a className="my-4" color="primary" type="button" href="sigetu/estudiantes/HomeEstudiante">
+                  <Link className="my-4" color="primary" type="button" to="/alumno/inicio" tag={Link}>
                     INGRESAR
-                  </a>
+                  </Link>
                 </div>
                 <Col xs="8">
                     <a

@@ -1,8 +1,7 @@
 /*!
-Barra de navegacion superior alumno
+Barra de navegacion superior
 */
 import { Link } from "react-router-dom";
-// reactstrap components
 import {
   DropdownMenu,
   DropdownItem,
@@ -14,56 +13,26 @@ import {
   InputGroupText,
   Input,
   InputGroup,
-  NavbarBrand,
   Navbar,
   Nav,
   Container,
   Media,
+  Col,
 } from "reactstrap";
 
 const AdminNavbar = (props) => {
   return (
     <>
-      <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
+      <Navbar className="navbar-top navbar-dark pt-5" expand="md" id="navbar-main">
         <Container fluid>
+          <Col >
+          <div className="h1 mb-0 text-white text-uppercase d-none d-lg-inline-block">Bienvenido a sigetu</div>
+          </Col>
+
           <Nav className="align-items-center d-none d-md-flex" navbar>
-            <UncontrolledDropdown nav>
-              <DropdownToggle className="pr-0" nav>
-                <Media className="align-items-center">
-                  <Media className="ml-2 d-none d-lg-block">
-                    <span className="mb-0 text-sm font-weight-bold">
-                     Eduardo Brandon Escorza Bolanos
-                    </span>
-                  </Media>
-                </Media>
-              </DropdownToggle>
-              <DropdownMenu className="dropdown-menu-arrow" right>
-                <DropdownItem className="noti-title" header tag="div">
-                  <h6 className="text-overflow m-0">Bienvenido</h6>
-                </DropdownItem>
-                <DropdownItem to="/admin/user-profile" tag={Link}>
-                  <i className="ni ni-single-02" />
-                  <span>My profile</span>
-                </DropdownItem>
-                <DropdownItem to="/admin/user-profile" tag={Link}>
-                  <i className="ni ni-settings-gear-65" />
-                  <span>Settings</span>
-                </DropdownItem>
-                <DropdownItem to="/admin/user-profile" tag={Link}>
-                  <i className="ni ni-calendar-grid-58" />
-                  <span>Activity</span>
-                </DropdownItem>
-                <DropdownItem to="/admin/user-profile" tag={Link}>
-                  <i className="ni ni-support-16" />
-                  <span>Support</span>
-                </DropdownItem>
-                <DropdownItem divider />
-                <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
-                  <i className="ni ni-user-run" />
-                  <span>Salir</span>
-                </DropdownItem>
-              </DropdownMenu>
-            </UncontrolledDropdown>
+                    <h3 className="h3 mb-0 text-white text-uppercase d-none d-lg-inline-block">
+                      Nombre del Alumno
+                    </h3>
           </Nav>
         </Container>
       </Navbar>

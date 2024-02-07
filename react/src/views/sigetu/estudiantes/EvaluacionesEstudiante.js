@@ -25,7 +25,7 @@ import {
   TabPane
 } from "reactstrap";
 
-import Header from "components/Headers/Header.js";
+import UserHeader from "components/Headers/UserHeader";
 import React from "react";
 import classnames from "classnames";
 
@@ -42,8 +42,8 @@ class Navs extends React.Component {
   render() {
     return (
       <>
-        <Header />
-        <Container className="mt--7" fluid>
+        <UserHeader />
+        <Container className="mt--9" fluid>
           {/* Table */}
           <Row>
             <div className="col">

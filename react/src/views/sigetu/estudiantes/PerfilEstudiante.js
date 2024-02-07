@@ -477,15 +477,13 @@ El form es para hacer cambios a la credencial del estudiante se debe editar el f
               </Card>
             </Col>
 
-            {/*
+{/*
 ============================================================================================================================
 
-                                          seccion de datos personales
+                          seccion de datos personales
 
 ============================================================================================================================
-
-            */}
-
+*/}
             <Col className="order-xl-1" xl="8">
               <Card className="bg-secondary shadow">
                 <CardHeader className="bg-white border-0">
