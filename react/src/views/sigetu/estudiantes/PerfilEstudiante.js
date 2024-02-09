@@ -12,7 +12,8 @@ import {
   Col,
   Modal,
   Label,
-  FormText
+  FormText,
+  Table
 } from "reactstrap";
 
 import UserHeader from "components/Headers/UserHeader.js";
@@ -34,149 +35,17 @@ class Modals extends React.Component {
         {/* Altura de las tarjetas */}
         <Container className="mt--9" fluid>
           <Row>
-            <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
+            <Col className="order-xl-6 mb-5 mb-xl-0" xl="3">
               <Card className="card-profile shadow">
                 <CardHeader CardHeader className="bg-white border-0 text-center">
                   <h2>
                     Extras
                   </h2>
                 </CardHeader>
-                <hr className="my-4" />
-                <CardBody className="bg-secondary shadow">
+                <hr className="my-1" />
+                <CardBody className="bg-dark shadow">
                   <Row>
-                    <Col md="12">
-                      <Button
-                        block
-                        className="mb-3"
-                        color="primary"
-                        type="button"
-                      >
-                        <span className="btn-inner--icon">
-                          <i className="ni ni-bag-17" />
-                        </span>
-                        Horario
-                      </Button>
-                    </Col>
-                    {/* MODALES PARA LAS NOTIFICACIONES DEBEN TENER EL MISMO NOMBRE PARA FUNCIONAR EN CONJUNTO DEPENDIENDO DE CADA COL*/}
-                    <Col md="12">
-                      <Button
-                        block
-                        className="mb-3"
-                        color="primary"
-                        type="button"
-                        onClick={() => this.toggleModal("AdeudoModal")}
-                      >
-                        <span className="btn-inner--icon">
-                          <i className="ni ni-bag-17" />
-                        </span>
-                        Adeudos
-                      </Button>
-                      <Modal
-                        className="modal-dialog-centered"
-                        isOpen={this.state.AdeudoModal}
-                        toggle={() => this.toggleModal("AdeudoModal")}
-                      >
-                        <div className="modal-header">
-                          <h6 className="modal-title" id="modal-title-default">
-                            Type your modal title
-                          </h6>
-                          <button
-                            aria-label="Close"
-                            className="close"
-                            data-dismiss="modal"
-                            type="button"
-                            onClick={() => this.toggleModal("AdeudoModal")}
-                          >
-                            <span aria-hidden={true}>×</span>
-                          </button>
-                        </div>
-                        <div className="modal-body">
-                          <p>
-                            Far far away, behind the word mountains, far from the
-                            countries Vokalia and Consonantia, there live the blind
-                            texts. Separated they live in Bookmarksgrove right at the
-                            coast of the Semantics, a large language ocean.
-                          </p>
-                          <p>
-                            A small river named Duden flows by their place and supplies
-                            it with the necessary regelialia. It is a paradisematic
-                            country, in which roasted parts of sentences fly into your
-                            mouth.
-                          </p>
-                        </div>
-                        <div className="modal-footer">
-                          <Button color="primary" type="button">
-                            Aceptar
-                          </Button>
-                          <Button
-                            className="ml-auto"
-                            color="link"
-                            data-dismiss="modal"
-                            type="button"
-                            onClick={() => this.toggleModal("AdeudoModal")}
-                          >
-                            Cerrar
-                          </Button>
-                        </div>
-                      </Modal>
-                    </Col>
-                    <Col md="12">
-                      <Button
-                        block
-                        className="mb-3"
-                        color="warning"
-                        type="button"
-                        onClick={() => this.toggleModal("solicitudModal")}
-                      >
-                        <span className="btn-inner--icon">
-                          <i className="ni ni-bag-17" />
-                        </span>
-                        Solicitud cambio carrera
-                      </Button>
-                      <Modal
-                        className="modal-dialog-centered modal-danger"
-                        contentClassName="bg-gradient-danger"
-                        isOpen={this.state.solicitudModal}
-                        toggle={() => this.toggleModal("solicitudModal")}
-                      >
-                        <div className="modal-header">
-                          <button
-                            aria-label="Close"
-                            className="close"
-                            data-dismiss="modal"
-                            type="button"
-                            onClick={() => this.toggleModal("solicitudModal")}
-                          >
-                            <span aria-hidden={true}>x</span>
-                          </button>
-                        </div>
-                        <div className="modal-body">
-                          <div className="py-3 text-center">
-                            <i className="ni ni-bell-55 ni-3x" />
-                            <h4 className="heading mt-4">No puedes cambiar de carrera en INGENIERIA PENDEJO!</h4>
-                            <p>
-                              jajajaja el menso
-                            </p>
-                          </div>
-                        </div>
-                        <div className="modal-footer">
-                          <Button className="btn-white" color="default" type="button">
-                            ENTERADO
-                          </Button>
-                          <Button
-                            className="text-white ml-auto"
-                            color="link"
-                            data-dismiss="modal"
-                            type="button"
-                            onClick={() => this.toggleModal("solicitudModal")}
-                          >
-                            Close
-                          </Button>
-                        </div>
-                      </Modal>
-                    </Col>
-
-                    <Col md="12">
+                  <Col md="12">
                       <Button
                         block
                         className="mb-3"
@@ -194,64 +63,17 @@ class Modals extends React.Component {
                       <Button
                         block
                         className="mb-3"
-                        color="warning"
+                        color="info"
                         type="button"
-                        onClick={() => this.toggleModal("notificationModal")}
                       >
                         <span className="btn-inner--icon">
                           <i className="ni ni-bag-17" />
                         </span>
-                        Referencia bancaria
+                        Horario
                       </Button>
-                      <Modal
-                        className="modal-dialog-centered modal-danger"
-                        contentClassName="bg-gradient-danger"
-                        isOpen={this.state.notificationModal}
-                        toggle={() => this.toggleModal("notificationModal")}
-                      >
-                        <div className="modal-header">
-                          <h6 className="modal-title" id="modal-title-notification">
-                            Your attention is required
-                          </h6>
-                          <button
-                            aria-label="Close"
-                            className="close"
-                            data-dismiss="modal"
-                            type="button"
-                            onClick={() => this.toggleModal("notificationModal")}
-                          >
-                            <span aria-hidden={true}>×</span>
-                          </button>
-                        </div>
-                        <div className="modal-body">
-                          <div className="py-3 text-center">
-                            <i className="ni ni-bell-55 ni-3x" />
-                            <h4 className="heading mt-4">You should read this!</h4>
-                            <p>
-                              A small river named Duden flows by their place and
-                              supplies it with the necessary regelialia.
-                            </p>
-                          </div>
-                        </div>
-                        <div className="modal-footer">
-                          <Button className="btn-white" color="default" type="button">
-                            Ok, Got it
-                          </Button>
-                          <Button
-                            className="text-white ml-auto"
-                            color="link"
-                            data-dismiss="modal"
-                            type="button"
-                            onClick={() => this.toggleModal("notificationModal")}
-                          >
-                            Close
-                          </Button>
-                        </div>
-                      </Modal>
                     </Col>
 
-
-                    {/* 
+                     {/* 
 =============================================================================================================================================================
 
 SECCION DE CREDENCIAL              
@@ -263,7 +85,7 @@ El form es para hacer cambios a la credencial del estudiante se debe editar el f
                       <Button
                         block
                         className="mb-3"
-                        color="primary"
+                        color="info"
                         type="button"
                         onClick={() => this.toggleModal("defaultModal")}
                       >
@@ -459,11 +281,190 @@ El form es para hacer cambios a la credencial del estudiante se debe editar el f
                       </Modal>
                     </Col>
 
-                    <Col>
-                    <Button
+{/* MODALES PARA LAS NOTIFICACIONES DEBEN TENER EL MISMO NOMBRE PARA FUNCIONAR EN CONJUNTO DEPENDIENDO DE CADA COL*/}
+                    <Col md="12">
+                      <Button
                         block
                         className="mb-3"
-                        color="primary"
+                        color="warning"
+                        type="button"
+                        onClick={() => this.toggleModal("AdeudoModal")}
+                      >
+                        <span className="btn-inner--icon">
+                          <i className="ni ni-bag-17" />
+                        </span>
+                        Adeudos
+                      </Button>
+                      <Modal
+                        className="modal-dialog-centered"
+                        isOpen={this.state.AdeudoModal}
+                        toggle={() => this.toggleModal("AdeudoModal")}
+                      >
+                        <div className="modal-header">
+                          <h6 className="modal-title" id="modal-title-default">
+                            Type your modal title
+                          </h6>
+                          <button
+                            aria-label="Close"
+                            className="close"
+                            data-dismiss="modal"
+                            type="button"
+                            onClick={() => this.toggleModal("AdeudoModal")}
+                          >
+                            <span aria-hidden={true}>×</span>
+                          </button>
+                        </div>
+                        <div className="modal-body">
+                          <p>
+                            Far far away, behind the word mountains, far from the
+                            countries Vokalia and Consonantia, there live the blind
+                            texts. Separated they live in Bookmarksgrove right at the
+                            coast of the Semantics, a large language ocean.
+                          </p>
+                          <p>
+                            A small river named Duden flows by their place and supplies
+                            it with the necessary regelialia. It is a paradisematic
+                            country, in which roasted parts of sentences fly into your
+                            mouth.
+                          </p>
+                        </div>
+                        <div className="modal-footer">
+                          <Button color="primary" type="button">
+                            Aceptar
+                          </Button>
+                          <Button
+                            className="ml-auto"
+                            color="link"
+                            data-dismiss="modal"
+                            type="button"
+                            onClick={() => this.toggleModal("AdeudoModal")}
+                          >
+                            Cerrar
+                          </Button>
+                        </div>
+                      </Modal>
+                    </Col>
+                    <Col md="12">
+                      <Button
+                        block
+                        className="mb-3"
+                        color="warning"
+                        type="button"
+                        onClick={() => this.toggleModal("solicitudModal")}
+                      >
+                        <span className="btn-inner--icon">
+                          <i className="ni ni-bag-17" />
+                        </span>
+                        Solicitud cambio carrera
+                      </Button>
+                      <Modal
+                        className="modal-dialog-centered modal-danger"
+                        contentClassName="bg-gradient-danger"
+                        isOpen={this.state.solicitudModal}
+                        toggle={() => this.toggleModal("solicitudModal")}
+                      >
+                        <div className="modal-header">
+                          <button
+                            aria-label="Close"
+                            className="close"
+                            data-dismiss="modal"
+                            type="button"
+                            onClick={() => this.toggleModal("solicitudModal")}
+                          >
+                            <span aria-hidden={true}>x</span>
+                          </button>
+                        </div>
+                        <div className="modal-body">
+                          <div className="py-3 text-center">
+                            <i className="ni ni-bell-55 ni-3x" />
+                            <h4 className="heading mt-4">No puedes cambiar de carrera en INGENIERIA PENDEJO!</h4>
+                            <p>
+                              jajajaja el menso
+                            </p>
+                          </div>
+                        </div>
+                        <div className="modal-footer">
+                          <Button className="btn-white" color="default" type="button">
+                            ENTERADO
+                          </Button>
+                          <Button
+                            className="text-white ml-auto"
+                            color="link"
+                            data-dismiss="modal"
+                            type="button"
+                            onClick={() => this.toggleModal("solicitudModal")}
+                          >
+                            Close
+                          </Button>
+                        </div>
+                      </Modal>
+                    </Col>
+
+                    <Col md="12">
+                      <Button
+                        block
+                        className="mb-3"
+                        color="danger"
+                        type="button"
+                        onClick={() => this.toggleModal("notificationModal")}
+                      >
+                        <span className="btn-inner--icon">
+                          <i className="ni ni-bag-17" />
+                        </span>
+                        Referencia bancaria
+                      </Button>
+                      <Modal
+                        className="modal-dialog-centered modal-danger"
+                        contentClassName="bg-gradient-danger"
+                        isOpen={this.state.notificationModal}
+                        toggle={() => this.toggleModal("notificationModal")}
+                      >
+                        <div className="modal-header">
+                          <h6 className="modal-title" id="modal-title-notification">
+                            Your attention is required
+                          </h6>
+                          <button
+                            aria-label="Close"
+                            className="close"
+                            data-dismiss="modal"
+                            type="button"
+                            onClick={() => this.toggleModal("notificationModal")}
+                          >
+                            <span aria-hidden={true}>×</span>
+                          </button>
+                        </div>
+                        <div className="modal-body">
+                          <div className="py-3 text-center">
+                            <i className="ni ni-bell-55 ni-3x" />
+                            <h4 className="heading mt-4">You should read this!</h4>
+                            <p>
+                              A small river named Duden flows by their place and
+                              supplies it with the necessary regelialia.
+                            </p>
+                          </div>
+                        </div>
+                        <div className="modal-footer">
+                          <Button className="btn-white" color="default" type="button">
+                            Ok, Got it
+                          </Button>
+                          <Button
+                            className="text-white ml-auto"
+                            color="link"
+                            data-dismiss="modal"
+                            type="button"
+                            onClick={() => this.toggleModal("notificationModal")}
+                          >
+                            Close
+                          </Button>
+                        </div>
+                      </Modal>
+                    </Col>
+
+                    <Col>
+                      <Button
+                        block
+                        className="mb-3"
+                        color="danger"
                         type="button"
                       >
                         <span className="btn-inner--icon">
@@ -477,91 +478,132 @@ El form es para hacer cambios a la credencial del estudiante se debe editar el f
               </Card>
             </Col>
 
-{/*
+            {/*
 ============================================================================================================================
 
                           seccion de datos personales
 
 ============================================================================================================================
 */}
-            <Col className="order-xl-1" xl="8">
+            <Col className="order-xl-1" xl="9">
               <Card className="bg-secondary shadow">
                 <CardHeader className="bg-white border-0">
                   <Row >
                     <Col className="col-sm">
                       <span>
-                      <h2 className="mb-0">Eduardo Brandon Escorza Bolaños</h2>
+                        <h2 className="mb-0">Eduardo Brandon Escorza Bolaños</h2>
                       </span>
                     </Col>
                   </Row>
                 </CardHeader>
                 <CardBody className="pt-0 pt-md-4">
-                  <h2 className="text-muted mb-2">
-                    Informacion personal
-                  </h2>
-                  <div className="pl-lg-4">
-                    <Row>
-                      <Col className="order-xl-1" xl="4">
-                        <h3>Matricula</h3>
-                        <h3>Nombre completo</h3>
-                        <h3>Fecha nacimiento</h3>
-                        <h3>Estado civil</h3>
-                        <h3>Curp</h3>
-                      </Col>
-                      <Col className="order-xl-1" xl="6">
-                        <h3>Matricula</h3>
-                        <h3>Nombre</h3>
-                        <h3>Fecha nacimiento</h3>
-                        <h3>Estado civil</h3>
-                        <h3>Curp</h3>
-                      </Col>
+                  <Col>
+                    <Row className="align-items-center">
+                      <div className="col">
+                        <h2 className="text-muted mb-2">
+                          Informacion personal
+                        </h2>
+                      </div>
                     </Row>
-                  </div>
+                    <Table borderless size="sm" className="align-items-center table-flush" responsive>
+                      <tbody>
+                        <tr>
+                          <th><h3>Matricula</h3></th>
+                          <td><h3>Matricula</h3></td>
+                        </tr>
+                        <tr>
+                          <th><h3>Nombre completo</h3></th>
+                          <td><h3>Matricula</h3></td>
+                        </tr>
+                        <tr>
+                          <th><h3>Fecha nacimiento</h3></th>
+                          <td><h3>Matricula</h3></td>
+                        </tr>
+                        <tr>
+                          <th><h3>Estado civil</h3></th>
+                          <td><h3>Matricula</h3></td>
+                        </tr>
+                        <tr>
+                          <th><h3>Curp</h3></th>
+                          <td><h3>Matricula</h3></td>
+                        </tr>
+                      </tbody>
+                    </Table>
+                  </Col>
 
-                  <hr className="my-4" />
-                  <h2 className=" text-muted mb-4">
-                    Datos academicos
-                  </h2>
-                  <div className="pl-lg-4">
-                    <Row>
-                      <Col className="order-xl-1" xl="4">
-                        <h3>Carrera</h3>
-                        <h3>Grado</h3>
-                        <h3>Grupo</h3>
-                        <h3>Grupo idioma</h3>
-                        <h3>Periodo</h3>
-                        <h3>Vidas academicas</h3>
-                        <h3>situacion</h3>
-                      </Col>
-                      <Col className="order-xl-1" xl="6">
-                        <h3>Desarrollo de software</h3>
-                        <h3>10</h3>
-                        <h3>10IDS1</h3>
-                        <h3>9IN1</h3>
-                        <h3>ENERO-ABRIL 2024</h3>
-                        <h3>3</h3>
-                        <h3>regular</h3>
-                      </Col>
+                  <hr className="my-2" />
+                  <Col>
+                    <Row className="align-items-center">
+                      <div className="col">
+                        <h2 className="text-muted mb-1">
+                          Informacion Escolar
+                        </h2>
+                      </div>
                     </Row>
-                  </div>
+                    <Table borderless size="sm" className="align-items-center table-flush" responsive>
+                      <tbody>
+                        <tr>
+                          <th><h3>Carrera</h3></th>
+                          <td><h3>Matricula</h3></td>
+                        </tr>
+                        <tr>
+                          <th><h3>Grado</h3></th>
+                          <td><h3>Matricula</h3></td>
+                        </tr>
+                        <tr>
+                          <th><h3>Grupo</h3></th>
+                          <td><h3>Matricula</h3></td>
+                        </tr>
+                        <tr>
+                          <th><h3>Grupo idioma</h3></th>
+                          <td><h3>Matricula</h3></td>
+                        </tr>
+                        <tr>
+                          <th><h3>Periodo</h3></th>
+                          <td><h3>Matricula</h3></td>
+                        </tr>
+                        <tr>
+                          <th><h3>Vidas academicas</h3></th>
+                          <td><h3>Matricula</h3></td>
+                        </tr>
+                        <tr>
+                          <th><h3>Vidas academicas</h3></th>
+                          <td><h3>Matricula</h3></td>
+                        </tr>
+                        <tr>
+                          <th><h3>situacion</h3></th>
+                          <td><h3>Matricula</h3></td>
+                        </tr>
+                      </tbody>
+                    </Table>
+                  </Col>
 
-                  <hr className="my-4" />
-                  <h2 className="text-muted mb-4">Numero de afiliacion de seguro facultativo</h2>
-                  <div className="pl-lg-4">
-                    <Row>
-                      <Col className="order-xl-1" xl="4">
-                        <h3>Institucion</h3>
-                        <h3>numero de afilicacion</h3>
-                        <h3>clinica</h3>
-
-                      </Col>
-                      <Col className="order-xl-1" xl="6">
-                        <h3>Instituto Mexicano del Seguro Social</h3>
-                        <h3>1013531</h3>
-                        <h3>alguna</h3>
-                      </Col>
+                  <hr className="my-2" />
+                  <Col>
+                    <Row className="align-items-center">
+                      <div className="col">
+                        <h2 className="text-muted mb-1">
+                          Numero de afiliacion de seguro facultativo
+                        </h2>
+                      </div>
                     </Row>
-                  </div>
+                    <Table borderless size="sm" className="align-items-center table-flush" responsive>
+                      <tbody>
+                        <tr>
+                          <th><h3>Institucion</h3></th>
+                          <td><h3>Instituto Mexicano del Seguro Social</h3></td>
+                        </tr>
+                        <tr>
+                          <th><h3>numero de afilicacion</h3></th>
+                          <td><h3>1013531</h3></td>
+                        </tr>
+                        <tr>
+                          <th><h3>clinica</h3></th>
+                          <td><h3>Matricula</h3></td>
+                        </tr>
+                      </tbody>
+                    </Table>
+                  </Col>
                 </CardBody>
               </Card>
             </Col>

@@ -55,15 +55,13 @@ const Index = (props) => {
     <>
       <Header />
 {/*
-==========================================================================================
-       
+==========================================================================================  
        seccion de evaluaciones actuales 
-       
 ============================================================================================
 */}
-      <Container className="mt--7" fluid>
+      <Container className="mt--7 bg-gradient-info" fluid>
         <Row>
-          <Col className="mb-5 mb-xl-0" xl="9">
+          <Col className="mb-5 mb-xl-0" xl="12">
             <Card className="shadow">
               <CardHeader className="border-0">
                 <Row className="align-items-center">
@@ -72,7 +70,7 @@ const Index = (props) => {
                   </div>
                   <div className="col text-right">
                     <Button
-                      color="primary"
+                      color="success"
                       href="#pablo"
                       onClick={(e) => e.preventDefault()}
                       size="sm"
@@ -83,14 +81,14 @@ const Index = (props) => {
                 </Row>
               </CardHeader>
               <Table striped className="align-items-center table-flush" responsive>
-                <thead className="thead-Default">
-                  <tr>
-                    <th scope="col">Asignatura</th>
-                    <th scope="col">Profesor</th>
-                    <th scope="col">Parcial 1</th>
-                    <th scope="col">Parcial 2</th>
-                    <th scope="col">Parcial 3</th>
-                    <th scope="col">Ev. Final</th>
+                <thead>
+                  <tr className="bg-info">
+                    <th>Asignatura</th>
+                    <th>Profesor</th>
+                    <th>Parcial 1</th>
+                    <th>Parcial 2</th>
+                    <th>Parcial 3</th>
+                    <th>Ev. Final</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -127,7 +125,7 @@ const Index = (props) => {
                     <td>DE</td>
                   </tr>
                   <tr>
-                    <th scope="row">ingles</th>
+                    <th scope="row">Ingles</th>
                     <td>Chavez Torrez Yaxben</td>
                     <td>AU</td>
                     <td>DE</td>
@@ -176,36 +174,6 @@ const Index = (props) => {
                   </tr>
                 </tbody>
               </Table>
-            </Card>
-          </Col>
-
-          {/* 
-===========================================================================================
-
- seccion de avisos
-
-====================================================================================
-*/}
-
-          <Col xl="3">
-            <Card className="card mb-4 mb-lg-0" >
-              <CardHeader className="bg-transparent align-items-center">
-                <h3>Avisos</h3>
-              </CardHeader>
-
-              <CardBody>
-                <div className="chart">
-                  <Alert color="warning">
-                    <span className="alert-inner--icon">
-                      <i className="ni ni-like-2" />
-                    </span>{" "}
-                    <span className="alert-inner--text">
-                      <strong>Warning!</strong> This is a warning alert—check it out
-                      that has an icon too!
-                    </span>
-                  </Alert>
-                </div>
-              </CardBody>
             </Card>
           </Col>
         </Row>

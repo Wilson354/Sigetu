@@ -1,42 +1,25 @@
 /*!
-
 =========================================================
-
 Opciones para el usuario en la barra lateral izquierda alumno
 se manda a llamar desde el Alumno.js en layouts
-
 =========================================================
-
 */
 import { useState } from "react";
 import { NavLink as NavLinkRRD, Link } from "react-router-dom";
 import { PropTypes } from "prop-types";
 
 import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
   Collapse,
   DropdownMenu,
   DropdownItem,
   UncontrolledDropdown,
   DropdownToggle,
-  FormGroup,
-  Form,
-  Input,
-  InputGroupAddon,
-  InputGroupText,
-  InputGroup,
   Media,
   NavbarBrand,
   Navbar,
   NavItem,
   NavLink,
   Nav,
-  Progress,
-  Table,
   Container,
   Row,
   Col,
@@ -91,7 +74,7 @@ const Sidebar = (props) => {
 
   return (
     <Navbar
-      className="navbar-vertical fixed-left navbar-light bg-grey"
+      className="navbar-vertical fixed-left navbar-dark bg-dark"
       expand="md"
       id="sidenav-main"
     >
