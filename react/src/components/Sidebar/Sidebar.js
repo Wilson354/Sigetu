@@ -174,18 +174,6 @@ Barra lateral web para la Navegacion
 ========================================================================================
 */}
           <Nav navbar>{createLinks(routes)}
-            <UncontrolledDropdown nav inNavbar>
-              <DropdownToggle nav caret>
-                <i className="ni ni-bullet-list-67 text-red"></i>
-                Tramites
-              </DropdownToggle>
-              <DropdownMenu>
-                <DropdownItem>
-                  Opcion1
-                </DropdownItem>
-                <DropdownItem>Option 2</DropdownItem>
-              </DropdownMenu>
-            </UncontrolledDropdown>
           </Nav>
         </Collapse>
       </Container>

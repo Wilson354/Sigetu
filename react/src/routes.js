@@ -7,6 +7,7 @@ import Evaluaciones from "views/sigetu/estudiantes/EvaluacionesEstudiante";
 import Login from "views/sigetu/Login.js";
 import Encuestas from "views/sigetu/estudiantes/EncuestasEstudiante"
 import Tramites from "views/sigetu/estudiantes/TramitesEstudiante"
+import Formulario from "views/examples/formulario"
 
 var routes = [
   {
@@ -49,6 +50,14 @@ var routes = [
     name: "Login",
     icon: "ni ni-key-25 text-info",
     component: <Login />,
+    layout: "/auth",
+  },
+
+  {
+    path: "/formulario",
+    name: "formulario",
+    icon: "ni ni-key-25 text-info",
+    component: <Formulario />,
     layout: "/auth",
   },
 ];

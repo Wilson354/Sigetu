@@ -25,6 +25,8 @@ import {
   Col,
 } from "reactstrap";
 
+import { useAuth } from "context/AuthContext";
+
 var ps;
 
 const Sidebar = (props) => {
@@ -72,6 +74,14 @@ const Sidebar = (props) => {
     };
   }
 
+  const auth = useAuth();
+    const {displayName} = auth.user
+    console.log(displayName)
+
+    const handleLogout = () => {
+      auth.logout();
+  }
+
   return (
     <Navbar
       className="navbar-vertical fixed-left navbar-dark bg-dark"
@@ -116,11 +126,18 @@ const Sidebar = (props) => {
             </DropdownToggle>
             <DropdownMenu className="dropdown-menu-arrow" right>
               <DropdownItem className="noti-title" header tag="div">
-                <h6 className="text-overflow m-0">Bienvenido alumno</h6>     {/* cuando es en telefono sale en el usuario */}
+                <h5 className="text-overflow m-0">
+                  {displayName && <h5>{displayName}</h5>}
+                </h5>
+                 {/* cuando es en telefono sale en el usuario */}
               </DropdownItem>
               <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
                 <i className="ni ni-user-run" />
-                <span>Logout</span>
+                <span>
+                <button 
+                                onClick={(e)=> handleLogout(e)}
+                                className="button">logout</button>
+                </span>
               </DropdownItem>
             </DropdownMenu>
           </UncontrolledDropdown>
@@ -163,20 +180,9 @@ Barra lateral web para la Navegacion alumno
 ========================================================================================
 */}
           <Nav navbar>{createLinks(routes)}
-            <UncontrolledDropdown nav inNavbar>
-              <DropdownToggle nav caret>
-                <i className="ni ni-bullet-list-67 text-red"></i>
-                Tramites
-              </DropdownToggle>
-              <DropdownMenu>
-                <DropdownItem>
-                  Opcion1
-                </DropdownItem>
-                <DropdownItem>
-                  Option 2
-                </DropdownItem>
-              </DropdownMenu>
-            </UncontrolledDropdown>
+          <button 
+                                onClick={(e)=> handleLogout(e)}
+                                className="button">logout</button>
           </Nav>
         </Collapse>
       </Container>

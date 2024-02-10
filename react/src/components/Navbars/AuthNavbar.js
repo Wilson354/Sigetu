@@ -12,7 +12,10 @@ import {
   Col,
 } from "reactstrap";
 
+import { useAuth } from "context/AuthContext";
+
 const AdminNavbar = () => {
+
   return (
     <>
       <Navbar className="navbar-top navbar-horizontal navbar-dark" expand="md">

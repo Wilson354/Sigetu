@@ -9,22 +9,21 @@ import {
   Col,
 } from "reactstrap";
 
+import { useAuth } from "context/AuthContext";
+
 const AdminNavbar = (props) => {
+  const auth = useAuth();
+    const {displayName} = auth.user
+    console.log(displayName)
   return (
     <>
       <Navbar className="navbar-top navbar-dark pt-5" expand="md" id="navbar-main">
         <Container fluid>
           <Col >
             <div className="h1 mb-0 text-white text-uppercase d-none d-lg-inline-block">
-              Bienvenido a sigetu
+              Bienvenido a sigetu {displayName && <div className="h1 mb-0 text-white text-uppercase d-none d-lg-inline-block">{displayName}</div>}
             </div>
           </Col>
-
-          <Nav className="align-items-center d-none d-md-flex" navbar>
-                    <h3 className="h3 mb-0 text-white text-uppercase d-none d-lg-inline-block">
-                      Nombre del Alumno
-                    </h3>
-          </Nav>
         </Container>
       </Navbar>
     </>
