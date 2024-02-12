@@ -21,7 +21,10 @@ const AdminNavbar = (props) => {
         <Container fluid>
           <Col >
             <div className="h1 mb-0 text-white text-uppercase d-none d-lg-inline-block">
-              Bienvenido a sigetu {displayName && <div className="h1 mb-0 text-white text-uppercase d-none d-lg-inline-block">{displayName}</div>}
+              Bienvenido a sigetu
+            </div>
+            <div >
+            {displayName && <div className="h1 mb-0 text-white text-uppercase d-none d-lg-inline-block">{displayName}</div>}
             </div>
           </Col>
         </Container>

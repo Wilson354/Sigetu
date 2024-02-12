@@ -8,6 +8,8 @@ import Login from "views/sigetu/Login.js";
 import Encuestas from "views/sigetu/estudiantes/EncuestasEstudiante"
 import Tramites from "views/sigetu/estudiantes/TramitesEstudiante"
 import Formulario from "views/examples/formulario"
+import Crud from "views/examples/crudshow"
+import Crear from "views/examples/crudcreate"
 
 var routes = [
   {
@@ -59,6 +61,22 @@ var routes = [
     icon: "ni ni-key-25 text-info",
     component: <Formulario />,
     layout: "/auth",
+  },
+
+  {
+    path: "/crud",
+    name: "crud",
+    icon: "ni ni-key-25 text-info",
+    component: <Crud/>,
+    layout: "/alumno",
+  },
+
+  {
+    path: "/crear",
+    name: "crear",
+    icon: "ni ni-key-25 text-info",
+    component: <Crear/>,
+    layout: "/alumno",
   },
 ];
 export default routes;

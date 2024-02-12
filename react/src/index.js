@@ -1,5 +1,17 @@
+import React from 'react';
+import ReactDom from 'react-dom';
+import App from './App';
 
-import React from "react";
+ReactDom.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  //el root se manda llamar del html
+  document.getElementById('root')
+);
+
+
+/*import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 
@@ -24,8 +36,10 @@ root.render(
       <Route path="/docente/*" element={<DocenteLayout />} />
       <Route path="/auth/*" element={<AuthLayout />} />
       <Route path="*" element={<Navigate to="/auth/login" replace />} />
+
+      <Route path="/crudedit" element={<AlumnoLayout />} />
       
     </Routes>
   </BrowserRouter>
   </AuthProvider>
-);
+);*/
