@@ -77,7 +77,7 @@ const Index = (props) => {
                   </div>
                 </Row>
               </CardHeader>
-              <Table striped className="align-items-center table-flush" responsive>
+              <Table bordered striped className="align-items-center table-flush" responsive>
                 <thead>
                   <tr className="bg-info">
                     <th>Asignatura</th>

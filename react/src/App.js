@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 
 import "assets/plugins/nucleo/css/nucleo.css";
@@ -14,32 +13,20 @@ import AuthLayout from "layouts/Auth.js";
 import Show from 'views/examples/crudshow';
 import Create from 'views/examples/crudcreate';
 import Edit from 'views/examples/crudedit';
+import Showd from 'views/examples/division';
 
+//rutas buenas
 import { AuthProvider } from "context/AuthContext";
 
-/*const root = ReactDOM.createRoot(document.getElementById("root"));
-
-root.render(
-  <AuthProvider>
-  <BrowserRouter>
-    <Routes>
-      
-      <Route path="/alumno/*" element={<AlumnoLayout />} />
-      <Route path="/docente/*" element={<DocenteLayout />} />
-      <Route path="/auth/*" element={<AuthLayout />} />
-      <Route path="*" element={<Navigate to="/auth/login" replace />} />
-
-      <Route path="/crudedit" element={<AlumnoLayout />} />
-      
-    </Routes>
-  </BrowserRouter>
-  </AuthProvider>
-)
-*/
+import LoginView from "views/LoginView";
+import Index from "views/sigetu/estudiantes/HomeEstudiante";
 
 function App() {
+
+
   return (
     <div className="App">
+
       <AuthProvider>
         <BrowserRouter>
           <Routes>
@@ -49,10 +36,14 @@ function App() {
             <Route path="/auth/*" element={<AuthLayout />} />
             <Route path="/" element={<Navigate to="/auth/login" replace />} />
 
+            <Route  path="/" element= {< App />}/>
+            <Route  path="login" element= {< LoginView />} />
+            <Route  path="dashboardA" element= {< Index />} />
+
             <Route path="/show" element={<Show />} />
             <Route path="/create" element={<Create />} />
             <Route path="/edit/:id" element={<Edit />} />
-
+            <Route path="/division" element={<Showd />} />
 
           </Routes>
         </BrowserRouter>

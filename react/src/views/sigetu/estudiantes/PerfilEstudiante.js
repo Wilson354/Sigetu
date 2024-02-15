@@ -17,18 +17,35 @@ import {
 } from "reactstrap";
 
 import UserHeader from "components/Headers/UserHeader.js";
-import React from "react";
+import React, { useState } from "react";
+import { useAuth } from "context/AuthContext";
 
-class Modals extends React.Component {
-  state = {
-    defaultModal: false
+const Modals = () => {
+  const auth = useAuth();
+  const { displayName } = auth.user;
+  const [defaultModal, setDefaultModal] = useState(false);
+  const [AdeudoModal, setAdeudoModal] = useState(false);
+  const [solicitudModal, setSolicitudModal] = useState(false);
+  const [notificationModal, setNotificationModal] = useState(false);
+
+  const toggleModal = (modal) => {
+    switch (modal) {
+      case 'defaultModal':
+        setDefaultModal(!defaultModal);
+        break;
+      case 'AdeudoModal':
+        setAdeudoModal(!AdeudoModal);
+        break;
+      case 'solicitudModal':
+        setSolicitudModal(!solicitudModal);
+        break;
+      case 'notificationModal':
+        setNotificationModal(!notificationModal);
+        break;
+      default:
+        break;
+    }
   };
-  toggleModal = state => {
-    this.setState({
-      [state]: !this.state[state]
-    });
-  };
-  render() {
     return (
       <>
         <UserHeader />
@@ -87,7 +104,8 @@ El form es para hacer cambios a la credencial del estudiante se debe editar el f
                         className="mb-3"
                         color="info"
                         type="button"
-                        onClick={() => this.toggleModal("defaultModal")}
+                        isOpen={defaultModal}
+                        onClick={() => toggleModal("defaultModal")}
                       >
                         <span className="btn-inner--icon">
                           <i className="ni ni-bag-17" />
@@ -96,8 +114,8 @@ El form es para hacer cambios a la credencial del estudiante se debe editar el f
                       </Button>
                       <Modal
                         className="modal-dialog-centered"
-                        isOpen={this.state.defaultModal}
-                        toggle={() => this.toggleModal("defaultModal")}
+                        isOpen={defaultModal}
+                        toggle={() => toggleModal("defaultModal")}
                       >
                         <div className="modal-header">
                           <h6 className="modal-title" id="modal-title-default">
@@ -108,7 +126,7 @@ El form es para hacer cambios a la credencial del estudiante se debe editar el f
                             className="close"
                             data-dismiss="modal"
                             type="button"
-                            onClick={() => this.toggleModal("defaultModal")}
+                            onClick={() => toggleModal("defaultModal")}
                           >
                             <span aria-hidden={true}>×</span>
                           </button>
@@ -273,7 +291,7 @@ El form es para hacer cambios a la credencial del estudiante se debe editar el f
                             color="link"
                             data-dismiss="modal"
                             type="button"
-                            onClick={() => this.toggleModal("defaultModal")}
+                            onClick={() => toggleModal("defaultModal")}
                           >
                             Cerrar
                           </Button>
@@ -288,7 +306,7 @@ El form es para hacer cambios a la credencial del estudiante se debe editar el f
                         className="mb-3"
                         color="warning"
                         type="button"
-                        onClick={() => this.toggleModal("AdeudoModal")}
+                        onClick={() => toggleModal("AdeudoModal")}
                       >
                         <span className="btn-inner--icon">
                           <i className="ni ni-bag-17" />
@@ -297,8 +315,8 @@ El form es para hacer cambios a la credencial del estudiante se debe editar el f
                       </Button>
                       <Modal
                         className="modal-dialog-centered"
-                        isOpen={this.state.AdeudoModal}
-                        toggle={() => this.toggleModal("AdeudoModal")}
+                        isOpen={AdeudoModal}
+                        toggle={() => toggleModal("AdeudoModal")}
                       >
                         <div className="modal-header">
                           <h6 className="modal-title" id="modal-title-default">
@@ -309,7 +327,7 @@ El form es para hacer cambios a la credencial del estudiante se debe editar el f
                             className="close"
                             data-dismiss="modal"
                             type="button"
-                            onClick={() => this.toggleModal("AdeudoModal")}
+                            onClick={() => toggleModal("AdeudoModal")}
                           >
                             <span aria-hidden={true}>×</span>
                           </button>
@@ -337,7 +355,7 @@ El form es para hacer cambios a la credencial del estudiante se debe editar el f
                             color="link"
                             data-dismiss="modal"
                             type="button"
-                            onClick={() => this.toggleModal("AdeudoModal")}
+                            onClick={() => toggleModal("AdeudoModal")}
                           >
                             Cerrar
                           </Button>
@@ -350,7 +368,7 @@ El form es para hacer cambios a la credencial del estudiante se debe editar el f
                         className="mb-3"
                         color="warning"
                         type="button"
-                        onClick={() => this.toggleModal("solicitudModal")}
+                        onClick={() => toggleModal("solicitudModal")}
                       >
                         <span className="btn-inner--icon">
                           <i className="ni ni-bag-17" />
@@ -360,8 +378,8 @@ El form es para hacer cambios a la credencial del estudiante se debe editar el f
                       <Modal
                         className="modal-dialog-centered modal-danger"
                         contentClassName="bg-gradient-danger"
-                        isOpen={this.state.solicitudModal}
-                        toggle={() => this.toggleModal("solicitudModal")}
+                        isOpen={solicitudModal}
+                        toggle={() => toggleModal("solicitudModal")}
                       >
                         <div className="modal-header">
                           <button
@@ -369,7 +387,7 @@ El form es para hacer cambios a la credencial del estudiante se debe editar el f
                             className="close"
                             data-dismiss="modal"
                             type="button"
-                            onClick={() => this.toggleModal("solicitudModal")}
+                            onClick={() => toggleModal("solicitudModal")}
                           >
                             <span aria-hidden={true}>x</span>
                           </button>
@@ -392,7 +410,7 @@ El form es para hacer cambios a la credencial del estudiante se debe editar el f
                             color="link"
                             data-dismiss="modal"
                             type="button"
-                            onClick={() => this.toggleModal("solicitudModal")}
+                            onClick={() => toggleModal("solicitudModal")}
                           >
                             Close
                           </Button>
@@ -406,7 +424,7 @@ El form es para hacer cambios a la credencial del estudiante se debe editar el f
                         className="mb-3"
                         color="danger"
                         type="button"
-                        onClick={() => this.toggleModal("notificationModal")}
+                        onClick={() => toggleModal("notificationModal")}
                       >
                         <span className="btn-inner--icon">
                           <i className="ni ni-bag-17" />
@@ -416,8 +434,8 @@ El form es para hacer cambios a la credencial del estudiante se debe editar el f
                       <Modal
                         className="modal-dialog-centered modal-danger"
                         contentClassName="bg-gradient-danger"
-                        isOpen={this.state.notificationModal}
-                        toggle={() => this.toggleModal("notificationModal")}
+                        isOpen={notificationModal}
+                        toggle={() => toggleModal("notificationModal")}
                       >
                         <div className="modal-header">
                           <h6 className="modal-title" id="modal-title-notification">
@@ -428,7 +446,7 @@ El form es para hacer cambios a la credencial del estudiante se debe editar el f
                             className="close"
                             data-dismiss="modal"
                             type="button"
-                            onClick={() => this.toggleModal("notificationModal")}
+                            onClick={() => toggleModal("notificationModal")}
                           >
                             <span aria-hidden={true}>×</span>
                           </button>
@@ -452,7 +470,7 @@ El form es para hacer cambios a la credencial del estudiante se debe editar el f
                             color="link"
                             data-dismiss="modal"
                             type="button"
-                            onClick={() => this.toggleModal("notificationModal")}
+                            onClick={() => toggleModal("notificationModal")}
                           >
                             Close
                           </Button>
@@ -491,7 +509,9 @@ El form es para hacer cambios a la credencial del estudiante se debe editar el f
                   <Row >
                     <Col className="col-sm">
                       <span>
-                        <h2 className="mb-0">Eduardo Brandon Escorza Bolaños</h2>
+                        <h2 className="mb-0">
+                        {displayName && <div className="h2 mb-0 text-black text-uppercase d-none d-lg-inline-block">{displayName}</div>}
+                        </h2>
                       </span>
                     </Col>
                   </Row>
@@ -612,5 +632,5 @@ El form es para hacer cambios a la credencial del estudiante se debe editar el f
       </>
     );
   };
-}
+
 export default Modals;

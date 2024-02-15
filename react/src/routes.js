@@ -11,6 +11,8 @@ import Formulario from "views/examples/formulario"
 import Crud from "views/examples/crudshow"
 import Crear from "views/examples/crudcreate"
 
+import Showd from "views/examples/division"
+
 var routes = [
   {
     path: "/inicio",
@@ -76,6 +78,14 @@ var routes = [
     name: "crear",
     icon: "ni ni-key-25 text-info",
     component: <Crear/>,
+    layout: "/alumno",
+  },
+
+  {
+    path: "/showd",
+    name: "showd",
+    icon: "ni ni-key-25 text-info",
+    component: <Showd/>,
     layout: "/alumno",
   },
 ];

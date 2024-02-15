@@ -4,19 +4,17 @@ import {getAuth} from "firebase/auth"
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBQUK7w86qPHYkRh9JaPtIxXXlbJdhb390",
-    authDomain: "pruebareact-33214.firebaseapp.com",
-    projectId: "pruebareact-33214",
-    storageBucket: "pruebareact-33214.appspot.com",
-    messagingSenderId: "501121342970",
-    appId: "1:501121342970:web:750578d468bd278c98d843"
+    apiKey: process.env.REACT_APP_APIKEY,
+    authDomain: process.env.REACT_APP_AUTHDOMAIN,
+    projectId: process.env.REACT_APP_PROYECTID,
+    storageBucket: process.env.REACT_APP_STORAGEBUCKET,
+    messagingSenderId: process.env.REACT_APP_MESSAGINGSENDERID,
+    appId: process.env.REACT_APP_APPID,
   };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
 export const db = getFirestore(app)
-
 const auth = getAuth(app)
 
 auth.onAuthStateChanged(user => {
