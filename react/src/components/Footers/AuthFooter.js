@@ -6,14 +6,14 @@ import { NavItem, NavLink, Nav, Container, Row, Col } from "reactstrap";
 const Login = () => {
   return (
     <>
-      <footer className="py-6">
+      <footer className="py-6 bg-transparent">
         <Container>
           <Row className="align-items-center justify-content-xl-between">
             <Col xl="6">
               <div className="copyright text-center text-xl-left text-muted">
                 © {new Date().getFullYear()}{" "}
                 <a
-                  className="font-weight-bold ml-1"
+                  className="font-weight-bold ml-1 text-white"
                   href=""
                   target="_blank"
                 >
@@ -28,16 +28,7 @@ const Login = () => {
                     href=""
                     target="_blank"
                   >
-                    inkova
-                  </NavLink>
-                </NavItem>
-
-                <NavItem>
-                  <NavLink
-                    href=""
-                    target="_blank"
-                  >
-                    Sobre nosotros
+                    <h3 className="text-white">Sobre nosotros</h3>
                   </NavLink>
                 </NavItem>
                 

@@ -48,12 +48,20 @@ const Admin = (props) => {
 
   return (
     <>
+    <div className="header pb-4 pt-5 pt-lg-3 align-items-center"
+        style={{
+          minHeight: "300px",
+          backgroundImage:
+          "url(" + require("../assets/img/theme/playa.jpg")+")",
+          backgroundSize: "cover",
+          backgroundPosition: "center top",
+        }}
+      >
+        {/*cambia el span el color del fondo*/}
+        <span className="mask opacity-4 bg-gradient-dark" />
       <Sidebar
         {...props}
         routes={routes}
-        logo={{
-          imgSrc: require("../assets/img/brand/logoSigetu.jpeg"),
-        }}
       />
       <div className="main-content" ref={mainContent}>
         <AlumnoNavbar
@@ -68,6 +76,7 @@ const Admin = (props) => {
         <Container fluid>
           <AdminFooter />
         </Container>
+      </div>
       </div>
     </>
   );

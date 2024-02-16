@@ -31,7 +31,7 @@ const Showd = () => {
     return (
         <>
         <UserHeader />
-            <div className='container mt--9'>
+            <div className='container mt--4'>
                 <div className='row'>
                     <div className='col'>
                         <div className='d-grid gap-2'>

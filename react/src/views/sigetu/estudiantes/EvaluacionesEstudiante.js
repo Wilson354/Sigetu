@@ -33,7 +33,7 @@ class Navs extends React.Component {
     return (
       <>
         <UserHeader />
-        <Container className="mt--9" fluid>
+        <Container className="mt--4" fluid>
           {/* Table */}
           <Row>
             <Col xl="12">

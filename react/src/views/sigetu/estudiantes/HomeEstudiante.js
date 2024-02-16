@@ -56,7 +56,7 @@ const Index = (props) => {
        seccion de evaluaciones actuales 
 ============================================================================================
 */}
-      <Container className="mt--7 bg-gradient-info" fluid>
+      <Container className="mt--4 bg-transparent" fluid>
         <Row>
           <Col className="mb-5 mb-xl-0" xl="12">
             <Card className="shadow">

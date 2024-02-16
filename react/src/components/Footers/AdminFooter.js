@@ -12,8 +12,9 @@ import {
 
 const Footer = () => {
   return (
-    <footer className="footer">
-      <Row className="align-items-center justify-content-xl-between">
+    <footer className="footer bg-transparent">
+      
+      <Row className="align-items-center justify-content-xl-between bg-white">
         <Col xl="6">
           <div className="copyright text-center text-xl-left text-muted">
             © {new Date().getFullYear()}{" "}

@@ -17,13 +17,14 @@ import { useAuth } from "context/AuthContext";
 const AdminNavbar = () => {
 
   return (
-    <>
+    <> 
       <Navbar className="navbar-top navbar-horizontal navbar-dark" expand="md">
-        <Container className="px-4">
+        <Container className="px-5">
           <NavbarBrand to="/" tag={Link}>
             <img
               alt="..."
-              src={require("../../assets/img/brand/argon-react-white.png")}
+              style={{ width: '90px', height: 'auto' }}
+              src={require("../../assets/img/theme/sigetu_logo_black.png")}
             />
           </NavbarBrand>
           <button className="navbar-toggler" id="navbar-collapse-main">
@@ -36,7 +37,7 @@ const AdminNavbar = () => {
                   <Link to="/">
                     <img
                       alt="..."
-                      src={require("../../assets/img/brand/argon-react.png")}
+                      src={require("../../assets/img/theme/sigetu_logo.png")}
                     />
                   </Link>
                 </Col>

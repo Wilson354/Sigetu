@@ -179,7 +179,13 @@ Barra lateral web para la Navegacion alumno
 
 ========================================================================================
 */}
-          <Nav navbar>{createLinks(routes)}
+          <Nav navbar>
+          <img 
+              alt="..."
+              style={{ width: '70px', height: 'auto', position: 'relative', left: '80px', top: '-20px' }}
+              src={require("../../assets/img/theme/sigetu_logo_black.png")}
+            />
+            {createLinks(routes)}
           <button 
                                 onClick={(e)=> handleLogout(e)}
                                 className="button">logout</button>

@@ -50,7 +50,7 @@ const Modals = () => {
       <>
         <UserHeader />
         {/* Altura de las tarjetas */}
-        <Container className="mt--9" fluid>
+        <Container className="mt--4 " fluid>
           <Row>
             <Col className="order-xl-6 mb-5 mb-xl-0" xl="3">
               <Card className="card-profile shadow">
@@ -505,17 +505,6 @@ El form es para hacer cambios a la credencial del estudiante se debe editar el f
 */}
             <Col className="order-xl-1" xl="9">
               <Card className="bg-secondary shadow">
-                <CardHeader className="bg-white border-0">
-                  <Row >
-                    <Col className="col-sm">
-                      <span>
-                        <h2 className="mb-0">
-                        {displayName && <div className="h2 mb-0 text-black text-uppercase d-none d-lg-inline-block">{displayName}</div>}
-                        </h2>
-                      </span>
-                    </Col>
-                  </Row>
-                </CardHeader>
                 <CardBody className="pt-0 pt-md-4">
                   <Col>
                     <Row className="align-items-center">

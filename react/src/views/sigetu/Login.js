@@ -22,7 +22,7 @@ import {
           <Card className="bg-secondary shadow border-0">
             <CardHeader className="bg-transparent pb-1">
               <div className="text-muted text-center mt-2 mb-3">
-                <h1>Login</h1>
+                <h1 >Login</h1>
               </div>
             </CardHeader>
             <CardBody className="px-lg-5 py-lg-5">
@@ -65,18 +65,17 @@ import {
                     className="custom-control-label"
                     htmlFor=" customCheckLogin"
                   >
-                    <span className="text-muted">recordar cuenta</span>
+                    <span className="text-muted text-dark">recordar cuenta</span>
                   </label>
                 </div>
                 <div className="text-center">
-                  <Link className="my-4" color="primary" type="button" to="/alumno/inicio" tag={Link}>
+                  <Link className="my-4" color="success" type="button" to="/alumno/inicio" tag={Link}>
                     INGRESAR
                   </Link>
                 </div>
                 <Col xs="8">
                     <a
-                className="text-light"
-                href="sigetu/estudiantes/HomeEstudiante"
+                className="text-dark"
                 onClick={(e) => e.preventDefault()}
                     >
                 <small>Olvidaste tu contraseña?</small>
