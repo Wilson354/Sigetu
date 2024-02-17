@@ -1,56 +1,62 @@
-import React from "react";
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 
 import "assets/plugins/nucleo/css/nucleo.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "assets/scss/argon-dashboard-react.scss";
 
-import AlumnoLayout from "layouts/Alumno.js";
-import DocenteLayout from "layouts/Docente.js";
-import AuthLayout from "layouts/Auth.js";
-
-//rutas para el crud escenciales
-import Show from 'views/examples/crudshow';
-import Create from 'views/examples/crudcreate';
-import Edit from 'views/examples/crudedit';
-import Showd from 'views/examples/division';
-
-//rutas buenas
+// Rutas buenas
 import { AuthProvider } from "context/AuthContext";
+import Login from "views/screens/Login";
+import Home from "views/screens/Home";
 
-import LoginView from "views/LoginView";
-import Index from "views/sigetu/estudiantes/HomeEstudiante";
+// Firebase
+import firebaseApp from "firebase.config";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
+
+const auth = getAuth(firebaseApp);
+const firestore = getFirestore(firebaseApp);
 
 function App() {
+  const [user, setUser] = useState(null);
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (usuarioFirebase) => {
+      if (usuarioFirebase) {
+        setUserWithFirebaseAndRol(usuarioFirebase);
+      } else {
+        setUser(null);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  async function getRol(uid) {
+    const docuRef = doc(firestore, `usuarios/${uid}`);
+    const docuCifrada = await getDoc(docuRef);
+    const infoFinal = docuCifrada.data().rol;
+    return infoFinal;
+  }
+
+  async function setUserWithFirebaseAndRol(usuarioFirebase) {
+    const rol = await getRol(usuarioFirebase.uid);
+    const userData = {
+      uid: usuarioFirebase.uid,
+      email: usuarioFirebase.email,
+      rol: rol,
+    };
+    setUser(userData);
+    console.log("userData final", userData);
+  }
 
   return (
-    <div className="App">
-
-      <AuthProvider>
-        <BrowserRouter>
-          <Routes>
-
-            <Route path="/alumno/*" element={<AlumnoLayout />} />
-            <Route path="/docente/*" element={<DocenteLayout />} />
-            <Route path="/auth/*" element={<AuthLayout />} />
-            <Route path="/" element={<Navigate to="/auth/login" replace />} />
-
-            <Route  path="/" element= {< App />}/>
-            <Route  path="login" element= {< LoginView />} />
-            <Route  path="dashboardA" element= {< Index />} />
-
-            <Route path="/show" element={<Show />} />
-            <Route path="/create" element={<Create />} />
-            <Route path="/edit/:id" element={<Edit />} />
-            <Route path="/division" element={<Showd />} />
-
-          </Routes>
-        </BrowserRouter>
-      </AuthProvider>
-    </div>
+    <AuthProvider>
+      <>
+        {user ? <Home user={user} /> : <Login />}
+      </>
+    </AuthProvider>
   );
 }
 
 export default App;
-

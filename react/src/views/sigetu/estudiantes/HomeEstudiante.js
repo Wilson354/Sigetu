@@ -2,55 +2,27 @@
 Tarjetas de informacion del usuario
 */
 import { useState } from "react";
-import classnames from "classnames";
 import Chart from "chart.js";
-import { Line, Bar } from "react-chartjs-2";
 
 import {
-  UncontrolledAlert,
   Button,
-  Badge,
   Card,
   CardHeader,
-  CardBody,
-  NavItem,
-  NavLink,
-  Nav,
-  Progress,
   Table,
   Container,
   Row,
   Col,
-  ListGroupItem,
-  Alert
 } from "reactstrap";
 
-import {
-  chartOptions,
-  parseOptions,
-  chartExample1,
-  chartExample2,
-} from "variables/charts.js";
 
-import Header from "components/Headers/Header.js";
+import UserHeaderD from "components/Headers/UserHeaderD.js";
 
 
 const Index = (props) => {
-  const [activeNav, setActiveNav] = useState(1);
-  const [chartExample1Data, setChartExample1Data] = useState("data1");
-
-  if (window.Chart) {
-    parseOptions(Chart, chartOptions());
-  }
-
-  const toggleNavs = (e, index) => {
-    e.preventDefault();
-    setActiveNav(index);
-    setChartExample1Data("data" + index);
-  };
+  
   return (
     <>
-      <Header />
+      <UserHeaderD />
 {/*
 ==========================================================================================  
        seccion de evaluaciones actuales 

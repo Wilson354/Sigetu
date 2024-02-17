@@ -12,8 +12,6 @@ import {
   Col,
 } from "reactstrap";
 
-import { useAuth } from "context/AuthContext";
-
 const AdminNavbar = () => {
 
   return (
