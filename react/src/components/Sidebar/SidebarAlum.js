@@ -1,13 +1,9 @@
-/*!
-=========================================================
-Opciones para el usuario en la barra lateral izquierda alumno
-se manda a llamar desde el Alumno.js en layouts
-=========================================================
-*/
 import { useState } from "react";
-import { NavLink as NavLinkRRD, Link } from "react-router-dom";
+import { NavLink as NavLinkRRD, Link} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { PropTypes } from "prop-types";
-
+import { getAuth, signOut } from "firebase/auth";
+import { useAuth } from "context/AuthContext"; // Asegúrate de importar useAuth desde context/AuthContext
 import {
   Collapse,
   DropdownMenu,
@@ -25,12 +21,23 @@ import {
   Col,
 } from "reactstrap";
 
-import { useAuth } from "context/AuthContext";
-
-var ps;
-
 const Sidebar = (props) => {
   const [collapseOpen, setCollapseOpen] = useState();
+  const navigate = useNavigate(); // Usa useNavigate para navegación en React Router v6
+  const auth = useAuth();
+
+
+  const handleLogout = () => {
+    const auth = getAuth(); // Obtener la instancia de autenticación
+    signOut(auth)
+      .then(() => {
+        // Redirigir al usuario a la página de inicio y reemplazar la ruta actual
+        navigate("/");
+      })
+      .catch((error) => {
+        console.error("Error al cerrar sesión:", error);
+      });
+  };
 
   const activeRoute = (routeName) => {
     return props.location.pathname.indexOf(routeName) > -1 ? "active" : "";
@@ -74,13 +81,8 @@ const Sidebar = (props) => {
     };
   }
 
-  const auth = useAuth();
-    const {displayName} = auth.user
-    console.log(displayName)
-
-    const handleLogout = () => {
-      auth.logout();
-  }
+  const { displayName } = auth.user; // Obtiene el nombre de usuario
+  console.log(displayName);
 
   return (
     <Navbar
@@ -107,11 +109,7 @@ const Sidebar = (props) => {
             />
           </NavbarBrand>
         ) : null}
-{/*==================================================================================================== 
-        
-        barra lateral modo android
-
-==========================================================================================================*/}
+        {/* barra lateral modo android */}
         <Nav className="align-items-center d-md-none">
           <UncontrolledDropdown nav>
             <DropdownToggle nav>
@@ -126,17 +124,15 @@ const Sidebar = (props) => {
             </DropdownToggle>
             <DropdownMenu className="dropdown-menu-arrow" right>
               <DropdownItem className="noti-title" header tag="div">
-                <h5 className="text-overflow m-0">
-                  {displayName && <h5>{displayName}</h5>}
-                </h5>
-                 {/* cuando es en telefono sale en el usuario */}
+                <h5 className="text-overflow m-0">{displayName && <h5>{displayName}</h5>}</h5>
+                {/* cuando es en telefono sale en el usuario */}
               </DropdownItem>
               <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
                 <i className="ni ni-user-run" />
                 <span>
-                <button 
-                                onClick={(e)=> handleLogout(e)}
-                                className="button">logout</button>
+                  <button onClick={(e) => handleLogout(e)} className="button">
+                    logout
+                  </button>
                 </span>
               </DropdownItem>
             </DropdownMenu>
@@ -172,23 +168,23 @@ const Sidebar = (props) => {
               </Col>
             </Row>
           </div>
-          {/* 
-==========================================================================================
-
-Barra lateral web para la Navegacion alumno
-
-========================================================================================
-*/}
+          {/* Barra lateral web para la Navegacion alumno */}
           <Nav navbar>
-          <img 
+            <img
               alt="..."
-              style={{ width: '70px', height: 'auto', position: 'relative', left: '80px', top: '-20px' }}
+              style={{
+                width: "70px",
+                height: "auto",
+                position: "relative",
+                left: "80px",
+                top: "-20px",
+              }}
               src={require("../../assets/img/theme/sigetu_logo_black.png")}
             />
             {createLinks(routes)}
-          <button 
-                                onClick={(e)=> handleLogout(e)}
-                                className="button">logout</button>
+            <button onClick={(e) => handleLogout(e)} className="button">
+              logout
+            </button>
           </Nav>
         </Collapse>
       </Container>
