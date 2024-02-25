@@ -41,14 +41,8 @@ const Showd = () => {
                         <table className='table table-dark table-hover'>
                             <thead>
                                 <tr>
-                                    <th>Matricula</th>
-                                    <th>Nombres</th>
-                                    <th>Apellidos</th>
-                                    <th>grado</th>
-                                    <th>grupo</th>
-                                    <th>adeudos</th>
-                                    <th>vidas</th>
-                                    <th>acciones</th>
+                                    <th>Codigo</th>
+                                    <th>Nombre</th>
                                 </tr>
                             </thead>
                             <tbody>

@@ -12,6 +12,7 @@ import Crud from "views/examples/crudshow"
 import Crear from "views/examples/crudcreate"
 
 import Showd from "views/examples/division"
+import ShowU from "views/examples/usuarioShow"
 
 var routes = [
   {
@@ -86,6 +87,13 @@ var routes = [
     name: "showd",
     icon: "ni ni-key-25 text-info",
     component: <Showd/>,
+    layout: "/alumno",
+  },
+  {
+    path: "/showu",
+    name: "showu",
+    icon: "ni ni-key-25 text-info",
+    component: <ShowU/>,
     layout: "/alumno",
   },
 ];

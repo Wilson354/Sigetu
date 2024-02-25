@@ -32,16 +32,16 @@ const Auth = (props) => {
         style={{
           minHeight: "300px",
           backgroundImage:
-          "url(" + require("../assets/img/theme/rocks.jpg")+")",
+          "url(" + require("../assets/img/theme/uttecamac.jpg")+")",
           backgroundSize: "cover",
-          backgroundPosition: "center center",
+          backgroundPosition: "center",
         }}
       >
 {/*=============================================================
         configurar fondo del login y color
 ===============================================================*/}
         <AuthNavbar />
-        <div className="header py-8 py-lg-9 mt--7">
+        <div className="header py-8 py-lg-9 mt--8">
           <Container>
             <div className="header-body text-center mb-5">
               <Row className="justify-content-center">
@@ -56,7 +56,7 @@ const Auth = (props) => {
           </Container>
         </div>
         {/* contenido del login */}
-        <Container className="mt--9">
+        <Container className="mt--7">
           <Row className="justify-content-center">
             <Routes>
               {getRoutes(routes)}

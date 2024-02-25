@@ -59,7 +59,7 @@ export function AuthProvider({ children }) {
 
     /* 
     Inicio de sesion con google
-    */
+
     const loginWithGoogle = async () => {
         try {
             const provider = new GoogleAuthProvider();
@@ -69,6 +69,7 @@ export function AuthProvider({ children }) {
             console.log("Error al iniciar sesión con Google:", error.message);
         }
     };
+    */
 
     const logout = async () => {
         try {
@@ -84,7 +85,6 @@ export function AuthProvider({ children }) {
             value={{
                 register,
                 login,
-                loginWithGoogle,
                 logout,
                 user
             }}

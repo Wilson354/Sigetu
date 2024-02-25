@@ -1,9 +1,13 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import AdminView from "../../components/AdminView";
-import UserView from "../../components/UserView";
 import firebaseApp from "firebase.config";
 import { getAuth, signOut } from "firebase/auth";
+
+//vistas
+import AdminView from "../../components/AdminView";
+import UserView from "../../components/UserView";
+import AlumnoView from "../../components/AlumnoView";
+import DocenteView from "../../components/DocenteView";
 
 import Show from 'views/examples/crudshow';
 import Create from 'views/examples/crudcreate';
@@ -19,8 +23,14 @@ function Home({ user }) {
   return (
     <div>
       Home
-      <button onClick={() => signOut(auth)}> Cerrar sesión</button>
-      {user.rol === "admin" ? <AdminView /> : <UserView />}
+      <button onClick={() => signOut(auth)}>Cerrar sesión</button>
+      {user.rol === "admin" ? (
+        <AdminView />
+      ) : user.rol === "docente" ? (
+        <DocenteView />
+      ) : (
+        <AlumnoView/>
+      )}
     </div>
   );
 }

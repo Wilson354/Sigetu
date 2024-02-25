@@ -51,9 +51,9 @@ const Admin = (props) => {
       <Sidebar
         {...props}
         routes={routes}
-        logo={{
+        /*logo={{
           imgSrc: require("../assets/img/brand/logoSigetu.jpeg"),
-        }}
+        }}*/
       />
       <div className="main-content" ref={mainContent}>
         <AdminNavbar

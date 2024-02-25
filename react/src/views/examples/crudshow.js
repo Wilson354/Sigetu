@@ -41,7 +41,7 @@ const Crudshow = () => {
                 <div className='row'>
                     <div className='col'>
                         <div className='d-grid gap-2'>
-                            <Link to="/create" className='btn btn-secondary mt-2 mb-2'>CREAR</Link>
+                            <Link to="alumno/create" className='btn btn-secondary mt-2 mb-2'>CREAR</Link>
                         </div>
 
                         <table className='table table-dark table-hover'>

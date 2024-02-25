@@ -15,7 +15,7 @@ import HomeEstudiante from "../views/sigetu/estudiantes/HomeEstudiante.js"
 import routes from "routes.js";
 
 
-const UserView = (props) => {
+const AlumnoView = (props) => {
   const mainContent = React.useRef(null);
   const location = useLocation();
 
@@ -87,4 +87,4 @@ const UserView = (props) => {
 };
 
 
-export default UserView;
+export default AlumnoView;

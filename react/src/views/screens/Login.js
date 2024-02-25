@@ -61,7 +61,8 @@ function Login() {
           Rol:
           <select value={rol} onChange={(e) => setRol(e.target.value)}> {/* Actualizamos el estado del rol cuando cambia la selección */}
             <option value="admin">Administrador</option>
-            <option value="user">Usuario</option>
+            <option value="docent">Docente</option>
+            <option value="alumno">Alumno</option>
           </select>
         </label>
 
