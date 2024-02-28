@@ -35,7 +35,7 @@ function Home({ user }) {
 
 export default function HomeWrapper(props) {
   return (
-    <Router>
+
       <Routes>
         <Route path="/" element={<Home {...props} />} />
 
@@ -47,10 +47,9 @@ export default function HomeWrapper(props) {
           <Route path="edit" element={<Edit />} />
           <Route path="showd" element={<Showd />} />
         </Route>
-
         <Route path="/auth/*" element={<AuthLayout />} />
       </Routes>
-    </Router>
+
 
   );
 }

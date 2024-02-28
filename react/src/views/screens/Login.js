@@ -1,82 +1,137 @@
 import React, { useState } from "react";
-import firebaseApp from "../../firebase.config";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
-import { getFirestore, doc, collection, setDoc } from "firebase/firestore";
-const auth = getAuth(firebaseApp);
+  Col,
+  Card,
+  CardHeader,
+  CardBody,
+  FormGroup,
+  Form,
+  Input,
+  InputGroupAddon,
+  InputGroupText,
+  InputGroup,
+  Container, Row,
+} from "reactstrap";
 
-function Login() {
-  const firestore = getFirestore(firebaseApp);
-  const [isRegistrando, setIsRegistrando] = useState(false);
-  const [rol, setRol] = useState("admin"); // Estado para almacenar el valor del rol
+import AuthNavbar from "components/Navbars/AuthNavbar.js";
+import AuthFooter from "components/Footers/AuthFooter.js";
+import routes from "routes.js";
+import { useLocation, Route, Routes, Navigate } from "react-router-dom";
 
-  async function registrarUsuario(email, password) {
-    const infoUsuario = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    ).then((usuarioFirebase) => {
-      return usuarioFirebase;
-    });
+const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const auth = getAuth();
 
-    console.log(infoUsuario.user.uid);
-    const docuRef = doc(firestore, `usuarios/${infoUsuario.user.uid}`);
-    setDoc(docuRef, { correo: email, rol: rol }); // Utiliza el valor del rol almacenado en el estado
-  }
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
 
-  function submitHandler(e) {
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-
-    const email = e.target.elements.email.value;
-    const password = e.target.elements.password.value;
-
-    console.log("submit", email, password, rol); // Aquí también utilizamos el valor del rol almacenado en el estado
-
-    if (isRegistrando) {
-      registrarUsuario(email, password);
-    } else {
-      signInWithEmailAndPassword(auth, email, password);
-    }
-  }
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Logged in successfully
+        const user = userCredential.user;
+        console.log("Logged in as:", user.email);
+        // You can redirect the user to another page here
+      })
+      .catch((error) => {
+        // Handle errors here
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.error("Login error:", errorMessage);
+      });
+  };
 
   return (
-    <div>
-      <h1>{isRegistrando ? "Regístrate" : "Inicia sesión"}</h1>
-
-      <form onSubmit={submitHandler}>
-        <label>
-          Correo electrónico:
-          <input type="email" id="email" />
-        </label>
-
-        <label>
-          Contraseña:
-          <input type="password" id="password" />
-        </label>
-
-        <label>
-          Rol:
-          <select value={rol} onChange={(e) => setRol(e.target.value)}> {/* Actualizamos el estado del rol cuando cambia la selección */}
-            <option value="admin">Administrador</option>
-            <option value="docent">Docente</option>
-            <option value="alumno">Alumno</option>
-          </select>
-        </label>
-
-        <input
-          type="submit"
-          value={isRegistrando ? "Registrar" : "Iniciar sesión"}
-        />
-      </form>
-
-      <button onClick={() => setIsRegistrando(!isRegistrando)}>
-        {isRegistrando ? "Ya tengo una cuenta" : "Quiero registrarme"}
-      </button>
-    </div>
+    <>
+      <div  className=""
+        style={{
+          minHeight: "100vh", //se extiende la imagen 
+          backgroundImage:
+          "url(" + require("../../assets/img/theme/uttecamac.jpg")+")",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <AuthNavbar />
+        <Container fluid className="h-100 d-flex justify-content-center align-items-center">
+        <Col md="12">
+            <div className="header-body text-center mb-5">
+                  <h1 className="text-white">BIENVENIDO A SIGETU</h1> 
+                  <p className="text-white">
+                    Sistema Integral de Gestion Estudiantil y Tramites Universitarios
+                  </p>
+            </div>
+        <div className="d-flex justify-content-center">
+        <Col lg="3" md="7">
+          <Card className="bg-gradient-green shadow">
+            <CardHeader className="bg-transparent pb-2">
+              <div className="text-muted text-center mt-2 mb-3">
+                <h1 className="text-white">Login</h1>
+              </div>
+            </CardHeader>
+            <CardBody className="px-lg-5 py-lg-5">
+              <Form role="form" onSubmit={handleSubmit}>
+                <FormGroup className="mb-3">
+                  <InputGroup className="input-group-alternative">
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText>
+                        <i className="ni ni-email-83" />
+                      </InputGroupText>
+                    </InputGroupAddon>
+                    <Input
+                      placeholder="Email"
+                      type="email"
+                      autoComplete="new-email"
+                      value={email}
+                      onChange={handleEmailChange}
+                    />
+                  </InputGroup>
+                </FormGroup>
+                <FormGroup>
+                  <InputGroup className="input-group-alternative">
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText>
+                        <i className="ni ni-lock-circle-open" />
+                      </InputGroupText>
+                    </InputGroupAddon>
+                    <Input
+                      placeholder="Password"
+                      type="password"
+                      autoComplete="new-password"
+                      value={password}
+                      onChange={handlePasswordChange}
+                    />
+                  </InputGroup>
+                </FormGroup>
+                <div className="text-center">
+                  <button className="btn btn-success btn-block mt-4" type="submit">
+                    Ingresar
+                  </button>
+                </div>
+                <Col xs="12" className="mt-3 text-center">
+                  <a href="#" className="text-light">
+                    Olvidaste tu contraseña?
+                  </a>
+                </Col>
+              </Form>
+            </CardBody>
+          </Card>
+        </Col>
+      </div>
+      </Col>
+        </Container>
+      <AuthFooter />
+      </div>
+    </>
   );
-}
+};
 
 export default Login;

@@ -78,7 +78,7 @@ const AlumnoView = (props) => {
     <>
        <div className="header pb-4 pt-5 pt-lg-3 align-items-center h-100"
         style={{
-          minHeight: "300px",
+          minHeight: "100vh", //se extiende la imagen 
           backgroundImage:
             "url(" + require("../assets/img/theme/rocks.jpg") + ")",
           backgroundSize: "cover",
