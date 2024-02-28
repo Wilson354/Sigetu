@@ -1,5 +1,7 @@
 /*!
- RUTAS PARA LAS PAGINAS    consejo usar shift+alt+f para ordenar el codigo
+ RUTAS PARA LAS PAGINAS    
+ 
+ consejo usar shift+alt+f para ordenar el codigo
 */
 import Index from "views/sigetu/estudiantes/HomeEstudiante";
 import Perfil from "views/sigetu/estudiantes/PerfilEstudiante";
@@ -13,8 +15,12 @@ import Crear from "views/examples/crudcreate"
 
 import Showd from "views/examples/division"
 import ShowU from "views/examples/usuarioShow"
+import AlumnoView from "components/AlumnoView";
+
+
 
 var routes = [
+  
   {
     path: "/inicio",
     name: "INICIO",

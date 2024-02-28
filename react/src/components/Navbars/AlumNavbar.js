@@ -17,7 +17,7 @@ const AdminNavbar = (props) => {
     console.log(displayName)
   return (
     <>
-      <Navbar className="navbar-top navbar-dark pt-5" expand="md" id="navbar-main">
+      <Navbar className="navbar-top navbar-dark pt-3 bg-dark mt--3" expand="md" id="navbar-main">
         <Container fluid>
           <Col >
             <div className="h1 mb-0 text-white text-uppercase d-none d-lg-inline-block">

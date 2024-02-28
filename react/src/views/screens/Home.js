@@ -5,7 +5,6 @@ import { getAuth, signOut } from "firebase/auth";
 
 //vistas
 import AdminView from "../../components/AdminView";
-import UserView from "../../components/UserView";
 import AlumnoView from "../../components/AlumnoView";
 import DocenteView from "../../components/DocenteView";
 
@@ -15,15 +14,14 @@ import Edit from 'views/examples/crudedit';
 import Showd from 'views/examples/division';
 import AlumnoLayout from "layouts/Alumno.js";
 import AuthLayout from "layouts/Auth.js";
-import Index from "views/sigetu/estudiantes/HomeEstudiante";
+
 
 const auth = getAuth(firebaseApp);
 
 function Home({ user }) {
+  
   return (
     <div>
-      Home
-      <button onClick={() => signOut(auth)}>Cerrar sesión</button>
       {user.rol === "admin" ? (
         <AdminView />
       ) : user.rol === "docente" ? (
@@ -43,7 +41,7 @@ export default function HomeWrapper(props) {
 
       {/* Rutas anidadas para alumno solo permitiran su acceso a alumno*/}
         <Route path="/alumno/*" element={<AlumnoLayout />}>
-          <Route index element={<Index />} />
+ 
           <Route path="show" element={<Show />} />
           <Route path="create" element={<Create />} />
           <Route path="edit" element={<Edit />} />

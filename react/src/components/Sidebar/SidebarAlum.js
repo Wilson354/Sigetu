@@ -82,7 +82,6 @@ const Sidebar = (props) => {
   }
 
   const { displayName } = auth.user; // Obtiene el nombre de usuario
-  console.log(displayName);
 
   return (
     <Navbar
@@ -91,7 +90,6 @@ const Sidebar = (props) => {
       id="sidenav-main"
     >
       <Container fluid>
-        {/* Toggler */}
         <button
           className="navbar-toggler"
           type="button"
@@ -99,7 +97,6 @@ const Sidebar = (props) => {
         >
           <span className="navbar-toggler-icon" />
         </button>
-        {/* Brand */}
         {logo ? (
           <NavbarBrand className="pt-0" {...navbarBrandProps}>
             <img
