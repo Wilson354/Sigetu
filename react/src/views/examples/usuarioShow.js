@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { collection, getDocs, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { db } from 'firebase.config';
-import { auth } from 'firebase.config';
+import { Button, message } from 'antd';
 import UserHeader from "components/Headers/UserHeader.js";
 
-// Definir TablaUsuarios fuera de Crudshow
 const TablaUsuarios = ({ usuarios, updateRol, deleteUsuario }) => {
     const handleChangeRol = (userId, newRol) => {
         updateRol(userId, newRol);
@@ -22,28 +21,21 @@ const TablaUsuarios = ({ usuarios, updateRol, deleteUsuario }) => {
                         <label>
                             Rol:
                             <select
-    value={usuario.rol}
-    onChange={(e) => handleChangeRol(usuario.id, e.target.value)}>
-    <option value="admin">Administrador</option>
-    <option value="docente">Docente</option> {/* Corregir el valor aquí */}
-    <option value="user">Usuario</option>
-</select>
+                                value={usuario.rol}
+                                onChange={(e) => handleChangeRol(usuario.id, e.target.value)}>
+                                <option value="admin">Administrador</option>
+                                <option value="docente">Docente</option> {/* Corregir el valor aquí */}
+                                <option value="user">Usuario</option>
+                            </select>
                         </label>
                     </td>
                     <td>
-                    <button
-    className="btn btn-light"
-    onClick={() => handleChangeRol(usuario.id, usuario.rol)}> {/* Usar usuario.rol en lugar de usuario.newRol */}
-    Actualizar <i className="fa-solid fa-pencil"></i>
-</button>
-                        <button
-                            onClick={() => {
-                                deleteUsuario(usuario.id);
-                            }}
-                            className="btn btn-danger"
-                        >
-                            <i className="fa-solid fa-trash"></i>
-                        </button>
+                        <Button onClick={() => handleChangeRol(usuario.id, usuario.rol)}>
+                            Actualizar
+                        </Button>
+                        <Button onClick={() => deleteUsuario(usuario.id)} danger>
+                            Eliminar
+                        </Button>
                     </td>
                 </tr>
             ))}
@@ -52,45 +44,39 @@ const TablaUsuarios = ({ usuarios, updateRol, deleteUsuario }) => {
 };
 
 const Crudshow = () => {
-    // configurar hooks (ganchos)
     const [usuarios, setUsuarios] = useState([]);
     const [mensaje, setMensaje] = useState(null);
+    const [messageApi, contextHolder] = message.useMessage();
 
-    // actualizar el rol con el boton
     const updateRol = async (id, newRol) => {
         try {
-            const usuarioDoc = doc(db, "usuarios", id);
-            await updateDoc(usuarioDoc, { rol: newRol });
-            await getUsuarios(); // Actualiza la lista de usuarios después de actualizar el rol
-            setMensaje("Rol actualizado correctamente.");
-            setTimeout(() => {
-                setMensaje(null); // Desaparece el mensaje después de un tiempo
-            }, 4000); // 4000 ms =  segundos
+            message.loading({ content: 'Actualizando rol...', key: 'loading', duration: 2.5 })
+                .then(async () => {
+                    const usuarioDoc = doc(db, "usuarios", id);
+                    await updateDoc(usuarioDoc, { rol: newRol });
+                    await getUsuarios();
+                    message.success({ content: 'Rol actualizado correctamente', key: 'success' });
+                });
         } catch (error) {
             console.error("Error al actualizar el rol del usuario:", error);
-            setMensaje("Error al actualizar el rol del usuario.");
+            message.error({ content: 'Error al actualizar el rol del usuario', key: 'error' });
         }
     };
+    
 
-    // referenciar a bd
     const usuariosCollection = collection(db, "usuarios");
 
-    // mostrar docs
     const getUsuarios = async () => {
         const data = await getDocs(usuariosCollection);
-        setUsuarios(
-            data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
-        );
+        setUsuarios(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     };
 
-    // eliminar docs
     const deleteUsuario = async (id) => {
         const usuarioDoc = doc(db, "usuarios", id);
         await deleteDoc(usuarioDoc);
         await getUsuarios();
     };
 
-    // useEffect
     useEffect(() => {
         getUsuarios();
     }, []);
@@ -111,10 +97,9 @@ const Crudshow = () => {
                                     <th>Correo</th>
                                     <th>Nombres</th>
                                     <th>Apellidos</th>
-                                    <th>rol</th>
+                                    <th>Rol</th>
                                 </tr>
                             </thead>
-                            {/* Usar TablaUsuarios dentro de tbody */}
                             <TablaUsuarios
                                 usuarios={usuarios}
                                 updateRol={updateRol}
@@ -124,6 +109,7 @@ const Crudshow = () => {
                     </div>
                 </div>
             </div>
+            {contextHolder}
         </>
     );
 };

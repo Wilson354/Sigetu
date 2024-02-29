@@ -16,8 +16,6 @@ import {
 
 import AuthNavbar from "components/Navbars/AuthNavbar.js";
 import AuthFooter from "components/Footers/AuthFooter.js";
-import routes from "routes.js";
-import { useLocation, Route, Routes, Navigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -53,7 +51,7 @@ const Login = () => {
     <>
       <div  className=""
         style={{
-          minHeight: "100vh", //se extiende la imagen 
+          minHeight: "100vh",
           backgroundImage:
           "url(" + require("../../assets/img/theme/uttecamac.jpg")+")",
           backgroundSize: "cover",
@@ -61,7 +59,7 @@ const Login = () => {
         }}
       >
         <AuthNavbar />
-        <Container fluid className="h-100 d-flex justify-content-center align-items-center">
+        <Container fluid className="d-flex justify-content-center align-items-center ">
         <Col md="12">
             <div className="header-body text-center mb-5">
                   <h1 className="text-white">BIENVENIDO A SIGETU</h1> 
@@ -71,10 +69,10 @@ const Login = () => {
             </div>
         <div className="d-flex justify-content-center">
         <Col lg="3" md="7">
-          <Card className="bg-gradient-green shadow">
+          <Card className="bg-gradient-white shadow">
             <CardHeader className="bg-transparent pb-2">
               <div className="text-muted text-center mt-2 mb-3">
-                <h1 className="text-white">Login</h1>
+                <h1 className="text-black">Login</h1>
               </div>
             </CardHeader>
             <CardBody className="px-lg-5 py-lg-5">

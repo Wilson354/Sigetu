@@ -6,12 +6,6 @@ import { getAuth, signOut } from "firebase/auth";
 import { useAuth } from "context/AuthContext"; // Asegúrate de importar useAuth desde context/AuthContext
 import {
   Collapse,
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
-  DropdownToggle,
-  Media,
-  NavbarBrand,
   Navbar,
   NavItem,
   NavLink,
@@ -49,6 +43,7 @@ const Sidebar = (props) => {
   const closeCollapse = () => {
     setCollapseOpen(false);
   };
+  
   // crea los links que aparecen en el menu izquierdo sidebar
   const createLinks = (routes) => {
     return routes.map((prop, key) => {
@@ -97,44 +92,7 @@ const Sidebar = (props) => {
         >
           <span className="navbar-toggler-icon" />
         </button>
-        {logo ? (
-          <NavbarBrand className="pt-0" {...navbarBrandProps}>
-            <img
-              alt={logo.imgAlt}
-              className="navbar-brand-img"
-              src={logo.imgSrc}
-            />
-          </NavbarBrand>
-        ) : null}
-        {/* barra lateral modo android */}
-        <Nav className="align-items-center d-md-none">
-          <UncontrolledDropdown nav>
-            <DropdownToggle nav>
-              <Media className="align-items-center">
-                <span className="avatar avatar-sm rounded-circle">
-                  <img
-                    alt="..."
-                    src={require("../../assets/img/theme/team-1-800x800.jpg")}
-                  />
-                </span>
-              </Media>
-            </DropdownToggle>
-            <DropdownMenu className="dropdown-menu-arrow" right>
-              <DropdownItem className="noti-title" header tag="div">
-                <h5 className="text-overflow m-0">{displayName && <h5>{displayName}</h5>}</h5>
-                {/* cuando es en telefono sale en el usuario */}
-              </DropdownItem>
-              <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
-                <i className="ni ni-user-run" />
-                <span>
-                  <button onClick={(e) => handleLogout(e)} className="button">
-                    logout
-                  </button>
-                </span>
-              </DropdownItem>
-            </DropdownMenu>
-          </UncontrolledDropdown>
-        </Nav>
+        
         {/* Collapse */}
         <Collapse navbar isOpen={collapseOpen}>
           {/* Collapse header */}
@@ -166,6 +124,7 @@ const Sidebar = (props) => {
             </Row>
           </div>
           {/* Barra lateral web para la Navegacion alumno */}
+          <div className="navbar-collapse-body">
           <Nav navbar>
             <img
               alt="..."
@@ -176,13 +135,14 @@ const Sidebar = (props) => {
                 left: "80px",
                 top: "-20px",
               }}
-              src={require("../../assets/img/theme/sigetu_logo_black.png")}
+              src={require("../../assets/img/theme/sigetu_logo.png")}
             />
             {createLinks(routes)}
             <button onClick={(e) => handleLogout(e)} className="button">
               logout
             </button>
           </Nav>
+          </div>
         </Collapse>
       </Container>
     </Navbar>

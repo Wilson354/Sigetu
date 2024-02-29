@@ -12,8 +12,6 @@ import {
   CardTitle,
   Alert,
 } from "reactstrap";
-import AlumnoNavbar from "components/Navbars/AlumNavbar";
-import Sidebar from "components/Sidebar/SidebarAlum.js";
 import routes from "routes.js";
 import UserHeaderD from "components/Headers/UserHeaderD.js";
 import Calendar from 'react-calendar';

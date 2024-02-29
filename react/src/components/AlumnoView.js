@@ -10,7 +10,6 @@ import {
   Col,
   CardBody,
   CardTitle,
-  Alert,
 } from "reactstrap";
 import AlumnoNavbar from "components/Navbars/AlumNavbar";
 import Sidebar from "components/Sidebar/SidebarAlum.js";
@@ -18,6 +17,7 @@ import routes from "routes.js";
 import UserHeaderD from "components/Headers/UserHeaderD.js";
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import { Alert, Space } from 'antd';
 
 const AlumnoView = (props) => {
   const mainContent = React.useRef(null);
@@ -76,7 +76,7 @@ const AlumnoView = (props) => {
 
   return (
     <>
-       <div className="header pb-4 pt-5 pt-lg-3 align-items-center h-100"
+      <div className="header pb-4 pt-5 pt-lg-3 align-items-center h-100"
         style={{
           minHeight: "100vh", //se extiende la imagen 
           backgroundImage:
@@ -229,7 +229,6 @@ const AlumnoView = (props) => {
                   </Card>
                 </Col>
 
-                {/* Aplicar estilos en línea y estilos embebidos */}
                 <Col className="order-xl-1 mb-5 mb-xl-0" xl="3" >
                   <Card className="card-profile shadow">
 
@@ -307,17 +306,45 @@ const AlumnoView = (props) => {
                       </div>
                     </CardHeader>
                     <hr className="my-1" />
-                    <CardBody className="">
+                    <CardBody style={{ maxHeight: '300px', overflowY: 'auto' }}>
                       <Row>
                         <Col md="12">
-                          <Alert>
-                            <h4 className="alert-heading">
-                              Well done!
-                            </h4>
-                            <p>
-                              Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.
-                            </p>
-                          </Alert>
+                          <Space
+                            direction="vertical"
+                            style={{
+                              width: '100%',
+                            }}
+                          >
+                            <Alert message="Success Tips" type="success" showIcon />
+                            <Alert message="Informational Notes" type="info" showIcon />
+                            <Alert message="Warning" type="warning" showIcon closable />
+                            <Alert message="Error" type="error" showIcon />
+                            <Alert
+                              message="Success Tips"
+                              description="Detailed description and advice about successful copywriting."
+                              type="success"
+                              showIcon
+                            />
+                            <Alert
+                              message="Informational Notes"
+                              description="Additional description and information about copywriting."
+                              type="info"
+                              showIcon
+                            />
+                            <Alert
+                              message="Warning"
+                              description="This is a warning notice about copywriting."
+                              type="warning"
+                              showIcon
+                              closable
+                            />
+                            <Alert
+                              message="Error"
+                              description="This is an error message about copywriting."
+                              type="error"
+                              showIcon
+                            />
+                          </Space>
                         </Col>
                       </Row>
                     </CardBody>

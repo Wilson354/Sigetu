@@ -15,7 +15,8 @@ import Crear from "views/examples/crudcreate"
 
 import Showd from "views/examples/division"
 import ShowU from "views/examples/usuarioShow"
-import AlumnoView from "components/AlumnoView";
+
+import Calendario from "views/sigetu/estudiantes/Calendario";
 
 
 
@@ -33,6 +34,13 @@ var routes = [
     name: "PERFIL",
     icon: "ni ni-single-02 text-yellow",
     component: <Perfil />,
+    layout: "/alumno",
+  },
+  {
+    path: "/calendario",
+    name: "CALENDARIO",
+    icon: "ni ni-single-02 text-yellow",
+    component: <Calendario />,
     layout: "/alumno",
   },
   {
