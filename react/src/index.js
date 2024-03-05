@@ -9,6 +9,5 @@ ReactDom.render(
       <App />
     </Router>
   </React.StrictMode>,
-  //el root se manda llamar del html
   document.getElementById('root')
 );

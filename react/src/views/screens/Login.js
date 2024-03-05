@@ -34,13 +34,13 @@ const Login = () => {
     e.preventDefault();
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Logged in successfully
+
         const user = userCredential.user;
         console.log("Logged in as:", user.email);
-        // You can redirect the user to another page here
+
       })
       .catch((error) => {
-        // Handle errors here
+
         const errorCode = error.code;
         const errorMessage = error.message;
         console.error("Login error:", errorMessage);

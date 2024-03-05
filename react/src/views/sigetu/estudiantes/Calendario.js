@@ -3,17 +3,10 @@ import { Badge, Calendar } from 'antd';
 import {
   Button,
   Card,
-  CardHeader,
-  Table,
   Container,
   Row,
   Col,
-  CardBody,
-  CardTitle,
-  Alert,
 } from 'reactstrap';
-import UserHeaderD from 'components/Headers/UserHeaderD.js';
-import esES from 'antd/es/locale/es_ES';
 
 const Calendario = () => {
 
@@ -160,8 +153,7 @@ const Calendario = () => {
 
   return (
     <div>
-      <UserHeaderD />
-      <Container className="mt--6" fluid>
+      <Container fluid>
         <Card style={{ border: '1px solid black' }}>
           <Row>
             <Col className="order-xl-1 mb-5 mb-xl-0">

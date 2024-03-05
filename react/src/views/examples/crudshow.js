@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom'; // Corregido aquí
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore'; // Importar doc desde 'firebase/firestore'
 import { db } from 'firebase.config';
 
-import UserHeader from "components/Headers/UserHeader.js";
-
 const Crudshow = () => {
     // configurar hooks (ganchos)
     const [alumnos, setAlumnos] = useState([]);
@@ -36,7 +34,6 @@ const Crudshow = () => {
 
     return (
         <>
-        <UserHeader />
             <div className='container mt--4'>
                 <div className='row'>
                     <div className='col'>

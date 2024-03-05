@@ -1,6 +1,4 @@
-
 import {
-  Badge,
   Card,
   CardHeader,
   Table,
@@ -15,7 +13,6 @@ import {
   Col
 } from "reactstrap";
 
-import UserHeader from "components/Headers/UserHeader";
 import React from "react";
 import classnames from "classnames";
 
@@ -32,9 +29,7 @@ class Navs extends React.Component {
   render() {
     return (
       <>
-        <UserHeader />
-        <Container className="mt--4" fluid>
-          {/* Table */}
+        <Container fluid>
           <Row>
             <Col xl="12">
             <Card className="shadow">
@@ -74,7 +69,7 @@ class Navs extends React.Component {
                     </Nav>
                   </div>
                 </CardHeader>
-                <CardBody className="mt--5">
+                <CardBody >
                   <TabContent activeTab={"tabsin" + this.state.tabsin}>
                     <TabPane tabId="tabsin1">
                       <Table striped className="align-items-center table-flush" responsive>

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { collection, getDocs, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { db } from 'firebase.config';
 import { Button, message } from 'antd';
-import UserHeader from "components/Headers/UserHeader.js";
+
 
 const TablaUsuarios = ({ usuarios, updateRol, deleteUsuario }) => {
     const handleChangeRol = (userId, newRol) => {
@@ -83,7 +83,7 @@ const Crudshow = () => {
 
     return (
         <>
-            <UserHeader />
+
             {mensaje && <div className="alert alert-success mt--2">{mensaje}</div>}
             <div className='container mt--4'>
                 <div className='row'>

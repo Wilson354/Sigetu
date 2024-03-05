@@ -2,8 +2,7 @@ import React, {useState} from 'react'
 import { useNavigate } from 'react-router-dom'
 import { collection, addDoc } from 'firebase/firestore'
 import {db} from 'firebase.config'
-import UserHeader from "components/Headers/UserHeader.js";
-import { Link } from 'react-router-dom';
+
 
 
 const Crear = () => {
@@ -30,7 +29,7 @@ const Crear = () => {
 
   return (
     <>
-    <UserHeader />
+
        <div className='container mt--9'>
                 <div className='row'>
                     <div className='col'>

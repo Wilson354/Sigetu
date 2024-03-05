@@ -1,22 +1,10 @@
 
 import {
-    Badge,
     Card,
     CardHeader,
-    CardFooter,
-    DropdownMenu,
-    DropdownItem,
-    UncontrolledDropdown,
-    DropdownToggle,
-    Media,
-    Pagination,
-    PaginationItem,
-    PaginationLink,
-    Progress,
     Table,
     Container,
     Row,
-    UncontrolledTooltip,
     CardBody,
     NavItem,
     NavLink,
@@ -25,10 +13,8 @@ import {
     TabPane
   } from "reactstrap";
   
-  import UserHeader from "components/Headers/UserHeader.js";
   import React from "react";
   import classnames from "classnames";
-  
   class Navs extends React.Component {
     state = {
       tabs: 1
@@ -42,7 +28,6 @@ import {
     render() {
       return (
         <>
-        <UserHeader />
           <Container className="mt--4" fluid>
             <Row>
               <div className="col">

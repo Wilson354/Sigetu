@@ -1,32 +1,32 @@
 /*!
  RUTAS PARA LAS PAGINAS    
- 
- consejo usar shift+alt+f para ordenar el codigo
 */
-import Index from "views/sigetu/estudiantes/HomeEstudiante";
+
+//alumnos
+import Inicio from "views/sigetu/estudiantes/HomeEstudiante";
 import Perfil from "views/sigetu/estudiantes/PerfilEstudiante";
 import Evaluaciones from "views/sigetu/estudiantes/EvaluacionesEstudiante";
-import Login from "views/sigetu/Login.js";
 import Encuestas from "views/sigetu/estudiantes/EncuestasEstudiante"
 import Tramites from "views/sigetu/estudiantes/TramitesEstudiante"
 import Formulario from "views/examples/formulario"
+import Calendario from "views/sigetu/estudiantes/Calendario";
+
+
+//administrador
 import Crud from "views/examples/crudshow"
 import Crear from "views/examples/crudcreate"
-
 import Showd from "views/examples/division"
 import ShowU from "views/examples/usuarioShow"
-
-import Calendario from "views/sigetu/estudiantes/Calendario";
 
 
 
 var routes = [
-  
+  //alumnos
   {
     path: "/inicio",
     name: "INICIO",
     icon: "ni ni-tv-2 text-primary",
-    component: <Index />,
+    component: <Inicio />,
     layout: "/alumno",
   },
   {
@@ -64,13 +64,6 @@ var routes = [
       component: <Tramites />,
       layout: "/alumno",
     },
-  {
-    path: "/login",
-    name: "Login",
-    icon: "ni ni-key-25 text-info",
-    component: <Login />,
-    layout: "/auth",
-  },
 
   {
     path: "/formulario",
@@ -80,6 +73,7 @@ var routes = [
     layout: "/auth",
   },
 
+  //admin
   {
     path: "/crud",
     name: "crud",

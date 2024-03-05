@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { getDoc, updateDoc, doc } from 'firebase/firestore'
 import { db } from 'firebase.config'
-import UserHeader from "components/Headers/UserHeader.js";
 
 const Editar = () => {
 
@@ -40,8 +39,6 @@ const Editar = () => {
 
     return (
         <>
-            <UserHeader />
-
             <div className='container mt--9'>
                 <div className='row'>
                     <div className='col'>
