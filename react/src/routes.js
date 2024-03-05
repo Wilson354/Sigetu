@@ -18,6 +18,8 @@ import Crear from "views/examples/crudcreate"
 import Showd from "views/examples/division"
 import ShowU from "views/examples/usuarioShow"
 
+import Login from "views/screens/Login"
+
 
 
 var routes = [
@@ -25,42 +27,36 @@ var routes = [
   {
     path: "/inicio",
     name: "INICIO",
-    icon: "ni ni-tv-2 text-primary",
     component: <Inicio />,
     layout: "/alumno",
   },
   {
     path: "/perfil",
     name: "PERFIL",
-    icon: "ni ni-single-02 text-yellow",
     component: <Perfil />,
     layout: "/alumno",
   },
   {
     path: "/calendario",
     name: "CALENDARIO",
-    icon: "ni ni-single-02 text-yellow",
     component: <Calendario />,
     layout: "/alumno",
   },
   {
     path: "/evaluaciones",
     name: "EVALUACIONES",
-    icon: "ni ni-bullet-list-67 text-red",
     component: <Evaluaciones />,
     layout: "/alumno",
   },
   {
     path: "/encuestas",
     name: "ENCUESTAS",
-    icon: "ni ni-bullet-list-67 text-red",
     component: <Encuestas />,
     layout: "/alumno",
   },
     {
       path: "/tramites",
       name: "TRAMITES",
-      icon: "ni ni-bullet-list-67 text-red",
       component: <Tramites />,
       layout: "/alumno",
     },
@@ -68,8 +64,14 @@ var routes = [
   {
     path: "/formulario",
     name: "formulario",
-    icon: "ni ni-key-25 text-info",
     component: <Formulario />,
+    layout: "/auth",
+  },
+
+  {
+    path: "/login",
+    name: "login",
+    component: <Login />,
     layout: "/auth",
   },
 
@@ -77,7 +79,6 @@ var routes = [
   {
     path: "/crud",
     name: "crud",
-    icon: "ni ni-key-25 text-info",
     component: <Crud/>,
     layout: "/alumno",
   },
@@ -85,7 +86,6 @@ var routes = [
   {
     path: "/crear",
     name: "crear",
-    icon: "ni ni-key-25 text-info",
     component: <Crear/>,
     layout: "/alumno",
   },
@@ -93,14 +93,12 @@ var routes = [
   {
     path: "/showd",
     name: "showd",
-    icon: "ni ni-key-25 text-info",
     component: <Showd/>,
     layout: "/alumno",
   },
   {
     path: "/showu",
     name: "showu",
-    icon: "ni ni-key-25 text-info",
     component: <ShowU/>,
     layout: "/alumno",
   },

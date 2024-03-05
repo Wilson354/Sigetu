@@ -7,12 +7,10 @@ import { getAuth, signOut } from "firebase/auth";
 import AdminView from "../../components/AdminView";
 import DocenteView from "../../components/DocenteView";
 
-import Show from 'views/examples/crudshow';
-import Create from 'views/examples/crudcreate';
-import Edit from 'views/examples/crudedit';
-import Showd from 'views/examples/division';
 import AlumnoLayout from "layouts/Alumno";
-import AuthLayout from "layouts/Auth.js";
+import Login from "./Login";
+import AuthLayouth from "layouts/Auth";
+
 
 
 const auth = getAuth(firebaseApp);
@@ -42,7 +40,7 @@ export default function HomeWrapper(props) {
         <Route path="/alumno/*" element={<AlumnoLayout />} />
         
           
-        <Route path="/auth/*" element={<AuthLayout />} />
+        <Route path="/auth/*" element={<AuthLayouth />} />
       </Routes>
 
   );

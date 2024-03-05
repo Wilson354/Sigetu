@@ -10,6 +10,7 @@ import { Container, Row, Col } from "reactstrap";
 
 import AuthNavbar from "components/Navbars/AuthNavbar.js";
 import AuthFooter from "components/Footers/AuthFooter.js";
+import Login from "../views/screens/Login";
 
 import routes from "routes.js";
 
@@ -28,43 +29,30 @@ const Auth = (props) => {
 
   return (
     <>
-    <div  className=""
+      <div
         style={{
-          minHeight: "300px",
+          minHeight: "100vh",
           backgroundImage:
-          "url(" + require("../assets/img/theme/uttecamac.jpg")+")",
+            "url(" + require("../assets/img/theme/uttecamac.jpg") + ")",
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
       >
-{/*=============================================================
-        configurar fondo del login y color
-===============================================================*/}
         <AuthNavbar />
-        <div className="header py-8 py-lg-9 mt--8">
-          <Container>
-            <div className="header-body text-center mb-5">
-              <Row className="justify-content-center">
-                <Col lg="6" md="6">
-                  <h1 className="text-white">BIENVENIDO A SIGETU</h1> 
-                  <p className="text-white">
-                    Sistema Integral de Gestion Estudiantil y Tramites Universitarios
-                  </p>
-                </Col>
-              </Row>
-            </div>
-          </Container>
-        </div>
-        {/* contenido del login */}
-        <Container className="mt--7">
-          <Row className="justify-content-center">
-            <Routes>
-              {getRoutes(routes)}
-              <Route path="*" element={<Navigate to="/auth/login" replace />} />
-            </Routes>
-          </Row>
+        <Container>
+          <div className="header-body text-center">
+            <h1 className="text-dark">BIENVENIDO A <strong>SIGETU</strong></h1>
+            <p className="text-dark"><strong>
+              Sistema Integral de Gestion Estudiantil y Tramites Universitarios
+            </strong>
+            </p>
+          </div>
         </Container>
-      <AuthFooter />
+        {/* contenido del login */}
+        <Container fluid>
+          <Login />
+        </Container>
+        <AuthFooter />
       </div>
     </>
   );

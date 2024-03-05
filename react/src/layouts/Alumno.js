@@ -5,13 +5,20 @@ import { Routes, Route, useNavigate } from 'react-router-dom'; // Agrega Routes 
 import routes from '../routes'; // Importa tus rutas desde routes.js
 import {
   HomeFilled,
-  FileOutlined,
-  PieChartOutlined,
-  TeamOutlined,
-  UserOutlined,
-  LogoutOutlined,
+  IdcardFilled,
   CalendarFilled,
 } from '@ant-design/icons';
+
+//iconos
+import FeedIcon from '@mui/icons-material/Feed';
+import GroupsIcon from '@mui/icons-material/Groups';
+import PersonIcon from '@mui/icons-material/Person';
+import FactCheckIcon from '@mui/icons-material/FactCheck';
+import SchoolIcon from '@mui/icons-material/School';
+import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
+import AssignmentLateIcon from '@mui/icons-material/AssignmentLate';
+import CachedIcon from '@mui/icons-material/Cached';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 import AlumNavbar from 'components/Navbars/AlumNavbar';
 
@@ -19,32 +26,33 @@ import { getAuth, signOut } from "firebase/auth";
 
 const { SubMenu } = Menu;
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Content, Footer, Sider } = Layout;
 
+const iconSize = 20; 
 // Define tus elementos de menú
 const items = [
 
-  { key: '1', label: 'INICIO', icon: <HomeFilled />, path: '/alumno/inicio' },
-  { key: '2', label: 'PERFIL', icon: <UserOutlined />, path: '/alumno/perfil' },
-  { key: '3', label: 'CALENDARIO', icon: <CalendarFilled />, path: '/alumno/calendario' },
-  { key: '4', label: 'EVALUACIONES', icon: <FileOutlined />, path: '/alumno/evaluaciones' },
+  { key: '1', label: 'INICIO', icon: <HomeFilled style={{ fontSize: iconSize }}/>, path: '/alumno/inicio' },
+  { key: '2', label: 'PERFIL', icon: <IdcardFilled style={{ fontSize: iconSize }}/>, path: '/alumno/perfil' },
+  { key: '3', label: 'CALENDARIO', icon: <CalendarFilled style={{ fontSize: iconSize }}/>, path: '/alumno/calendario' },
+  { key: '4', label: 'EVALUACIONES', icon: <FeedIcon style={{ fontSize: iconSize }}/>, path: '/alumno/evaluaciones' },
   {
     key: '5',
-    label: 'EVALUACIONES',
-    icon: <FileOutlined />,
+    label: 'ENCUESTAS',
+    icon: <FactCheckIcon style={{ fontSize: iconSize }} />,
     children: [
-      { key: '6', label: 'EVALUACION DOCENTE', icon: <FileOutlined />, path: '/alumno/evaluacion/docente' },
-      { key: '7', label: 'EVALUACION ESTUDIANTIL', icon: <FileOutlined />, path: '/alumno/evaluacion/estudiante' },
+      { key: '6', label: 'DOCENTE', icon: <GroupsIcon style={{ fontSize: iconSize }}/>, path: '/alumno/evaluacion/docente' },
+      { key: '7', label: 'ESTUDIANTIL', icon: <PersonIcon style={{ fontSize: iconSize }} />, path: '/alumno/evaluacion/estudiante' },
     ]
   },
   {
     key: '8',
     label: 'TRAMITES',
-    icon: <FileOutlined />,
+    icon: <HistoryEduIcon style={{ fontSize: iconSize }} />,
     children: [
-      { key: '9', label: 'TITULACIÓN', icon: <FileOutlined />, path: '/alumno/' },
-      { key: '10', label: 'CERTIFICADO NO ADEUDO', icon: <FileOutlined />, path: '/alumno/' },
-      { key: '11', label: 'CAMBIO DE CARRERA', icon: <FileOutlined />, path: '/alumno/' },
+      { key: '9', label: 'TITULACIÓN', icon: <SchoolIcon style={{ fontSize: iconSize }} />, path: '/alumno/' },
+      { key: '10', label: 'CERT NO ADEUDO', icon: <AssignmentLateIcon style={{ fontSize: iconSize }}/>, path: '/alumno/' },
+      { key: '11', label: 'CAMBIO DE CARRERA', icon: <CachedIcon style={{ fontSize: iconSize }}/>, path: '/alumno/' },
     ]
   },
 
@@ -75,7 +83,7 @@ const Alumno = () => {
     const auth = getAuth();
     signOut(auth)
       .then(() => {
-        navigate("/alumno/inicio");
+        navigate("/auth/login");
       })
       .catch((error) => {
         console.error("Error al cerrar sesión:", error);
@@ -111,7 +119,6 @@ const Alumno = () => {
         ))}
       </SubMenu>
     ) : (
-      // Si no tiene hijos, es un elemento de menú normal
       <Menu.Item key={item.key} icon={item.icon}>
         <Link to={item.path}>{item.label}</Link>
       </Menu.Item>
@@ -119,7 +126,7 @@ const Alumno = () => {
   ))}
   <Menu.Divider style={{ margin: '8px 0', borderTop: '2px solid #616161' }} />
   {/* Botón de logout */}
-  <Menu.Item key="logout" icon={<LogoutOutlined />} onClick={handleLogout} style={{ color: 'red' }}>
+  <Menu.Item key="logout" icon={<LogoutIcon style={{ fontSize: iconSize }}/>} onClick={handleLogout} style={{ color: 'red' }}>
     SALIR
   </Menu.Item>
 </Menu>

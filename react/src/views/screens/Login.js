@@ -11,16 +11,20 @@ import {
   InputGroupAddon,
   InputGroupText,
   InputGroup,
-  Container, Row,
+  Container,
 } from "reactstrap";
-
-import AuthNavbar from "components/Navbars/AuthNavbar.js";
-import AuthFooter from "components/Footers/AuthFooter.js";
+import { useNavigate } from "react-router-dom";
+import { Alert } from 'antd';
+import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons'; // Importa los íconos necesarios
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false); // Para deshabilitar el botón durante la autenticación
+  const [showPassword, setShowPassword] = useState(false); // Para mostrar/ocultar la contraseña
   const auth = getAuth();
+  const navigate = useNavigate();
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -30,104 +34,122 @@ const Login = () => {
     setPassword(e.target.value);
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true); // Deshabilitar el botón de inicio de sesión
+
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-
         const user = userCredential.user;
         console.log("Logged in as:", user.email);
 
+        // Determina el rol del usuario y redirige en consecuencia
+        if (user.rol === "admin") {
+          navigate("/admin"); // Redirige a la página de administrador
+        } else if (user.rol === "docente") {
+          navigate("/docente"); // Redirige a la página de docente
+        } else {
+          navigate("/alumno/inicio"); // Redirige a la página de inicio del alumno
+        }
       })
       .catch((error) => {
-
         const errorCode = error.code;
         const errorMessage = error.message;
         console.error("Login error:", errorMessage);
+
+        if (errorCode === "auth/wrong-password" || errorCode === "auth/user-not-found") {
+          setError("Usuario o contraseña incorrectos");
+        } else if (errorCode === 400) {
+          setError("Error en la solicitud. Por favor, verifica tus datos e intenta de nuevo.");
+        } else if (errorCode === "auth/invalid-credential") {
+          setError("Credenciales inválidas. Por favor, verifica tu correo y contraseña e intenta de nuevo.");
+        } else {
+          setError(errorMessage);
+        }
+      })
+      .finally(() => {
+        setLoading(false); // Habilitar el botón de inicio de sesión después de completar la autenticación
       });
   };
 
   return (
     <>
-      <div  className=""
-        style={{
-          minHeight: "100vh",
-          backgroundImage:
-          "url(" + require("../../assets/img/theme/uttecamac.jpg")+")",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        <AuthNavbar />
-        <Container fluid className="d-flex justify-content-center align-items-center ">
-        <Col md="12">
-            <div className="header-body text-center mb-5">
-                  <h1 className="text-white">BIENVENIDO A SIGETU</h1> 
-                  <p className="text-white">
-                    Sistema Integral de Gestion Estudiantil y Tramites Universitarios
-                  </p>
+      <Container fluid className="justify-content-center align-items-center" style={{ maxWidth: '450px' }}>
+        <Card className="bg-gradient-white shadow">
+          <CardHeader className="bg-transparent">
+            <div className=" text-center mb-2">
+              <h1 className="text-dark">Login</h1>
             </div>
-        <div className="d-flex justify-content-center">
-        <Col lg="3" md="7">
-          <Card className="bg-gradient-white shadow">
-            <CardHeader className="bg-transparent pb-2">
-              <div className="text-muted text-center mt-2 mb-3">
-                <h1 className="text-black">Login</h1>
+            {/* Muestra la alerta si hay un error */}
+            {error && 
+            <Alert
+              message={error}
+              type="error"
+              showIcon
+            />}
+          </CardHeader>
+          <CardBody className="px-lg-4 py-lg-4">
+            <Form role="form" onSubmit={handleSubmit}>
+              <FormGroup className="mb-3">
+                <InputGroup className="input-group-alternative">
+                  <InputGroupAddon addonType="prepend">
+                    <InputGroupText>
+                      <i className="ni ni-email-83" />
+                    </InputGroupText>
+                  </InputGroupAddon>
+                  <Input
+                    placeholder=" Correo"
+                    type="email"
+                    value={email}
+                    onChange={handleEmailChange}
+                    disabled={loading}
+                  />
+                </InputGroup>
+              </FormGroup>
+              <FormGroup>
+                <InputGroup className="input-group-alternative">
+                  <InputGroupAddon addonType="prepend">
+                    <InputGroupText>
+                      <i className="ni ni-lock-circle-open" />
+                    </InputGroupText>
+                  </InputGroupAddon>
+                  <Input
+                    placeholder=" Contraseña"
+                    type={showPassword ? "text" : "password"} // Cambia el tipo de input dependiendo de si se muestra la contraseña
+                    value={password}
+                    onChange={handlePasswordChange}
+                    disabled={loading} // Deshabilitar el campo de entrada durante la autenticación
+                  />
+                  <InputGroupAddon addonType="append">
+                    <InputGroupText onClick={togglePasswordVisibility}>
+                      {showPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />} {/* Muestra el ícono correspondiente a la visibilidad de la contraseña */}
+                    </InputGroupText>
+                  </InputGroupAddon>
+                </InputGroup>
+              </FormGroup>
+              <div className="text-center">
+                <button
+                  style={{ backgroundColor: '#007bff', color: '#ffffff' }}
+                  className="btn btn-success btn-block mt-4"
+                  type="submit"
+                  disabled={loading} // Deshabilitar el botón durante la autenticación
+                >
+                  {loading ? 'Ingresando...' : 'Ingresar'}
+                </button>
               </div>
-            </CardHeader>
-            <CardBody className="px-lg-5 py-lg-5">
-              <Form role="form" onSubmit={handleSubmit}>
-                <FormGroup className="mb-3">
-                  <InputGroup className="input-group-alternative">
-                    <InputGroupAddon addonType="prepend">
-                      <InputGroupText>
-                        <i className="ni ni-email-83" />
-                      </InputGroupText>
-                    </InputGroupAddon>
-                    <Input
-                      placeholder="Email"
-                      type="email"
-                      autoComplete="new-email"
-                      value={email}
-                      onChange={handleEmailChange}
-                    />
-                  </InputGroup>
-                </FormGroup>
-                <FormGroup>
-                  <InputGroup className="input-group-alternative">
-                    <InputGroupAddon addonType="prepend">
-                      <InputGroupText>
-                        <i className="ni ni-lock-circle-open" />
-                      </InputGroupText>
-                    </InputGroupAddon>
-                    <Input
-                      placeholder="Password"
-                      type="password"
-                      autoComplete="new-password"
-                      value={password}
-                      onChange={handlePasswordChange}
-                    />
-                  </InputGroup>
-                </FormGroup>
-                <div className="text-center">
-                  <button className="btn btn-success btn-block mt-4" type="submit">
-                    Ingresar
-                  </button>
-                </div>
-                <Col xs="12" className="mt-3 text-center">
-                  <a href="#" className="text-light">
-                    Olvidaste tu contraseña?
-                  </a>
-                </Col>
-              </Form>
-            </CardBody>
-          </Card>
-        </Col>
-      </div>
-      </Col>
-        </Container>
-      <AuthFooter />
-      </div>
+              <Col xs="12" className="mt-5 text-center">
+                <a href="#" className="text-light">
+                  Olvidaste tu contraseña?
+                </a>
+              </Col>
+            </Form>
+          </CardBody>
+        </Card>
+      </Container>
     </>
   );
 };
