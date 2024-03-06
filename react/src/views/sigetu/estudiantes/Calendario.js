@@ -57,12 +57,12 @@ const Calendario = () => {
     const currentDay = value.date();
 
     // Definir los días de la Semana vacacional
-    const semanaSanta = [
-        {date: 25,  color: 'yellow', content: 'Semana vacacional'},
-        {date: 26,  color: 'yellow', content: 'Semana vacacional'},
-        {date: 27,  color: 'yellow', content: 'Semana vacacional'},
-        {date: 28,  color: 'yellow', content: 'Semana vacacional'},
-        {date: 29,  color: 'yellow', content: 'Semana vacacional'},
+    const vacacionesData = [
+        {date: 25, month: 2, color: 'yellow', content: 'Semana vacacional'},
+        {date: 26, month: 2,color: 'yellow', content: 'Semana vacacional'},
+        {date: 27, month: 2, color: 'yellow', content: 'Semana vacacional'},
+        {date: 28, month: 2, color: 'yellow', content: 'Semana vacacional'},
+        {date: 29, month: 2, color: 'yellow', content: 'Semana vacacional'},
         ]; // del 25 al 29 de marzo
 
     // Definir los días no laborales y sus colores
@@ -85,11 +85,6 @@ const Calendario = () => {
       { date: 16, month: 7, color: 'orange', content: 'Fin de cuatrimestre' }, //16 de agosto
     ];
 
-    // Verificar si el día actual está dentro de la Semana vacacional
-    if (currentMonth === 2 && semanaSanta.includes(currentDay)) {
-      listData.push({ type: 'semanaSanta', content: 'Semana vacacional' });
-    }
-
     // Verificar si el día actual es uno de los días no laborales
     const noLaboral = noLaboralData.find(
       (data) => data.date === currentDay && data.month === currentMonth
@@ -100,6 +95,9 @@ const Calendario = () => {
       (data) => data.date === currentDay && data.month === currentMonth
     );
 
+    const vacaciones = vacacionesData.find(
+      (data) => data.date === currentDay && data.month === currentMonth
+    );
     // Agregar los datos correspondientes a la lista de datos
     if (noLaboral) {
       listData.push({ type: 'noLaboral', content: noLaboral.content, color: noLaboral.color });
@@ -107,6 +105,10 @@ const Calendario = () => {
 
     if (cuatrimestre) {
       listData.push({ type: 'cuatrimestre', content: cuatrimestre.content, color: cuatrimestre.color });
+    }
+
+    if (vacaciones) {
+      listData.push({ type: 'vacaciones', content: vacaciones.content, color: vacaciones.color });
     }
 
     return listData;

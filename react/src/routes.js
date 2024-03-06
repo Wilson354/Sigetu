@@ -20,6 +20,8 @@ import ShowU from "views/examples/usuarioShow"
 
 import Login from "views/screens/Login"
 
+//docente
+import Iniciod from "views/sigetu/docentes/HomeDocentes";
 
 
 var routes = [
@@ -60,7 +62,7 @@ var routes = [
       component: <Tramites />,
       layout: "/alumno",
     },
-
+//auth
   {
     path: "/formulario",
     name: "formulario",
@@ -101,6 +103,14 @@ var routes = [
     name: "showu",
     component: <ShowU/>,
     layout: "/alumno",
+  },
+
+  //docentes
+  {
+    path: "/inicio",
+    name: "INICIO",
+    component: <Iniciod />,
+    layout: "/docente",
   },
 ];
 export default routes;

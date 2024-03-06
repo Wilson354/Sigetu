@@ -1,84 +1,82 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'; // Corregido aquí
-import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore'; // Importar doc desde 'firebase/firestore'
-import { db } from 'firebase.config';
+import React, { useState } from "react";
+import firebaseApp from "../../firebase.config";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { getFirestore, doc, collection, setDoc } from "firebase/firestore";
+const auth = getAuth(firebaseApp);
 
-const Crudshow = () => {
-    // configurar hooks (ganchos)
-    const [alumnos, setAlumnos] = useState([]);
+function Login() {
+  const firestore = getFirestore(firebaseApp);
+  const [isRegistrando, setIsRegistrando] = useState(false);
+  const [rol, setRol] = useState("admin"); // Estado para almacenar el valor del rol
 
-    // referenciar a bd
-    const alumnosCollection = collection(db, "Alumnos");
+  async function registrarUsuario(email, password) {
+    const infoUsuario = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    ).then((usuarioFirebase) => {
+      return usuarioFirebase;
+    });
 
-    // mostrar docs
-    const getAlumnos = async () => {
-        const data = await getDocs(alumnosCollection);
-        setAlumnos(
-            data.docs.map((doc) => ({...doc.data(), id: doc.id}))
-        );
-    };
+    console.log(infoUsuario.user.uid);
+    const docuRef = doc(firestore, `usuarios/${infoUsuario.user.uid}`);
+    setDoc(docuRef, { correo: email, rol: rol }); // Utiliza el valor del rol almacenado en el estado
+  }
 
-    // eliminar docs
-    const deleteAlumno = async (id) => {
-        const alumnoDoc = doc(db, "Alumnos", id);
-        await deleteDoc(alumnoDoc);
-        getAlumnos();
-    };
+  function submitHandler(e) {
+    e.preventDefault();
 
-    // useEffect
-    useEffect(() => {
-        getAlumnos();
-    }, []);
+    const email = e.target.elements.email.value;
+    const password = e.target.elements.password.value;
 
-    // devolver la vista al componente
+    console.log("submit", email, password, rol); // Aquí también utilizamos el valor del rol almacenado en el estado
 
-    return (
-        <>
-            <div className='container mt--4'>
-                <div className='row'>
-                    <div className='col'>
-                        <div className='d-grid gap-2'>
-                            <Link to="alumno/create" className='btn btn-secondary mt-2 mb-2'>CREAR</Link>
-                        </div>
+    if (isRegistrando) {
+      registrarUsuario(email, password);
+    } else {
+      signInWithEmailAndPassword(auth, email, password);
+    }
+  }
 
-                        <table className='table table-dark table-hover'>
-                            <thead>
-                                <tr>
-                                    <th>Matricula</th>
-                                    <th>Nombres</th>
-                                    <th>Apellidos</th>
-                                    <th>grado</th>
-                                    <th>grupo</th>
-                                    <th>adeudos</th>
-                                    <th>vidas</th>
-                                    <th>acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {alumnos.map((alumno) => (
-                                    <tr key={alumno.id}>
-                                        <td>{alumno.matricula}</td>
-                                        <td>{alumno.nombres}</td>
-                                        <td>{alumno.apellidos}</td>
-                                        <td>{alumno.grado}</td>
-                                        <td>{alumno.grupo}</td>
-                                        <td>{alumno.adeudos}</td>
-                                        <td>{alumno.vidas}</td>
-                                        <td>
-                                            {/* Utilizar Link para la navegación */}
-                                            <Link to={`/edit/${alumno.id}`} className='btn btn-light'><i className="fa-solid fa-pencil"></i></Link>
-                                            <button onClick={() => {deleteAlumno(alumno.id)}} className='btn btn-danger'><i className="fa-solid fa-trash"></i></button>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+  return (
+    <div>
+      <h1>{isRegistrando ? "Regístrate" : "Inicia sesión"}</h1>
 
-        </>
-    );
-};
+      <form onSubmit={submitHandler}>
+        <label>
+          Correo electrónico:
+          <input type="email" id="email" />
+        </label>
 
-export default Crudshow;
+        <label>
+          Contraseña:
+          <input type="password" id="password" />
+        </label>
+
+        <label>
+          Rol:
+          <select value={rol} onChange={(e) => setRol(e.target.value)}> {/* Actualizamos el estado del rol cuando cambia la selección */}
+            <option value="admin">Administrador</option>
+            <option value="docente">Docente</option>
+            <option value="alumno">Alumno</option>
+          </select>
+        </label>
+
+        <input
+          type="submit"
+          value={isRegistrando ? "Registrar" : "Iniciar sesión"}
+        />
+      </form>
+
+      <button onClick={() => setIsRegistrando(!isRegistrando)}>
+        {isRegistrando ? "Ya tengo una cuenta" : "Quiero registrarme"}
+      </button>
+    </div>
+  );
+}
+
+export default Login;

@@ -55,6 +55,7 @@ const items = [
       { key: '11', label: 'CAMBIO DE CARRERA', icon: <CachedIcon style={{ fontSize: iconSize }}/>, path: '/alumno/' },
     ]
   },
+  { key: '12', label: 'Crear', icon: <FeedIcon style={{ fontSize: iconSize }}/>, path: '/alumno/crud' },
 
 
   // Agrega más elementos de menú según sea necesario

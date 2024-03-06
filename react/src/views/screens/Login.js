@@ -17,7 +17,14 @@ import { useNavigate } from "react-router-dom";
 import { Alert } from 'antd';
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons'; // Importa los íconos necesarios
 
+//firebase rol agregar
+import firebaseApp from "../../firebase.config";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
+
+const firestore = getFirestore(firebaseApp);
+
 const Login = () => {
+  const [user, setUser] = useState(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -25,6 +32,13 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false); // Para mostrar/ocultar la contraseña
   const auth = getAuth();
   const navigate = useNavigate();
+
+  async function getRol(uid) {
+    const docuRef = doc(firestore, `usuarios/${uid}`);
+    const docuCifrada = await getDoc(docuRef);
+    const infoFinal = docuCifrada.data().rol;
+    return infoFinal;
+  }
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -38,29 +52,35 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Deshabilitar el botón de inicio de sesión
-
+    setLoading(true);
+  
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         const user = userCredential.user;
         console.log("Logged in as:", user.email);
-
-        // Determina el rol del usuario y redirige en consecuencia
-        if (user.rol === "admin") {
-          navigate("/admin"); // Redirige a la página de administrador
-        } else if (user.rol === "docente") {
-          navigate("/docente"); // Redirige a la página de docente
+  
+        // Obtener el rol del usuario desde la base de datos
+        const rol = await getRol(user.uid);
+  
+        // Determinar la ruta de redirección según el rol del usuario
+        if (rol === "admin") {
+          navigate("/admin");
+        } else if (rol === "docente") {
+          navigate("/docente/inicio");
+        } else if (rol === "alumno") {
+          navigate("/alumno/inicio");
         } else {
-          navigate("/alumno/inicio"); // Redirige a la página de inicio del alumno
+          setError("Rol de usuario no reconocido");
         }
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.error("Login error:", errorMessage);
-
+  
+        // Manejar errores de autenticación
         if (errorCode === "auth/wrong-password" || errorCode === "auth/user-not-found") {
           setError("Usuario o contraseña incorrectos");
         } else if (errorCode === 400) {
@@ -72,7 +92,7 @@ const Login = () => {
         }
       })
       .finally(() => {
-        setLoading(false); // Habilitar el botón de inicio de sesión después de completar la autenticación
+        setLoading(false);
       });
   };
 
