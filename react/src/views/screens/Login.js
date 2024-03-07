@@ -66,7 +66,7 @@ const Login = () => {
   
         // Determinar la ruta de redirección según el rol del usuario
         if (rol === "admin") {
-          navigate("/admin");
+          navigate("/admin/inicio");
         } else if (rol === "docente") {
           navigate("/docente/inicio");
         } else if (rol === "alumno") {
@@ -85,7 +85,7 @@ const Login = () => {
           setError("Usuario o contraseña incorrectos");
         } else if (errorCode === 400) {
           setError("Error en la solicitud. Por favor, verifica tus datos e intenta de nuevo.");
-        } else if (errorCode === "auth/invalid-credential") {
+        } else if (errorCode === "auth/invalid-credential" || errorCode === "auth/invalid-email") {
           setError("Credenciales inválidas. Por favor, verifica tu correo y contraseña e intenta de nuevo.");
         } else {
           setError(errorMessage);

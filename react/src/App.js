@@ -5,7 +5,6 @@ import "assets/scss/argon-dashboard-react.scss";
 // Rutas buenas
 import React, { useState, useEffect } from "react";
 import { AuthProvider } from "context/AuthContext";
-import Login from "views/screens/Login";
 import Home from "views/screens/Home";
 
 // Firebase
@@ -44,7 +43,8 @@ function App() {
       // Cerrar sesión por inactividad
       setUser(null);
       console.log('¡Sesión cerrada por inactividad!');
-    },  10 * 60 * 1000); // 3 minutos en milisegundos
+      window.location.href = '/auth/login'; 
+    },  10 * 60 * 1000); // 10 minutos en milisegundos
   };
 
   async function getRol(uid) {

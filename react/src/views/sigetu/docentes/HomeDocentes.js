@@ -9,6 +9,7 @@ import {
   Col,
   CardBody,
   CardTitle,
+  Button
 } from "reactstrap";
 
 const HomeEstudiante = (props) => {
@@ -40,137 +41,28 @@ const HomeEstudiante = (props) => {
     <>
       <div className="main-content" ref={mainContent}>
         <Container fluid>
-          <Card>
-            <Row>
-              <Col className="order-xl-1" xl="9">
-                <Card className="bg-red">
-                  <CardHeader>
-                    <Row>
-                      <div className="col">
-                        <CardTitle
-                          tag="h4"
-                          className="text-uppercase text-muted mb-0"
-                        >
-                          MATRICULA
-                        </CardTitle>
-                        <span className="h3 font-weight-bold mb-0">
-                          54123412
-                        </span>
-                      </div>
-                      <Col className="col-auto">
-                        <div className="icon icon-shape bg-warning text-white rounded-circle shadow">
-                          <i className="ni ni-badge"></i>
-                        </div>
-                      </Col>
-                    </Row>
-                  </CardHeader>
-                  <CardBody>
-                    <Col>
-                      <Card>
-                        <h3>Evaluaciones Actuales</h3>
-                        <Table bordered striped className="align-items-center" responsive>
-                          <thead>
-                            <tr className="bg-info">
-                              <th>Asignatura</th>
-                              <th>Profesor</th>
-                              <th>Parcial 1</th>
-                              <th>Parcial 2</th>
-                              <th>Parcial 3</th>
-                              <th>Ev. Final</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <th scope="row">Integradora</th>
-                              <td>Ramirez Campoy Lorena</td>
-                              <td>AU</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                            </tr>
-                            <tr>
-                              <th scope="row">Videojuegos</th>
-                              <td>Tellez Barrientos Omar</td>
-                              <td>AU</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                            </tr>
-                            <tr>
-                              <th scope="row">Desarrollo movil</th>
-                              <td>Atlitec Mejia Jonathan</td>
-                              <td>AU</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                            </tr>
-                            <tr>
-                              <th scope="row">Negociacion empresarial</th>
-                              <td>Miranda Rivera Eduardo</td>
-                              <td>AU</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                            </tr>
-                            <tr>
-                              <th scope="row">ingles</th>
-                              <td>Chavez Torrez Yaxben</td>
-                              <td>AU</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                            </tr>
-                            <tr>
-                              <th scope="row">Desarrollo software</th>
-                              <td>Tellez Barrientos Omar</td>
-                              <td>AU</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                            </tr>
-                            <tr>
-                              <th scope="row">Negociacion empresarial</th>
-                              <td>Miranda Rivera Eduardo</td>
-                              <td>AU</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                            </tr>
-                            <tr>
-                              <th scope="row">Negociacion empresarial</th>
-                              <td>Miranda Rivera Eduardo</td>
-                              <td>AU</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                            </tr>
-                            <tr>
-                              <th scope="row">Negociacion empresarial</th>
-                              <td>Miranda Rivera Eduardo</td>
-                              <td>AU</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                            </tr>
-                            <tr>
-                              <th scope="row">Negociacion empresarial</th>
-                              <td>Miranda Rivera Eduardo</td>
-                              <td>AU</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                            </tr>
-                          </tbody>
-                        </Table>
-                      </Card>
-                    </Col>
-                  </CardBody>
-                </Card>
-              </Col>
-
-            
-            </Row>
-          </Card>
+        <CardHeader className="text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
+                <div className="d-flex justify-content-between">
+                  <Button
+                    className="mr-4"
+                    color="info"
+                    href="#pablo"
+                    onClick={(e) => e.preventDefault()}
+                    size="sm"
+                  >
+                    Connect
+                  </Button>
+                  <Button
+                    className="float-right"
+                    color="default"
+                    href="#pablo"
+                    onClick={(e) => e.preventDefault()}
+                    size="sm"
+                  >
+                    Message
+                  </Button>
+                </div>
+              </CardHeader>
         </Container>
       </div>
     </>

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import {
   Card,
   CardHeader,
-  Table,
   Container,
   Row,
   Col,
@@ -11,34 +10,253 @@ import {
   CardTitle,
 } from "reactstrap";
 
-import { Alert, Space } from 'antd';
+import { Alert, Space, Table, Tag } from 'antd';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 
+import { doc, getDoc } from "firebase/firestore";
+import { db, auth } from 'firebase.config';
+
+// Obtener el usuario actualmente autenticado
+const user = auth.currentUser;
+
+// Verificar si hay un usuario autenticado
+if (user) {
+  // Obtener el ID del usuario autenticado
+  const userId = user.uid;
+  console.log(userId);
+} else {
+  // No hay usuario autenticado
+  console.log('No hay usuario autenticado');
+}
+
 const HomeEstudiante = (props) => {
   const mainContent = React.useRef(null);
   const location = useLocation();
+  const [time, setTime] = useState(new Date());
+  const [userData, setUserData] = useState(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
     mainContent.current.scrollTop = 0;
   }, [location]);
 
-  const [time, setTime] = useState(new Date());
-
   useEffect(() => {
     const timerID = setInterval(() => tick(), 1000);
-
-    // Devolvemos una función de limpieza para detener el temporizador cuando el componente se desmonte
-    return () => {
+      return () => {
       clearInterval(timerID);
     };
   }, []); // Usamos un arreglo vacío para indicar que este efecto solo se ejecuta una vez, similar a componentDidMount()
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const user = auth.currentUser;
+        if (user) {
+          const userId = user.uid;
+          const userData = await getAlumnoById(userId);
+          setUserData(userData);
+        } else {
+          console.log('No hay usuario autenticado');
+        }
+      } catch (error) {
+        console.error('Error al cargar los datos del usuario:', error);
+      }
+    };
+    fetchUserData();
+  }, []);
+
   const tick = () => {
     setTime(new Date());
+  };
+
+  //tabla
+  const columns = [
+    {
+      title: 'Asignatura',
+      dataIndex: 'asignatura',
+      key: 'asignatura',
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: 'Profesor',
+      dataIndex: 'profesor',
+      key: 'profesor',
+    },
+    {
+      title: 'Parcial 1',
+      key: 'tags1',
+      dataIndex: 'tags1',
+      render: (_, { tags1 }) => (
+        <>
+          {tags1 && tags1.map((tag) => {
+            let color = 'green';
+            if (tag === 'NA') {
+              color = 'volcano';
+            } else if (tag === 'SE') {
+              color = 'yellow';
+            }
+            return (
+              <Tag color={color} key={tag}>
+                {tag.toUpperCase()}
+              </Tag>
+            );
+          })}
+        </>
+      ),
+    },
+    {
+      title: 'Parcial 2',
+      key: 'tags2',
+      dataIndex: 'tags2',
+      render: (_, { tags2 }) => (
+        <>
+          {tags2 && tags2.map((tag) => {
+            let color = 'green';
+            if (tag === 'NA') {
+              color = 'volcano';
+            } else if (tag === 'SE') {
+              color = 'yellow';
+            }
+            return (
+              <Tag color={color} key={tag}>
+                {tag.toUpperCase()}
+              </Tag>
+            );
+          })}
+        </>
+      ),
+    },
+    {
+      title: 'Parcial 3',
+      key: 'tags3',
+      dataIndex: 'tags3',
+      render: (_, { tags3 }) => (
+        <>
+          {tags3 && tags3.map((tag) => {
+            let color = 'green';
+            if (tag === 'NA') {
+              color = 'volcano';
+            } else if (tag === 'SE') {
+              color = 'yellow';
+            }
+            return (
+              <Tag color={color} key={tag}>
+                {tag.toUpperCase()}
+              </Tag>
+            );
+          })}
+        </>
+      ),
+    },
+    {
+      title: 'Final',
+      key: 'tagsf',
+      dataIndex: 'tagsf',
+      render: (_, { tagsf }) => (
+        <>
+          {tagsf && tagsf.map((tag) => {
+            let color = 'green';
+            if (tag === 'NA') {
+              color = 'volcano';
+            } else if (tag === 'SE') {
+              color = 'yellow';
+            }
+            return (
+              <Tag color={color} key={tag}>
+                {tag.toUpperCase()}
+              </Tag>
+            );
+          })}
+        </>
+      ),
+    },
+  ];
+
+  const data = [
+    {
+      key: '1',
+      asignatura: 'John Brown',
+      profesor: 32,
+      tags1: ['NA'],
+      tags2: ['DE'],
+      tags3: ['SA'],
+      tagsf: ['DE'],
+    },
+    {
+      key: '2',
+      asignatura: 'John ds',
+      profesor: 32,
+      tags1: ['AU'],
+      tags2: ['DE'],
+      tags3: ['NA'],
+      tagsf: ['DE'],
+    },
+    {
+      key: '3',
+      asignatura: 'John es',
+      profesor: 32,
+      tags1: ['DE'],
+      tags2: ['DE'],
+      tags3: ['SE'],
+      tagsf: ['DE'],
+    },
+    {
+      key: '4',
+      asignatura: 'John es',
+      profesor: 32,
+      tags1: ['DE'],
+      tags2: ['DE'],
+      tags3: ['SE'],
+      tagsf: ['DE'],
+    },
+    {
+      key: '5',
+      asignatura: 'John es',
+      profesor: 32,
+      tags1: ['DE'],
+      tags2: ['DE'],
+      tags3: ['SE'],
+      tagsf: ['DE'],
+    },
+    {
+      key: '6',
+      asignatura: 'John es',
+      profesor: 32,
+      tags1: ['DE'],
+      tags2: ['DE'],
+      tags3: ['SE'],
+      tagsf: ['DE'],
+    },
+    {
+      key: '7',
+      asignatura: 'John es',
+      profesor: 32,
+      tags1: ['DE'],
+      tags2: ['DE'],
+      tags3: ['SE'],
+      tagsf: ['DE'],
+    },
+  ];
+
+  const getAlumnoById = async (userId) => {
+    try {
+      const docRef = doc(db, 'usuarios', userId);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const userData = docSnap.data();
+        console.log(userData);
+        return userData;
+      } else {
+        console.log('No se encontraron datos para el usuario con el ID proporcionado');
+        return null;
+      }
+    } catch (error) {
+      console.error('Error al obtener los datos del usuario:', error);
+      return null;
+    }
   };
 
   return (
@@ -48,127 +266,40 @@ const HomeEstudiante = (props) => {
           <Card>
             <Row>
               <Col className="order-xl-1" xl="9">
-                <Card className="bg-red">
+                <Card className="bg-red" >
                   <CardHeader>
-                    <Row>
-                      <div className="col">
-                        <CardTitle
-                          tag="h4"
-                          className="text-uppercase text-muted mb-0"
-                        >
-                          MATRICULA
-                        </CardTitle>
-                        <span className="h3 font-weight-bold mb-0">
-                          54123412
-                        </span>
-                      </div>
-                      <Col className="col-auto">
-                        <div className="icon icon-shape bg-warning text-white rounded-circle shadow">
-                          <i className="ni ni-badge"></i>
-                        </div>
+                    <Card>
+                    <Col>
+                        {userData && userData.nombres} 
+                        {userData && userData.apellidos}
+                      </Col>
+                    </Card>
+                    <Row gutter={[8, 8]}>
+                      <Col span={8}>
+                        {userData && userData.nombres} 
+                      </Col>
+                      <Col span={8} >
+                        {userData && userData.apellidos}
+                      </Col>
+                      <Col span={8} >
+                        {userData && userData.matricula}
+                      </Col>
+                      <Col span={8} >
+                        {userData && userData.grado}
+                      {userData && userData.grupo}
+                      </Col>
+                      <Col span={8} >
+                      {userData && userData.grupoi}
                       </Col>
                     </Row>
                   </CardHeader>
-                  <CardBody>
-                    <Col>
-                      <Card>
-                        <h3>Evaluaciones Actuales</h3>
-                        <Table bordered striped className="align-items-center" responsive>
-                          <thead>
-                            <tr className="bg-info">
-                              <th>Asignatura</th>
-                              <th>Profesor</th>
-                              <th>Parcial 1</th>
-                              <th>Parcial 2</th>
-                              <th>Parcial 3</th>
-                              <th>Ev. Final</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <th scope="row">Integradora</th>
-                              <td>Ramirez Campoy Lorena</td>
-                              <td>AU</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                            </tr>
-                            <tr>
-                              <th scope="row">Videojuegos</th>
-                              <td>Tellez Barrientos Omar</td>
-                              <td>AU</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                            </tr>
-                            <tr>
-                              <th scope="row">Desarrollo movil</th>
-                              <td>Atlitec Mejia Jonathan</td>
-                              <td>AU</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                            </tr>
-                            <tr>
-                              <th scope="row">Negociacion empresarial</th>
-                              <td>Miranda Rivera Eduardo</td>
-                              <td>AU</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                            </tr>
-                            <tr>
-                              <th scope="row">ingles</th>
-                              <td>Chavez Torrez Yaxben</td>
-                              <td>AU</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                            </tr>
-                            <tr>
-                              <th scope="row">Desarrollo software</th>
-                              <td>Tellez Barrientos Omar</td>
-                              <td>AU</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                            </tr>
-                            <tr>
-                              <th scope="row">Negociacion empresarial</th>
-                              <td>Miranda Rivera Eduardo</td>
-                              <td>AU</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                            </tr>
-                            <tr>
-                              <th scope="row">Negociacion empresarial</th>
-                              <td>Miranda Rivera Eduardo</td>
-                              <td>AU</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                            </tr>
-                            <tr>
-                              <th scope="row">Negociacion empresarial</th>
-                              <td>Miranda Rivera Eduardo</td>
-                              <td>AU</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                            </tr>
-                            <tr>
-                              <th scope="row">Negociacion empresarial</th>
-                              <td>Miranda Rivera Eduardo</td>
-                              <td>AU</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                              <td>DE</td>
-                            </tr>
-                          </tbody>
-                        </Table>
-                      </Card>
-                    </Col>
+                  <CardBody >
+                    <Card>
+                      <h3>Evaluaciones Actuales</h3>
+                      <div className="table-responsive">
+                        <Table className="table-content" columns={columns} dataSource={data} pagination={false} />
+                      </div>
+                    </Card>
                   </CardBody>
                 </Card>
               </Col>

@@ -13,11 +13,13 @@ import Calendario from "views/sigetu/estudiantes/Calendario";
 
 
 //administrador
-import Crud from "views/examples/crudshow"
+import Inicioa from "views/sigetu/admin/HomeAdmin";
+import Crud from "views/sigetu/admin/CrudUsers"
 import Crear from "views/examples/crudcreate"
 import Showd from "views/examples/division"
-import ShowU from "views/examples/usuarioShow"
+import ShowU from "views/sigetu/admin/CrudShow"
 
+//auth
 import Login from "views/screens/Login"
 
 //docente
@@ -79,30 +81,36 @@ var routes = [
 
   //admin
   {
+    path: "/inicio",
+    name: "INICIO",
+    component: <Inicioa />,
+    layout: "/admin",
+  },
+  {
     path: "/crud",
     name: "crud",
     component: <Crud/>,
-    layout: "/alumno",
+    layout: "/admin",
   },
 
   {
     path: "/crear",
     name: "crear",
     component: <Crear/>,
-    layout: "/alumno",
+    layout: "/admin",
   },
 
   {
     path: "/showd",
     name: "showd",
     component: <Showd/>,
-    layout: "/alumno",
+    layout: "/admin",
   },
   {
     path: "/showu",
     name: "showu",
     component: <ShowU/>,
-    layout: "/alumno",
+    layout: "/admin",
   },
 
   //docentes
@@ -112,5 +120,8 @@ var routes = [
     component: <Iniciod />,
     layout: "/docente",
   },
+
+  //errores
+  
 ];
 export default routes;

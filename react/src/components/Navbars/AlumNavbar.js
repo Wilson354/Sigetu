@@ -48,7 +48,7 @@ const AlumNavbar = (props) => {
         <Container fluid>
           <Col xl="8">
             <div className="h1 mb-0 text-uppercase d-none d-lg-inline-block">
-              Bienvenido a sigetu
+              Bienvenido a sigetu alumno
             </div>
           </Col>
           <Col xl="3">

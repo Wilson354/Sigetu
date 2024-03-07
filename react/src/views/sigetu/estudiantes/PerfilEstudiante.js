@@ -1,4 +1,3 @@
-
 import {
   Button,
   Card,
@@ -15,13 +14,23 @@ import {
   FormText,
   Table
 } from "reactstrap";
-
-import { Image } from 'antd';
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "context/AuthContext";
-
+import { doc, getDoc } from "firebase/firestore";
+import { db, auth } from '../../../firebase.config';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { message, Upload } from 'antd';
+import { format } from 'date-fns';
+
+
+const user = auth.currentUser;
+if (user) {
+  const userId = user.uid;
+  console.log(userId);
+} else {
+  console.log('No hay usuario autenticado');
+}
+
 const getBase64 = (img, callback) => {
   const reader = new FileReader();
   reader.addEventListener('load', () => callback(reader.result));
@@ -43,6 +52,8 @@ const beforeUpload = (file) => {
 const Perfil = () => {
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState();
+  const [userData, setUserData] = useState(null);
+
   const handleChange = (info) => {
     if (info.file.status === 'uploading') {
       setLoading(true);
@@ -74,14 +85,10 @@ const Perfil = () => {
     </button>
   );
 
-
-  const auth = useAuth();
-  const { displayName } = auth.user;
   const [defaultModal, setDefaultModal] = useState(false);
   const [AdeudoModal, setAdeudoModal] = useState(false);
   const [solicitudModal, setSolicitudModal] = useState(false);
   const [notificationModal, setNotificationModal] = useState(false);
-
   const toggleModal = (modal) => {
     switch (modal) {
       case 'defaultModal':
@@ -100,6 +107,43 @@ const Perfil = () => {
         break;
     }
   };
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const user = auth.currentUser;
+        if (user) {
+          const userId = user.uid;
+          const userData = await getAlumnoById(userId);
+          setUserData(userData);
+        } else {
+          console.log('No hay usuario autenticado');
+        }
+      } catch (error) {
+        console.error('Error al cargar los datos del usuario:', error);
+      }
+    };
+    fetchUserData();
+  }, []);
+
+  const getAlumnoById = async (userId) => {
+    try {
+      const docRef = doc(db, 'usuarios', userId);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const userData = docSnap.data();
+        console.log(userData);
+        return userData;
+      } else {
+        console.log('No se encontraron datos para el usuario con el ID proporcionado');
+        return null;
+      }
+    } catch (error) {
+      console.error('Error al obtener los datos del usuario:', error);
+      return null;
+    }
+  };
+
   return (
     <>
       <Container fluid>
@@ -163,14 +207,14 @@ const Perfil = () => {
                     </Button>
                   </Col>
 
-                  {/* 
+{/* 
 =============================================================================================================================================================
 
 SECCION DE CREDENCIAL              
 El form es para hacer cambios a la credencial del estudiante se debe editar el form
 
 ==============================================================================================================================================================
-             */}
+*/}
                   <Col md="12">
                     <Button
                       block
@@ -569,7 +613,7 @@ El form es para hacer cambios a la credencial del estudiante se debe editar el f
             </Card>
           </Col>
 
-          {/*
+{/*
 ============================================================================================================================
 
                           seccion de datos personales
@@ -591,23 +635,21 @@ El form es para hacer cambios a la credencial del estudiante se debe editar el f
                     <tbody>
                       <tr>
                         <th><h3>Matricula</h3></th>
-                        <td><h3>Matricula</h3></td>
+                        <td><h3>{userData && userData.matricula}</h3></td>
                       </tr>
                       <tr>
                         <th><h3>Nombre completo</h3></th>
-                        <td><h3>Matricula</h3></td>
-                      </tr>
-                      <tr>
-                        <th><h3>Fecha nacimiento</h3></th>
-                        <td><h3>Matricula</h3></td>
+                        <td>
+                        <h3>{userData && userData.nombres} {userData && userData.apellidos}</h3>
+                        </td>
                       </tr>
                       <tr>
                         <th><h3>Estado civil</h3></th>
-                        <td><h3>Matricula</h3></td>
+                        <td><h3>{userData && userData.civil}</h3></td>
                       </tr>
                       <tr>
                         <th><h3>Curp</h3></th>
-                        <td><h3>Matricula</h3></td>
+                        <td><h3>{userData && userData.curp}</h3></td>
                       </tr>
                     </tbody>
                   </Table>
@@ -626,40 +668,39 @@ El form es para hacer cambios a la credencial del estudiante se debe editar el f
                     <tbody>
                       <tr>
                         <th><h3>Carrera</h3></th>
-                        <td><h3>Matricula</h3></td>
+                        <td><h3>{userData && userData.carrera}</h3></td>
+                      </tr>
+                      <tr>
+                        <th><h3>Area</h3></th>
+                        <td><h3>{userData && userData.area}</h3></td>
                       </tr>
                       <tr>
                         <th><h3>Grado</h3></th>
-                        <td><h3>Matricula</h3></td>
+                        <td><h3>{userData && userData.grado}</h3></td>
                       </tr>
                       <tr>
                         <th><h3>Grupo</h3></th>
-                        <td><h3>Matricula</h3></td>
+                        <td><h3>{userData && userData.grupo}</h3></td>
                       </tr>
                       <tr>
                         <th><h3>Grupo idioma</h3></th>
-                        <td><h3>Matricula</h3></td>
+                        <td><h3>{userData && userData.grupoi}</h3></td>
                       </tr>
                       <tr>
                         <th><h3>Periodo</h3></th>
-                        <td><h3>Matricula</h3></td>
+                        <td><h3>{userData && userData.periodo}</h3></td>
                       </tr>
                       <tr>
                         <th><h3>Vidas academicas</h3></th>
-                        <td><h3>Matricula</h3></td>
-                      </tr>
-                      <tr>
-                        <th><h3>Vidas academicas</h3></th>
-                        <td><h3>Matricula</h3></td>
+                        <td><h3>{userData && userData.vidas}</h3></td>
                       </tr>
                       <tr>
                         <th><h3>situacion</h3></th>
-                        <td><h3>Matricula</h3></td>
+                        <td><h3>{userData && userData.situacion}</h3></td>
                       </tr>
                     </tbody>
                   </Table>
                 </Col>
-
                 <hr className="my-2" />
                 <Col>
                   <Row className="align-items-center">
@@ -673,15 +714,15 @@ El form es para hacer cambios a la credencial del estudiante se debe editar el f
                     <tbody>
                       <tr>
                         <th><h3>Institucion</h3></th>
-                        <td><h3>Instituto Mexicano del Seguro Social</h3></td>
+                        <td><h3>{userData && userData.institucion}</h3></td>
                       </tr>
                       <tr>
                         <th><h3>numero de afilicacion</h3></th>
-                        <td><h3>1013531</h3></td>
+                        <td><h3>{userData && userData.afiliacion}</h3></td>
                       </tr>
                       <tr>
                         <th><h3>clinica</h3></th>
-                        <td><h3>Matricula</h3></td>
+                        <td><h3>{userData && userData.clinica}</h3></td>
                       </tr>
                     </tbody>
                   </Table>

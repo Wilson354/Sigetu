@@ -3,7 +3,7 @@ import { Navbar, Container, Col } from 'reactstrap';
 import { AutoComplete, Input } from 'antd';
 import { useNavigate, Link } from 'react-router-dom'; // Importa useNavigate y Link desde react-router-dom
 
-
+const getRandomInt = (max, min = 0) => Math.floor(Math.random() * (max - min + 1)) + min;
 
 const searchResult = (query) => {
   const category = `${query}`; // Generar un único resultado
@@ -19,7 +19,7 @@ const searchResult = (query) => {
         >
           <span>
             {query} {' '}
-            <Link to={`/admin/${category}`}></Link>
+            <Link to={`/docente/${category}`}></Link>
           </span>
         </div>
       ),
@@ -29,8 +29,8 @@ const searchResult = (query) => {
 
 
 
-const AdminNavbar = (props) => {
-  const navigate = useNavigate(); 
+const DoceNavbar = (props) => {
+  const navigate = useNavigate(); // Utiliza useNavigate para la navegación
 
   const [options, setOptions] = useState([]);
 
@@ -39,7 +39,7 @@ const AdminNavbar = (props) => {
   };
 
   const onSelect = (value) => {
-    navigate(`/admin/${value}`); 
+    navigate(`/docente/${value}`); // Cambia '/ruta' por la ruta base de tu aplicación
   };
 
   return (
@@ -48,7 +48,7 @@ const AdminNavbar = (props) => {
         <Container fluid>
           <Col xl="8">
             <div className="h1 mb-0 text-uppercase d-none d-lg-inline-block">
-              Bienvenido a sigetu administrador
+              Bienvenido a sigetu profesor
             </div>
           </Col>
           <Col xl="3">
@@ -74,4 +74,4 @@ const AdminNavbar = (props) => {
   );
 };
 
-export default AdminNavbar;
+export default DoceNavbar;
