@@ -62,6 +62,10 @@ function CrudUsers() {
     const [successMessage, setSuccessMessage] = useState("");
     const [loading, setLoading] = useState(false);
 
+    const limpiarFormulario = () => {
+        form.resetFields(); // Limpia todos los campos del formulario
+    };
+
     async function registrarUsuario(values) {
         try {
             setLoading(true); // Establecer el estado de carga a verdadero
@@ -70,7 +74,7 @@ function CrudUsers() {
                 values.email,
                 values.password
             );
-            
+
             // Guardar información básica del usuario en la colección "usuarios"
             const userDataUsuarios = {
                 correo: values.email,
@@ -80,7 +84,7 @@ function CrudUsers() {
             };
             const docuRefUsuarios = doc(firestore, `usuarios/${infoUsuario.user.uid}`);
             await setDoc(docuRefUsuarios, userDataUsuarios);
-            
+
             // Guardar información adicional según el rol en la colección correspondiente
             let userDataAdicional = {
                 nombres: values.nombres,
@@ -95,7 +99,7 @@ function CrudUsers() {
                 case "docente":
                     collectionPath = "docentes";
                     break;
-                case "administrador":
+                case "admin":
                     collectionPath = "administradores";
                     break;
                 default:
@@ -104,10 +108,12 @@ function CrudUsers() {
             if (collectionPath !== "") {
                 const docuRefAdicional = doc(firestore, `${collectionPath}/${infoUsuario.user.uid}`);
                 await setDoc(docuRefAdicional, userDataAdicional);
+                console.log(`Información adicional para ${values.select} guardada correctamente.`);
+            } else {
+                console.log("No se encontró una colección válida para guardar la información adicional.");
             }
             message.success("¡Usuario registrado exitosamente!"); // Mostrar mensaje de éxito
         } catch (error) {
-            console.error("Error al registrar usuario:", error.message);
             message.error("Error al registrar usuario: " + error.message);
         } finally {
             setLoading(false); // Establecer el estado de carga a falso, independientemente del resultado
@@ -118,6 +124,7 @@ function CrudUsers() {
         console.log('Received values of form: ', values);
         registrarUsuario(values); // Llama a registrarUsuario con los valores del formulario
     };
+
 
     function generateRandomPassword(length) {
         const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -140,11 +147,11 @@ function CrudUsers() {
 
     return (
         <div>
-            
+
             <Container className="main-content" fluid>
                 <Card>
                     <CardHeader>
-                    {successMessage && <div style={{ textAlign: 'center', marginTop: '40px', color: 'green' }}>{successMessage}</div>} {/* Muestra el mensaje de éxito si existe */}
+                        {successMessage && <div style={{ textAlign: 'center', marginTop: '40px', color: 'green' }}>{successMessage}</div>} {/* Muestra el mensaje de éxito si existe */}
                     </CardHeader>
                     <Row>
                         <Col className="order-xl-1" xl="9">
@@ -267,8 +274,11 @@ function CrudUsers() {
                                 </Form.Item>
 
                                 <Form.Item {...tailFormItemLayout}>
-                                    <Button  type="primary" htmlType="submit" value="Registrar">
+                                    <Button type="primary" htmlType="submit" value="Registrar">
                                         Registrar
+                                    </Button>
+                                    <Button onClick={limpiarFormulario} style={{ marginLeft: 8 }}>
+                                        Limpiar
                                     </Button>
                                 </Form.Item>
                             </Form>
@@ -299,7 +309,7 @@ function CrudUsers() {
                 </Card>
 
             </Container>
-           
+
         </div>
     );
 }

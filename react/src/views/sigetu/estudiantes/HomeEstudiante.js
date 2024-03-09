@@ -269,29 +269,15 @@ const HomeEstudiante = (props) => {
                 <Card className="bg-red" >
                   <CardHeader>
                     <Card>
-                    <Col>
-                        {userData && userData.nombres} 
-                        {userData && userData.apellidos}
+                    <Col xl="8">
+            <div className="h1 mb-0 text-uppercase d-none d-lg-inline-block">
+              Bienvenido a sigetu alumno
+            </div>
+                      <h1>
+                        {userData && userData.nombres} {userData && userData.apellidos}
+                      </h1>
                       </Col>
                     </Card>
-                    <Row gutter={[8, 8]}>
-                      <Col span={8}>
-                        {userData && userData.nombres} 
-                      </Col>
-                      <Col span={8} >
-                        {userData && userData.apellidos}
-                      </Col>
-                      <Col span={8} >
-                        {userData && userData.matricula}
-                      </Col>
-                      <Col span={8} >
-                        {userData && userData.grado}
-                      {userData && userData.grupo}
-                      </Col>
-                      <Col span={8} >
-                      {userData && userData.grupoi}
-                      </Col>
-                    </Row>
                   </CardHeader>
                   <CardBody >
                     <Card>
