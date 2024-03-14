@@ -14,6 +14,7 @@ import Calendario from "views/sigetu/estudiantes/Calendario";
 
 //administrador
 import Inicioa from "views/sigetu/admin/HomeAdmin";
+import Perfila from "views/sigetu/admin/PerfilAdmin";
 import Crud from "views/sigetu/admin/CrudUsers"
 import Crear from "views/examples/crudcreate"
 import Showd from "views/examples/division"
@@ -84,6 +85,12 @@ var routes = [
     path: "/inicio",
     name: "INICIO",
     component: <Inicioa />,
+    layout: "/admin",
+  },
+  {
+    path: "/perfil",
+    name: "PERFIL",
+    component: <Perfila />,
     layout: "/admin",
   },
   {

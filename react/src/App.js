@@ -19,32 +19,42 @@ const firestore = getFirestore(firebaseApp);
 function App() {
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (usuarioFirebase) => {
-      if (usuarioFirebase) {
-        setUserWithFirebaseAndRol(usuarioFirebase);
-        // Reiniciar temporizador de inactividad al iniciar sesión
-        resetTimer();
-      } else {
-        setUser(null);
-      }
-    });
-
-    return () => clearTimeout(timeoutId);
-  }, []);
-
   let timeoutId;
+
   const resetTimer = () => {
     if (timeoutId) {
       clearTimeout(timeoutId);
     }
 
     timeoutId = setTimeout(() => {
-      // Cerrar sesión por inactividad
       setUser(null);
-      console.log('¡Sesión cerrada por inactividad!');
-      window.location.href = '/auth/login'; 
-    },  10 * 60 * 1000); // 10 minutos en milisegundos
+      console.log("¡Sesión cerrada por inactividad!");
+      window.location.href = "/auth/login";
+    }, 10 * 60 * 1000); // 10 minutos en milisegundos
+  };
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (usuarioFirebase) => {
+      if (usuarioFirebase) {
+        setUserWithFirebaseAndRol(usuarioFirebase);
+        resetTimer();
+      } else {
+        setUser(null);
+      }
+    });
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      unsubscribe();
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      clearTimeout(timeoutId);
+    };
+  }, []);
+
+  const handleBeforeUnload = () => {
+    setUser(null);
+    console.log("¡Sesión cerrada antes de descargar la página!");
   };
 
   async function getRol(uid) {
@@ -65,21 +75,19 @@ function App() {
     console.log("userData final", userData);
   }
 
-  // Detectar eventos de actividad del usuario
   const handleUserActivity = () => {
     resetTimer();
   };
 
   useEffect(() => {
-    window.addEventListener('mousemove', handleUserActivity);
-    window.addEventListener('keypress', handleUserActivity);
+    window.addEventListener("mousemove", handleUserActivity);
+    window.addEventListener("keypress", handleUserActivity);
 
     return () => {
-      window.removeEventListener('mousemove', handleUserActivity);
-      window.removeEventListener('keypress', handleUserActivity);
+      window.removeEventListener("mousemove", handleUserActivity);
+      window.removeEventListener("keypress", handleUserActivity);
     };
   }, []);
-
 
   return (
     <AuthProvider>

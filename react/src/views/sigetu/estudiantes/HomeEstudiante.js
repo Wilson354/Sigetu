@@ -45,7 +45,7 @@ const HomeEstudiante = (props) => {
 
   useEffect(() => {
     const timerID = setInterval(() => tick(), 1000);
-      return () => {
+    return () => {
       clearInterval(timerID);
     };
   }, []); // Usamos un arreglo vacío para indicar que este efecto solo se ejecuta una vez, similar a componentDidMount()
@@ -269,13 +269,13 @@ const HomeEstudiante = (props) => {
                 <Card className="bg-red" >
                   <CardHeader>
                     <Card>
-                    <Col xl="8">
-            <div className="h1 mb-0 text-uppercase d-none d-lg-inline-block">
-              Bienvenido a sigetu alumno
-            </div>
-                      <h1>
-                        {userData && userData.nombres} {userData && userData.apellidos}
-                      </h1>
+                      <Col xl="8">
+                        <div className="h1 mb-0 text-uppercase d-none d-lg-inline-block">
+                          Bienvenido a sigetu alumno
+                        </div>
+                        <h1>
+                          {userData && userData.nombres} {userData && userData.apellidos}
+                        </h1>
                       </Col>
                     </Card>
                   </CardHeader>

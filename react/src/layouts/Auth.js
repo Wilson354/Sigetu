@@ -1,12 +1,11 @@
 /*!
 =======================================
-LOGIN autentificador parte superior
+LOGIN autentificador principal
 =========================================
 */
 import React from "react";
-import { useLocation, Route, Routes, Navigate } from "react-router-dom";
 // reactstrap components
-import { Container, Row, Col } from "reactstrap";
+import { Container } from "reactstrap";
 
 import AuthNavbar from "components/Navbars/AuthNavbar.js";
 import AuthFooter from "components/Footers/AuthFooter.js";

@@ -30,20 +30,39 @@ const items = [
 
   { key: '1', label: 'INICIO', icon: <HomeFilled style={{ fontSize: iconSize }}/>, path: '/admin/inicio' },
   { key: '2', label: 'PERFIL', icon: <IdcardFilled style={{ fontSize: iconSize }}/>, path: '/admin/perfil' },
-  { key: '3', label: 'CALENDARIO', icon: <CalendarFilled style={{ fontSize: iconSize }}/>, path: '/' },
-  { key: '4', label: 'EVALUACIONES', icon: <FeedIcon style={{ fontSize: iconSize }}/>, path: '/' },
   {
-    key: '5',
-    label: 'CRUD',
+    key: '3',
+    label: 'ACADEMIA',
     icon: <FactCheckIcon style={{ fontSize: iconSize }} />,
     children: [
-      { key: '6', label: 'CREAR', icon: <FeedIcon style={{ fontSize: iconSize }}/>, path: '/admin/crud' },
-      { key: '7', label: 'MOSTRAR', icon: <GroupsIcon style={{ fontSize: iconSize }}/>, path: '/admin/showu' },
-      { key: '8', label: 'ACTUALIZAR', icon: <PersonIcon style={{ fontSize: iconSize }} />, path: '/' },
+      { key: '4', label: 'DOCENTES', icon: <FeedIcon style={{ fontSize: iconSize }}/>, path: '/admin/crud' },
+      { key: '5', label: 'ALUMNOS', icon: <GroupsIcon style={{ fontSize: iconSize }}/>, path: '/admin/showu' },
+      { key: '6', label: 'EVALUACIONES', icon: <PersonIcon style={{ fontSize: iconSize }} />, path: '/' },
+    ]
+  },
+  {
+    key: '7',
+    label: 'CONTROL ESCOLAR',
+    icon: <FactCheckIcon style={{ fontSize: iconSize }} />,
+    children: [
+      { key: '8', label: 'ALUMNOS GRUPO', icon: <FeedIcon style={{ fontSize: iconSize }}/>, path: '/admin/crud' },
+      { key: '9', label: 'PRE-REGISTRO', icon: <GroupsIcon style={{ fontSize: iconSize }}/>, path: '/admin/showu' },
+    ]
+  },
+  { key: '10', label: 'ESTADIAS', icon: <IdcardFilled style={{ fontSize: iconSize }}/>, path: '/admin/perfil' },
+  { key: '11', label: 'EVALUACIÓN 360', icon: <IdcardFilled style={{ fontSize: iconSize }}/>, path: '/admin/perfil' },
+  { key: '12', label: 'IDIOMAS', icon: <IdcardFilled style={{ fontSize: iconSize }}/>, path: '/admin/perfil' },
+  { key: '13', label: 'REPORTES', icon: <IdcardFilled style={{ fontSize: iconSize }}/>, path: '/admin/perfil' },
+  {
+    key: '14',
+    label: 'REGISTROS',
+    icon: <FactCheckIcon style={{ fontSize: iconSize }} />,
+    children: [
+      { key: '15', label: 'REGISTRAR', icon: <FeedIcon style={{ fontSize: iconSize }}/>, path: '/admin/crud' },
+      { key: '16', label: 'MOSTRAR', icon: <GroupsIcon style={{ fontSize: iconSize }}/>, path: '/admin/showu' },
     ]
   },
 
-  // Agrega más elementos de menú según sea necesario
 ];
 
 const Admin = () => {

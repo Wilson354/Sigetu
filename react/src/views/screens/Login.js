@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import {
   Col,
@@ -19,7 +19,7 @@ import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons'; // Import
 
 //firebase rol agregar
 import firebaseApp from "../../firebase.config";
-import { getFirestore, doc, getDoc } from "firebase/firestore";
+import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 
 const firestore = getFirestore(firebaseApp);
 
@@ -30,8 +30,30 @@ const Login = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false); // Para deshabilitar el botón durante la autenticación
   const [showPassword, setShowPassword] = useState(false); // Para mostrar/ocultar la contraseña
+  const [loginAttempts, setLoginAttempts] = useState(0); // Para llevar el registro de intentos de inicio de sesión
+  const [disableButton, setDisableButton] = useState(false); // Para deshabilitar el botón de inicio de sesión durante 30 minutos
   const auth = getAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Aquí puedes comprobar si el botón debe estar deshabilitado
+    const checkButtonStatus = async () => {
+      if (loginAttempts >= 6) {
+        setDisableButton(true); // Deshabilitar el botón si hay 6 o más intentos fallidos
+
+        // Guardar la marca de tiempo en Firestore para cuando el botón debe habilitarse nuevamente
+        const docRef = doc(firestore, "login_attempts", "button_disable_time");
+        await setDoc(docRef, { disabled_until: serverTimestamp() }, { merge: true });
+
+        // Esperar 30 minutos antes de habilitar el botón nuevamente
+        setTimeout(() => {
+          setDisableButton(false);
+        }, 30 * 60 * 1000);
+      }
+    };
+
+    checkButtonStatus();
+  }, [loginAttempts]);
 
   async function getRol(uid) {
     const docuRef = doc(firestore, `usuarios/${uid}`);
@@ -79,6 +101,9 @@ const Login = () => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.error("Login error:", errorMessage);
+
+        // Incrementar el contador de intentos de inicio de sesión fallidos
+  setLoginAttempts(prevAttempts => prevAttempts + 1);
   
         // Manejar errores de autenticación
         if (errorCode === "auth/wrong-password" || errorCode === "auth/user-not-found") {
@@ -87,6 +112,8 @@ const Login = () => {
           setError("Error en la solicitud. Por favor, verifica tus datos e intenta de nuevo.");
         } else if (errorCode === "auth/invalid-credential" || errorCode === "auth/invalid-email") {
           setError("Credenciales inválidas. Por favor, verifica tu correo y contraseña e intenta de nuevo.");
+        } else if (errorCode === "auth/too-many-requests") {
+          setError("Tu cuenta ha sido temporalmente deshabilitada debido a demasiados intentos fallidos de inicio de sesión. Puedes restaurarla inmediatamente restableciendo tu contraseña o puedes intentarlo de nuevo más tarde.");
         } else {
           setError(errorMessage);
         }
@@ -104,7 +131,6 @@ const Login = () => {
             <div className=" text-center mb-2">
               <h1 className="text-dark">Login</h1>
             </div>
-            {/* Muestra la alerta si hay un error */}
             {error && 
             <Alert
               message={error}
@@ -142,7 +168,7 @@ const Login = () => {
                     type={showPassword ? "text" : "password"} // Cambia el tipo de input dependiendo de si se muestra la contraseña
                     value={password}
                     onChange={handlePasswordChange}
-                    disabled={loading} // Deshabilitar el campo de entrada durante la autenticación
+                    disabled={loading || disableButton} // Deshabilitar el campo de entrada durante la autenticación o si el botón está deshabilitado
                   />
                   <InputGroupAddon addonType="append">
                     <InputGroupText onClick={togglePasswordVisibility}>
@@ -152,11 +178,11 @@ const Login = () => {
                 </InputGroup>
               </FormGroup>
               <div className="text-center">
-                <button
+              <button
                   style={{ backgroundColor: '#007bff', color: '#ffffff' }}
                   className="btn btn-success btn-block mt-4"
                   type="submit"
-                  disabled={loading} // Deshabilitar el botón durante la autenticación
+                  disabled={loading || disableButton} // Deshabilitar el botón durante la autenticación o si el botón está deshabilitado
                 >
                   {loading ? 'Ingresando...' : 'Ingresar'}
                 </button>

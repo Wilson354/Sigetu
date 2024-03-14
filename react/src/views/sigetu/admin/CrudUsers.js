@@ -267,9 +267,8 @@ function CrudUsers() {
                                     ]}
                                 >
                                     <Select placeholder="Selecciona tu genero">
-                                        <Option value="male">Masculino</Option>
-                                        <Option value="female">Femenino</Option>
-                                        <Option value="other">Helicoptero</Option>
+                                        <Option value="masculino">Masculino</Option>
+                                        <Option value="femenino">Femenino</Option>
                                     </Select>
                                 </Form.Item>
 
