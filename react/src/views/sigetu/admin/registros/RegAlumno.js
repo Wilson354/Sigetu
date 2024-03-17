@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Button, Col, Form, Input, Row, Select, Card, message } from 'antd';
 import { CardHeader, Container } from 'reactstrap';
 import firebaseApp from "../../../../firebase.config";
-import { getAuth } from "firebase/auth";
-import { getFirestore, doc, setDoc, getDoc, increment } from "firebase/firestore";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 
 const auth = getAuth(firebaseApp);
 
@@ -43,12 +43,12 @@ const tailFormItemLayout = {
 function RegAlumno() {
     const [form] = Form.useForm();
     const firestore = getFirestore(firebaseApp);
-    const [rol, setRol] = useState("alumno");
     const [passwordLength, setPasswordLength] = useState(8);
     const [generatedPassword, setGeneratedPassword] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
     const [loading, setLoading] = useState(false);
     const [matricula, setMatricula] = useState(""); // Inicializa el estado matricula con un valor vacío
+    const rol = "alumno";
 
     useEffect(() => {
         async function obtenerUltimaMatricula() {
@@ -72,7 +72,7 @@ function RegAlumno() {
         // Llama a la función obtenerUltimaMatricula al montar el componente
         obtenerUltimaMatricula();
     }, [firestore]);
-    // Dentro de la función onFinish
+
     const onFinish = async (values) => {
         try {
             if (!matricula) {
@@ -80,7 +80,7 @@ function RegAlumno() {
             }
 
             console.log('Received values of form: ', values);
-            await registrarUsuario(values);
+            await registrarUsuario(values.email, values.password, rol, values); // Pasar values como argumento
         } catch (error) {
             message.error("Error al registrar usuario: " + error.message);
         }
@@ -90,7 +90,7 @@ function RegAlumno() {
         form.resetFields();
     };
 
-    async function registrarUsuario(values) {
+    async function registrarUsuario(email, password, rol, values) {
         try {
             setLoading(true);
 
@@ -103,13 +103,18 @@ function RegAlumno() {
             const idDocumento = matricula;
 
             const userDataUsuarios = {
-                correo: values.email,
-                rol: values.select,
+                correo: email,
+                rol: rol,
                 nombres: values.nombres,
                 apellidos: values.apellidos,
                 matricula: matricula,
             };
-            const docuRefUsuarios = doc(firestore, `usuarios/${idDocumento}`);
+
+            // Crear una cuenta de usuario en Firebase Authentication
+            const auth = getAuth(firebaseApp);
+            const infoUsuario = await createUserWithEmailAndPassword(auth, email, password);
+
+            const docuRefUsuarios = doc(firestore, `usuarios/${infoUsuario.user.uid}`);
             await setDoc(docuRefUsuarios, userDataUsuarios);
 
             let userDataAdicional = {
@@ -117,27 +122,11 @@ function RegAlumno() {
                 apellidos: values.apellidos,
                 genero: values.genero,
             };
-            let collectionPath = "";
-            switch (values.select) {
-                case "alumno":
-                    collectionPath = "alumnos";
-                    break;
-                case "docente":
-                    collectionPath = "docentes";
-                    break;
-                case "admin":
-                    collectionPath = "administradores";
-                    break;
-                default:
-                    break;
-            }
-            if (collectionPath !== "") {
-                const docuRefAdicional = doc(firestore, `${collectionPath}/${idDocumento}`);
-                await setDoc(docuRefAdicional, userDataAdicional);
-                console.log(`Información adicional para ${values.select} guardada correctamente.`);
-            } else {
-                console.log("No se encontró una colección válida para guardar la información adicional.");
-            }
+
+            const collectionPath = "alumnos";
+            const docuRefAdicional = doc(firestore, `${collectionPath}/${idDocumento}`);
+            await setDoc(docuRefAdicional, userDataAdicional);
+            console.log(`Información adicional para alumno guardada correctamente.`);
 
             // Incrementar el contador de matrículas
             const contadorRef = doc(firestore, 'contadores', 'matricula');
@@ -232,12 +221,6 @@ function RegAlumno() {
                                         hasFeedback
                                     >
                                         <Input.Password />
-                                    </Form.Item>
-
-                                    <Form.Item
-                                        label="Rol"
-                                    >
-                                        <Input readOnly value="Alumno" />
                                     </Form.Item>
 
                                     <Form.Item
