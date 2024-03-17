@@ -24,7 +24,6 @@ import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "firebase/fir
 const firestore = getFirestore(firebaseApp);
 
 const Login = () => {
-  const [user, setUser] = useState(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");

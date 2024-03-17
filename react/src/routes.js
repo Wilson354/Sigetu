@@ -15,13 +15,17 @@ import Calendario from "views/sigetu/estudiantes/Calendario";
 //administrador
 import Inicioa from "views/sigetu/admin/HomeAdmin";
 import Perfila from "views/sigetu/admin/PerfilAdmin";
-import Crud from "views/sigetu/admin/CrudUsers"
+import Alumnado from "views/sigetu/admin/registros/RegAlumno"
+import Administrativos from "views/sigetu/admin/registros/RegAdmin"
 import Crear from "views/examples/crudcreate"
 import Showd from "views/examples/division"
-import ShowU from "views/sigetu/admin/CrudShow"
+import General from "views/sigetu/admin/tablas/TablaUsuarios"
+import AlumnadoS from "views/sigetu/admin/tablas/TablaAlumnado"
+import DocenteS from "views/sigetu/admin/tablas/TablaDocentes"
 
 //auth
 import Login from "views/screens/Login"
+import Error404 from "views/screens/Error404";
 
 //docente
 import Iniciod from "views/sigetu/docentes/HomeDocentes";
@@ -94,9 +98,27 @@ var routes = [
     layout: "/admin",
   },
   {
-    path: "/crud",
-    name: "crud",
-    component: <Crud/>,
+    path: "/registrar/alumnos",
+    name: "registrar",
+    component: <Alumnado/>,
+    layout: "/admin",
+  },
+  {
+    path: "/registrar/administrativos",
+    name: "registrar",
+    component: <Administrativos/>,
+    layout: "/admin",
+  },
+  {
+    path: "/usuarios/alumnos",
+    name: "mostrar",
+    component: <AlumnadoS/>,
+    layout: "/admin",
+  },
+  {
+    path: "/usuarios/docentes",
+    name: "mostrar",
+    component: <DocenteS/>,
     layout: "/admin",
   },
 
@@ -114,9 +136,9 @@ var routes = [
     layout: "/admin",
   },
   {
-    path: "/showu",
-    name: "showu",
-    component: <ShowU/>,
+    path: "/usuarios/general",
+    name: "mostrar",
+    component: <General/>,
     layout: "/admin",
   },
 
@@ -129,6 +151,11 @@ var routes = [
   },
 
   //errores
-  
+  {
+    path: "/Error",
+    name: "Error",
+    component: <Error404 />,
+    layout: "/auth",
+  },
 ];
 export default routes;

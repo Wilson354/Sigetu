@@ -4,7 +4,6 @@ import { CardBody, CardHeader, Container } from "reactstrap";
 import { Row, Col, Card, Statistic, Button, Progress, Avatar } from 'antd';
 import { UserAddOutlined, UserDeleteOutlined, EditOutlined, EllipsisOutlined, SettingOutlined } from '@ant-design/icons';
 import Box from '@mui/material/Box';
-import { LineChart } from '@mui/x-charts/LineChart';
 import { ResponsiveChartContainer } from '@mui/x-charts/ResponsiveChartContainer';
 import { LinePlot } from '@mui/x-charts/LineChart';
 import { BarPlot } from '@mui/x-charts/BarChart';

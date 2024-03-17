@@ -11,43 +11,43 @@ import EditIcon from '@mui/icons-material/Edit';
 import { Link } from 'react-router-dom';
 import Pagination from '@mui/material/Pagination';
 
-const TablaAlumnado = () => {
-  const [alumnos, setAlumnos] = useState([]);
-  const [selectedAlumnos, setSelectedAlumnos] = useState([]);
+const TablaDocentes = () => {
+  const [docentes, setDocentes] = useState([]);
+  const [selectedDocentes, setSelectedDocentes] = useState([]);
   const [confirmModalVisible, setConfirmModalVisible] = useState(false);
   const mainContent = React.useRef(null);
 
   useEffect(() => {
-    const fetchAlumnos = async () => {
-      const alumnosCollection = collection(db, 'alumnos');
-      const alumnosSnapshot = await getDocs(alumnosCollection);
-      const alumnosData = alumnosSnapshot.docs.map((doc) => ({
+    const fetchDocentes = async () => {
+      const docentesCollection = collection(db, 'docentes');
+      const docentesSnapshot = await getDocs(docentesCollection);
+      const docentesData = docentesSnapshot.docs.map((doc) => ({
         id: doc.id,
         nombres: doc.data().nombres,
         apellidos: doc.data().apellidos,
         genero: doc.data().genero,
         telefono: doc.data().telefono,
       }));
-      setAlumnos(alumnosData);
+      setDocentes(docentesData);
     };
 
-    fetchAlumnos();
+    fetchDocentes();
   }, []);
 
   const handleSelectionChange = (newSelection) => {
-    setSelectedAlumnos(newSelection);
+    setSelectedDocentes(newSelection);
   };
 
-  const deleteSelectedAlumnos = async () => {
+  const deleteSelectedDocentes = async () => {
     try {
-      const deletePromises = selectedAlumnos.map(async (alumnoId) => {
-        await deleteDoc(doc(db, 'alumnos', alumnoId));
+      const deletePromises = selectedDocentes.map(async (docenteId) => {
+        await deleteDoc(doc(db, 'docentes', docenteId));
       });
       await Promise.all(deletePromises);
-      setAlumnos(alumnos.filter((alumno) => !selectedAlumnos.includes(alumno.id)));
-      setSelectedAlumnos([]);
+      setDocentes(docentes.filter((docente) => !selectedDocentes.includes(docente.id)));
+      setSelectedDocentes([]);
     } catch (error) {
-      console.error('Error eliminando alumnos: ', error);
+      console.error('Error eliminando Docentes: ', error);
     }
   };
 
@@ -56,15 +56,15 @@ const TablaAlumnado = () => {
   };
 
   const handleEliminarClick = async () => {
-    deleteSelectedAlumnos();
+    deleteSelectedDocentes();
   };
 
-  const handleCheckboxChange = (e, alumnoId) => {
+  const handleCheckboxChange = (e, docenteId) => {
     const checked = e.target.checked;
     if (checked) {
-      setSelectedAlumnos([...selectedAlumnos, alumnoId]);
+      setSelectedDocentes([...selectedDocentes, docenteId]);
     } else {
-      setSelectedAlumnos(selectedAlumnos.filter(id => id !== alumnoId));
+      setSelectedDocentes(selectedDocentes.filter(id => id !== docenteId));
     }
   };
 
@@ -72,30 +72,30 @@ const TablaAlumnado = () => {
     <>
       <div className="main-content" ref={mainContent}>
         <Container fluid className='bg-white'>
-          <h2>Tabla de Alumnos</h2>
+          <h2>Tabla de Docentes</h2>
           <Stack direction="row" spacing={1} sx={{ mb: 1 }}>
             <Button
               size="small"
               onClick={showConfirmModal}
-              disabled={selectedAlumnos.length === 0}
+              disabled={selectedDocentes.length === 0}
               variant="contained"
               color="error" // Cambiado a color rojo
               style={{ fontWeight: 'bold' }} // Cambiado a negrita y más grande
             >
               Eliminar seleccionados
             </Button>
-            <Link to="/crear-alumno">
+            <Link to="/crear-docente">
               <Button
                 size="small"
                 variant="contained"
                 color="primary"
               >
-                Registrar Alumno
+                Registrar Docente
               </Button>
             </Link>
           </Stack>
           <DataGrid
-            rows={alumnos}
+            rows={docentes}
             columns={[
               { 
                 field: 'checkbox', 
@@ -104,7 +104,7 @@ const TablaAlumnado = () => {
                 renderCell: (params) => (
                   <Checkbox 
                     onChange={(e) => handleCheckboxChange(e, params.row.id)}
-                    checked={selectedAlumnos.includes(params.row.id)}
+                    checked={selectedDocentes.includes(params.row.id)}
                   />
                 ) 
               },
@@ -118,7 +118,7 @@ const TablaAlumnado = () => {
                 headerName: 'Editar',
                 width: 100,
                 renderCell: (params) => (
-                  <Link to={`/editar-alumno/${params.row.id}`}>
+                  <Link to={`/editar-docente/${params.row.id}`}>
                     <Button 
                       variant="contained" 
                       color="warning" // Cambiado a color amarillo
@@ -140,7 +140,7 @@ const TablaAlumnado = () => {
             pagination={false}
           />
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px' }}>
-            <div style={{ fontWeight: 'bold', fontSize: '15px' }}>{`Alumnos seleccionados: ${selectedAlumnos.length}`}</div>
+            <div style={{ fontWeight: 'bold', fontSize: '15px' }}>{`Docentes seleccionados: ${selectedDocentes.length}`}</div>
           </div>
         </Container>
       </div>
@@ -151,10 +151,10 @@ const TablaAlumnado = () => {
         onOk={handleEliminarClick}
         style={{ zIndex: 9999 }} // Ajusta el z-index
       >
-        <p>¿Está seguro de que desea eliminar los alumnos seleccionados?</p>
+        <p>¿Está seguro de que desea eliminar los docentes seleccionados?</p>
       </AntdModal>
     </>
   );
 };
 
-export default TablaAlumnado;
+export default TablaDocentes;

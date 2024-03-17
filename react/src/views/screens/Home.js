@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import firebaseApp from "firebase.config";
 import { getAuth, signOut } from "firebase/auth";
+import Error404 from "./Error404";
 
 //vistas
 import AdminLayout from "layouts/Admin";
@@ -9,7 +10,6 @@ import AlumnoLayout from "layouts/Alumno";
 import AuthLayouth from "layouts/Auth";
 import DocenteLayout from "layouts/Docente";
 
-//rutas
 //alumnos
 import Inicio from "views/sigetu/estudiantes/HomeEstudiante";
 import Perfil from "views/sigetu/estudiantes/PerfilEstudiante";
@@ -26,9 +26,6 @@ import Crud from "views/examples/crudshow"
 import Crear from "views/examples/crudcreate"
 import Showd from "views/examples/division"
 import ShowU from "views/examples/usuarioShow"
-
-//auth
-import Login from "views/screens/Login"
 
 //docente
 import Iniciod from "views/sigetu/docentes/HomeDocentes";
@@ -54,8 +51,7 @@ function Home({ user }) {
 export default function HomeWrapper(props) {
   return (
     <Routes>
-      <Route path="/" element={<Home {...props} />} />
-
+      
       {/* Rutas de alumnos */}
       <Route path="/alumno/*" element={<AlumnoLayout />}>
         <Route path="inicio" element={<Inicio />} />
@@ -68,8 +64,6 @@ export default function HomeWrapper(props) {
 
       {/* Rutas de autenticación */}
       <Route path="/auth/*" element={<AuthLayouth />}>
-        <Route path="formulario" element={<Formulario />} />
-        <Route path="login" element={<Login />} />
       </Route>
 
       {/* Rutas de administrador */}
@@ -85,6 +79,16 @@ export default function HomeWrapper(props) {
       <Route path="/docente/*" element={<DocenteLayout />}>
         <Route path="inicio" element={<Iniciod />} />
       </Route>
+
+      {/* Ruta para manejar el error 404 */}
+      <Route
+        path="*"
+        element={
+          <Error404
+            user={props.user}
+          />
+        }
+      />
     </Routes>
 
   );

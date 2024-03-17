@@ -24,19 +24,19 @@ const { SubMenu } = Menu;
 
 const { Content, Footer, Sider } = Layout;
 
-const iconSize = 20; 
+const iconSize = 20;
 // Define tus elementos de menú
 const items = [
 
-  { key: '1', label: 'INICIO', icon: <HomeFilled style={{ fontSize: iconSize }}/>, path: '/admin/inicio' },
-  { key: '2', label: 'PERFIL', icon: <IdcardFilled style={{ fontSize: iconSize }}/>, path: '/admin/perfil' },
+  { key: '1', label: 'INICIO', icon: <HomeFilled style={{ fontSize: iconSize }} />, path: '/admin/inicio' },
+  { key: '2', label: 'PERFIL', icon: <IdcardFilled style={{ fontSize: iconSize }} />, path: '/admin/perfil' },
   {
     key: '3',
     label: 'ACADEMIA',
     icon: <FactCheckIcon style={{ fontSize: iconSize }} />,
     children: [
-      { key: '4', label: 'DOCENTES', icon: <FeedIcon style={{ fontSize: iconSize }}/>, path: '/admin/crud' },
-      { key: '5', label: 'ALUMNOS', icon: <GroupsIcon style={{ fontSize: iconSize }}/>, path: '/admin/showu' },
+      { key: '4', label: 'DOCENTES', icon: <FeedIcon style={{ fontSize: iconSize }} />, path: '/admin/crud' },
+      { key: '5', label: 'ALUMNOS', icon: <GroupsIcon style={{ fontSize: iconSize }} />, path: '/admin/showu' },
       { key: '6', label: 'EVALUACIONES', icon: <PersonIcon style={{ fontSize: iconSize }} />, path: '/' },
     ]
   },
@@ -45,21 +45,31 @@ const items = [
     label: 'CONTROL ESCOLAR',
     icon: <FactCheckIcon style={{ fontSize: iconSize }} />,
     children: [
-      { key: '8', label: 'ALUMNOS GRUPO', icon: <FeedIcon style={{ fontSize: iconSize }}/>, path: '/admin/crud' },
-      { key: '9', label: 'PRE-REGISTRO', icon: <GroupsIcon style={{ fontSize: iconSize }}/>, path: '/admin/showu' },
+      { key: '8', label: 'GRUPOS', icon: <FeedIcon style={{ fontSize: iconSize }} />, path: '/admin/crud' },
+      { key: '9', label: 'PRE-REGISTRO', icon: <GroupsIcon style={{ fontSize: iconSize }} />, path: '/admin/showu' },
     ]
   },
-  { key: '10', label: 'ESTADIAS', icon: <IdcardFilled style={{ fontSize: iconSize }}/>, path: '/admin/perfil' },
-  { key: '11', label: 'EVALUACIÓN 360', icon: <IdcardFilled style={{ fontSize: iconSize }}/>, path: '/admin/perfil' },
-  { key: '12', label: 'IDIOMAS', icon: <IdcardFilled style={{ fontSize: iconSize }}/>, path: '/admin/perfil' },
-  { key: '13', label: 'REPORTES', icon: <IdcardFilled style={{ fontSize: iconSize }}/>, path: '/admin/perfil' },
+  { key: '10', label: 'ESTADIAS', icon: <IdcardFilled style={{ fontSize: iconSize }} />, path: '/admin/perfil' },
+  { key: '11', label: 'EVALUACIÓN 360', icon: <IdcardFilled style={{ fontSize: iconSize }} />, path: '/admin/perfil' },
+  { key: '12', label: 'IDIOMAS', icon: <IdcardFilled style={{ fontSize: iconSize }} />, path: '/admin/perfil' },
+  { key: '13', label: 'REPORTES', icon: <IdcardFilled style={{ fontSize: iconSize }} />, path: '/admin/perfil' },
   {
     key: '14',
-    label: 'REGISTROS',
+    label: 'REGISTRAR',
     icon: <FactCheckIcon style={{ fontSize: iconSize }} />,
     children: [
-      { key: '15', label: 'REGISTRAR', icon: <FeedIcon style={{ fontSize: iconSize }}/>, path: '/admin/crud' },
-      { key: '16', label: 'MOSTRAR', icon: <GroupsIcon style={{ fontSize: iconSize }}/>, path: '/admin/showu' },
+      { key: '15', label: 'ALUMNOS', icon: <FeedIcon style={{ fontSize: iconSize }} />, path: '/admin/registrar/alumnos' },
+      { key: '16', label: 'ADMINISTRATIVOS', icon: <GroupsIcon style={{ fontSize: iconSize }} />, path: '/admin/registrar/administrativos' },
+    ]
+  },
+  {
+    key: '17',
+    label: 'USUARIOS',
+    icon: <FactCheckIcon style={{ fontSize: iconSize }} />,
+    children: [
+      { key: '18', label: 'GENERAL', icon: <GroupsIcon style={{ fontSize: iconSize }} />, path: '/admin/usuarios/general' },
+      { key: '19', label: 'ALUMNOS', icon: <GroupsIcon style={{ fontSize: iconSize }} />, path: '/admin/usuarios/alumnos' },
+      { key: '20', label: 'DOCENTES', icon: <GroupsIcon style={{ fontSize: iconSize }} />, path: '/admin/usuarios/docentes' },
     ]
   },
 
@@ -98,43 +108,43 @@ const Admin = () => {
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} style={{ background: 'dark' }}>
-      <Menu  defaultSelectedKeys={['1']} mode="inline" >
-  <div style={{ margin: "10px" }}>
-    <img
-      alt="..."
-      style={{
-        width: "50px",
-        height: "auto",
-        position: "relative",
-        left: "10px",
-        top: "0px",
-      }}
-      src={require("assets/img/theme/sigetu_logo.png")}
-    />
-  </div>
-  
-  {items.map((item) => (
-    // Verifica si el elemento tiene hijos (es un submenú)
-    item.children ? (
-      <SubMenu key={item.key} title={item.label} icon={item.icon}>
-        {item.children.map((child) => (
-          <Menu.Item key={child.key} icon={child.icon}>
-            <Link to={child.path}>{child.label}</Link>
+        <Menu defaultSelectedKeys={['1']} mode="inline" >
+          <div style={{ margin: "10px" }}>
+            <img
+              alt="..."
+              style={{
+                width: "50px",
+                height: "auto",
+                position: "relative",
+                left: "10px",
+                top: "0px",
+              }}
+              src={require("assets/img/theme/sigetu_logo.png")}
+            />
+          </div>
+
+          {items.map((item) => (
+            // Verifica si el elemento tiene hijos (es un submenú)
+            item.children ? (
+              <SubMenu key={item.key} title={item.label} icon={item.icon}>
+                {item.children.map((child) => (
+                  <Menu.Item key={child.key} icon={child.icon}>
+                    <Link to={child.path}>{child.label}</Link>
+                  </Menu.Item>
+                ))}
+              </SubMenu>
+            ) : (
+              <Menu.Item key={item.key} icon={item.icon}>
+                <Link to={item.path}>{item.label}</Link>
+              </Menu.Item>
+            )
+          ))}
+          <Menu.Divider style={{ margin: '8px 0', borderTop: '2px solid #616161' }} />
+          {/* Botón de logout */}
+          <Menu.Item key="logout" icon={<LogoutIcon style={{ fontSize: iconSize }} />} onClick={handleLogout} style={{ color: 'red' }}>
+            SALIR
           </Menu.Item>
-        ))}
-      </SubMenu>
-    ) : (
-      <Menu.Item key={item.key} icon={item.icon}>
-        <Link to={item.path}>{item.label}</Link>
-      </Menu.Item>
-    )
-  ))}
-  <Menu.Divider style={{ margin: '8px 0', borderTop: '2px solid #616161' }} />
-  {/* Botón de logout */}
-  <Menu.Item key="logout" icon={<LogoutIcon style={{ fontSize: iconSize }}/>} onClick={handleLogout} style={{ color: 'red' }}>
-    SALIR
-  </Menu.Item>
-</Menu>
+        </Menu>
       </Sider>
       <Layout>
         <AdminNavbar />
@@ -142,11 +152,11 @@ const Admin = () => {
           padding: "15px",
           minHeight: "100vh",
           backgroundImage:
-          "url(" + require("assets/img/theme/uttecamac.jpg")+")",
+            "url(" + require("assets/img/theme/uttecamac.jpg") + ")",
           backgroundSize: "cover",
           backgroundPosition: "center",
-          }}
-          >
+        }}
+        >
           <Routes>
             {getRoutes(routes)}
           </Routes>
