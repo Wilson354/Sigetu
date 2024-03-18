@@ -45,7 +45,7 @@ const items = [
     label: 'CONTROL ESCOLAR',
     icon: <FactCheckIcon style={{ fontSize: iconSize }} />,
     children: [
-      { key: '8', label: 'GRUPOS', icon: <FeedIcon style={{ fontSize: iconSize }} />, path: '/admin/crud' },
+      { key: '8', label: 'GRUPOS', icon: <FeedIcon style={{ fontSize: iconSize }} />, path: '/admin/grupos' },
       { key: '9', label: 'PRE-REGISTRO', icon: <GroupsIcon style={{ fontSize: iconSize }} />, path: '/admin/showu' },
     ]
   },

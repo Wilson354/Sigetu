@@ -13,8 +13,8 @@ import Calendario from "views/sigetu/estudiantes/Calendario";
 
 
 //administrador
-import Inicioa from "views/sigetu/admin/HomeAdmin";
-import Perfila from "views/sigetu/admin/PerfilAdmin";
+import InicioA from "views/sigetu/admin/HomeAdmin";
+import PerfilA from "views/sigetu/admin/PerfilAdmin";
 import Alumnado from "views/sigetu/admin/registros/RegAlumno"
 import Administrativos from "views/sigetu/admin/registros/RegAdmin"
 import Crear from "views/examples/crudcreate"
@@ -22,6 +22,7 @@ import Showd from "views/examples/division"
 import General from "views/sigetu/admin/tablas/TablaUsuarios"
 import AlumnadoS from "views/sigetu/admin/tablas/TablaAlumnado"
 import DocenteS from "views/sigetu/admin/tablas/TablaDocentes"
+import Grupos from "views/sigetu/admin/grupos/Grupos";
 
 //auth
 import Login from "views/screens/Login"
@@ -69,32 +70,18 @@ var routes = [
       component: <Tramites />,
       layout: "/alumno",
     },
-//auth
-  {
-    path: "/formulario",
-    name: "formulario",
-    component: <Formulario />,
-    layout: "/auth",
-  },
-
-  {
-    path: "/login",
-    name: "login",
-    component: <Login />,
-    layout: "/auth",
-  },
 
   //admin
   {
     path: "/inicio",
     name: "INICIO",
-    component: <Inicioa />,
+    component: <InicioA />,
     layout: "/admin",
   },
   {
     path: "/perfil",
     name: "PERFIL",
-    component: <Perfila />,
+    component: <PerfilA />,
     layout: "/admin",
   },
   {
@@ -141,6 +128,12 @@ var routes = [
     component: <General/>,
     layout: "/admin",
   },
+  {
+    path: "/grupos",
+    name: "mostrar",
+    component: <Grupos/>,
+    layout: "/admin",
+  },
 
   //docentes
   {
@@ -155,6 +148,21 @@ var routes = [
     path: "/Error",
     name: "Error",
     component: <Error404 />,
+    layout: "/auth",
+  },
+
+  //auth
+  {
+    path: "/formulario",
+    name: "formulario",
+    component: <Formulario />,
+    layout: "/auth",
+  },
+
+  {
+    path: "/login",
+    name: "login",
+    component: <Login />,
     layout: "/auth",
   },
 ];
