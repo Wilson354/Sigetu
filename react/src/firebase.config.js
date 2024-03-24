@@ -14,7 +14,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);
-export const db = getFirestore(firebaseApp)
+const db = getFirestore(firebaseApp)
 const auth = getAuth(firebaseApp)
 
 auth.onAuthStateChanged(user => {
@@ -25,5 +25,5 @@ auth.onAuthStateChanged(user => {
     }
   });
   
-  export { auth };
+  export { auth, db };
   export default firebaseApp;

@@ -23,10 +23,13 @@ import General from "views/sigetu/admin/tablas/TablaUsuarios"
 import AlumnadoS from "views/sigetu/admin/tablas/TablaAlumnado"
 import DocenteS from "views/sigetu/admin/tablas/TablaDocentes"
 import Grupos from "views/sigetu/admin/grupos/Grupos";
+import AsignarGrupos from "views/sigetu/admin/grupos/AsignarG";
 
 //auth
 import Login from "views/screens/Login"
 import Error404 from "views/screens/Error404";
+import Error403 from "views/screens/Error403";
+import Error500 from "views/screens/Error500";
 
 //docente
 import Iniciod from "views/sigetu/docentes/HomeDocentes";
@@ -35,7 +38,7 @@ import Iniciod from "views/sigetu/docentes/HomeDocentes";
 var routes = [
   //alumnos
   {
-    path: "/inicio",
+    path: "/inicio/Alumno",
     name: "INICIO",
     component: <Inicio />,
     layout: "/alumno",
@@ -73,7 +76,7 @@ var routes = [
 
   //admin
   {
-    path: "/inicio",
+    path: "/inicio/Admin",
     name: "INICIO",
     component: <InicioA />,
     layout: "/admin",
@@ -134,10 +137,16 @@ var routes = [
     component: <Grupos/>,
     layout: "/admin",
   },
+  {
+    path: "/asignar/grupos",
+    name: "asignar",
+    component: <AsignarGrupos/>,
+    layout: "/admin",
+  },
 
   //docentes
   {
-    path: "/inicio",
+    path: "/inicio/Profesor",
     name: "INICIO",
     component: <Iniciod />,
     layout: "/docente",
@@ -145,12 +154,23 @@ var routes = [
 
   //errores
   {
-    path: "/Error",
-    name: "Error",
+    path: "/Error404",
+    name: "Error404",
     component: <Error404 />,
     layout: "/auth",
   },
-
+  {
+    path: "/Error403",
+    name: "Error403",
+    component: <Error403 />,
+    layout: "/auth",
+  },
+  {
+    path: "/Error500",
+    name: "Error500",
+    component: <Error500 />,
+    layout: "/auth",
+  },
   //auth
   {
     path: "/formulario",

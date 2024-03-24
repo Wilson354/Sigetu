@@ -32,7 +32,7 @@ const iconSize = 20;
 // Define tus elementos de menú
 const items = [
 
-  { key: '1', label: 'INICIO', icon: <HomeFilled style={{ fontSize: iconSize }}/>, path: '/alumno/inicio' },
+  { key: '1', label: 'INICIO', icon: <HomeFilled style={{ fontSize: iconSize }}/>, path: '/alumno/inicio/Alumno' },
   { key: '2', label: 'PERFIL', icon: <IdcardFilled style={{ fontSize: iconSize }}/>, path: '/alumno/perfil' },
   { key: '3', label: 'CALENDARIO', icon: <CalendarFilled style={{ fontSize: iconSize }}/>, path: '/alumno/calendario' },
   { key: '4', label: 'EVALUACIONES', icon: <FeedIcon style={{ fontSize: iconSize }}/>, path: '/alumno/evaluaciones' },

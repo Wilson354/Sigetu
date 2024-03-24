@@ -129,7 +129,7 @@ function RegAdmin() {
                     collectionPath = "alumnos";
                     break;
                 case "docente":
-                    collectionPath = "docentes";
+                    collectionPath = "profesores";
                     break;
                 case "admin":
                     collectionPath = "administradores";

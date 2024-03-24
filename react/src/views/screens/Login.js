@@ -87,11 +87,11 @@ const Login = () => {
   
         // Determinar la ruta de redirección según el rol del usuario
         if (rol === "admin") {
-          navigate("/admin/inicio");
+          navigate("/admin/inicio/Admin");
         } else if (rol === "docente") {
-          navigate("/docente/inicio");
+          navigate("/docente/inicio/Profesor");
         } else if (rol === "alumno") {
-          navigate("/alumno/inicio");
+          navigate("/alumno/inicio/Alumno");
         } else {
           setError("Rol de usuario no reconocido");
         }

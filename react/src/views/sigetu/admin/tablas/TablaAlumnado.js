@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
+import { collection, getDocs, deleteDoc, doc, getDoc } from 'firebase/firestore';
 import { db } from 'firebase.config';
 import { Container } from "reactstrap";
 import Stack from '@mui/material/Stack';
@@ -9,7 +9,6 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import Checkbox from 'antd/lib/checkbox/Checkbox';
 import EditIcon from '@mui/icons-material/Edit';
 import { Link } from 'react-router-dom';
-import Pagination from '@mui/material/Pagination';
 
 const TablaAlumnado = () => {
   const [alumnos, setAlumnos] = useState([]);
@@ -21,22 +20,27 @@ const TablaAlumnado = () => {
     const fetchAlumnos = async () => {
       const alumnosCollection = collection(db, 'alumnos');
       const alumnosSnapshot = await getDocs(alumnosCollection);
-      const alumnosData = alumnosSnapshot.docs.map((doc) => ({
-        id: doc.id,
-        nombres: doc.data().nombres,
-        apellidos: doc.data().apellidos,
-        genero: doc.data().genero,
-        telefono: doc.data().telefono,
+      const alumnosData = await Promise.all(alumnosSnapshot.docs.map(async (doc) => {
+        const alumnoData = doc.data();
+        let grupoNombre = alumnoData.grupo ? alumnoData.grupo : 'Sin grupo'; // Usar el campo 'grupo' en lugar de 'grupo_actual_ref'
+    
+        // Obtener los nombres de los grupos anteriores
+        let gruposHistorial = alumnoData.grupos_historial || []; // Si no hay grupos historial, inicializar como un array vacío
+        return {
+          id: doc.id,
+          nombres: alumnoData.nombres,
+          apellidos: alumnoData.apellidos,
+          genero: alumnoData.genero,
+          telefono: alumnoData.telefono,
+          grupo: grupoNombre,
+          gruposAnteriores: gruposHistorial.join(', '),
+          vidas: alumnoData.vidas,
+        };
       }));
       setAlumnos(alumnosData);
     };
-
     fetchAlumnos();
   }, []);
-
-  const handleSelectionChange = (newSelection) => {
-    setSelectedAlumnos(newSelection);
-  };
 
   const deleteSelectedAlumnos = async () => {
     try {
@@ -44,7 +48,8 @@ const TablaAlumnado = () => {
         await deleteDoc(doc(db, 'alumnos', alumnoId));
       });
       await Promise.all(deletePromises);
-      setAlumnos(alumnos.filter((alumno) => !selectedAlumnos.includes(alumno.id)));
+      // Actualiza el estado de alumnos eliminando los alumnos seleccionados
+      setAlumnos(prevAlumnos => prevAlumnos.filter((alumno) => !selectedAlumnos.includes(alumno.id)));
       setSelectedAlumnos([]);
     } catch (error) {
       console.error('Error eliminando alumnos: ', error);
@@ -79,8 +84,8 @@ const TablaAlumnado = () => {
               onClick={showConfirmModal}
               disabled={selectedAlumnos.length === 0}
               variant="contained"
-              color="error" // Cambiado a color rojo
-              style={{ fontWeight: 'bold' }} // Cambiado a negrita y más grande
+              color="error"
+              style={{ fontWeight: 'bold' }}
             >
               Eliminar seleccionados
             </Button>
@@ -112,7 +117,19 @@ const TablaAlumnado = () => {
               { field: 'nombres', headerName: 'Nombres', width: 150 },
               { field: 'apellidos', headerName: 'Apellidos', width: 150 },
               { field: 'genero', headerName: 'Género', width: 130 },
-              { field: 'telefono', headerName: 'Teléfono', width: 130 },
+              { field: 'telefono', headerName: 'Teléfono', width: 150 },
+              { 
+                field: 'grupo', 
+                headerName: 'Grupo', 
+                width: 90,
+                valueGetter: (params) => params.row.grupo ? params.row.grupo : 'Sin grupo'
+              },
+              { 
+                field: 'gruposAnteriores', 
+                headerName: 'Grupos Anteriores', 
+                width: 200,
+              },
+              { field: 'vidas', headerName: 'Vidas', width: 130 },
               {
                 field: 'editar',
                 headerName: 'Editar',
@@ -121,10 +138,10 @@ const TablaAlumnado = () => {
                   <Link to={`/editar-alumno/${params.row.id}`}>
                     <Button 
                       variant="contained" 
-                      color="warning" // Cambiado a color amarillo
+                      color="warning"
                       size="small" 
                       startIcon={<EditIcon />}
-                      style={{ fontWeight: 'bold' }} // Cambiado a negrita y más grande
+                      style={{ fontWeight: 'bold' }}
                     >
                       Editar
                     </Button>
@@ -144,7 +161,7 @@ const TablaAlumnado = () => {
           </div>
         </Container>
       </div>
-      <AntdModal // Modificado el nombre del componente para evitar conflictos
+      <AntdModal
         title="Confirmar Eliminación"
         visible={confirmModalVisible}
         onCancel={() => setConfirmModalVisible(false)}

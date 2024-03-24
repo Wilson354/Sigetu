@@ -25,19 +25,19 @@ const { SubMenu } = Menu;
 const { Content, Footer, Sider } = Layout;
 
 const iconSize = 20;
-// Define tus elementos de menú
+
 const items = [
 
-  { key: '1', label: 'INICIO', icon: <HomeFilled style={{ fontSize: iconSize }} />, path: '/admin/inicio' },
+  { key: '1', label: 'INICIO', icon: <HomeFilled style={{ fontSize: iconSize }} />, path: '/admin/inicio/Admin' },
   { key: '2', label: 'PERFIL', icon: <IdcardFilled style={{ fontSize: iconSize }} />, path: '/admin/perfil' },
   {
     key: '3',
     label: 'ACADEMIA',
     icon: <FactCheckIcon style={{ fontSize: iconSize }} />,
     children: [
-      { key: '4', label: 'DOCENTES', icon: <FeedIcon style={{ fontSize: iconSize }} />, path: '/admin/crud' },
-      { key: '5', label: 'ALUMNOS', icon: <GroupsIcon style={{ fontSize: iconSize }} />, path: '/admin/showu' },
-      { key: '6', label: 'EVALUACIONES', icon: <PersonIcon style={{ fontSize: iconSize }} />, path: '/' },
+      { key: '4', label: 'ALUMNOS', icon: <GroupsIcon style={{ fontSize: iconSize }} />, path: '/admin/' },
+      { key: '5', label: 'DOCENTES', icon: <GroupsIcon style={{ fontSize: iconSize }} />, path: '/admin/' },
+      { key: '6', label: 'EVALUACIONES', icon: <PersonIcon style={{ fontSize: iconSize }} />, path: '/admin/' },
     ]
   },
   {
@@ -45,31 +45,24 @@ const items = [
     label: 'CONTROL ESCOLAR',
     icon: <FactCheckIcon style={{ fontSize: iconSize }} />,
     children: [
-      { key: '8', label: 'GRUPOS', icon: <FeedIcon style={{ fontSize: iconSize }} />, path: '/admin/grupos' },
-      { key: '9', label: 'PRE-REGISTRO', icon: <GroupsIcon style={{ fontSize: iconSize }} />, path: '/admin/showu' },
+      { key: '8', label: 'ASIGNAR GRUPOS', icon: <GroupsIcon style={{ fontSize: iconSize }} />, path: '/admin/asignar/grupos' },
+      { key: '9', label: 'GRUPOS', icon: <FeedIcon style={{ fontSize: iconSize }} />, path: '/admin/grupos' },
+      { key: '10', label: 'USUARIOS', icon: <GroupsIcon style={{ fontSize: iconSize }} />, path: '/admin/usuarios/general' },
+      { key: '11', label: 'ALUMNOS', icon: <GroupsIcon style={{ fontSize: iconSize }} />, path: '/admin/usuarios/alumnos' },
+      { key: '12', label: 'DOCENTES', icon: <GroupsIcon style={{ fontSize: iconSize }} />, path: '/admin/usuarios/docentes' },
     ]
   },
-  { key: '10', label: 'ESTADIAS', icon: <IdcardFilled style={{ fontSize: iconSize }} />, path: '/admin/perfil' },
-  { key: '11', label: 'EVALUACIÓN 360', icon: <IdcardFilled style={{ fontSize: iconSize }} />, path: '/admin/perfil' },
-  { key: '12', label: 'IDIOMAS', icon: <IdcardFilled style={{ fontSize: iconSize }} />, path: '/admin/perfil' },
-  { key: '13', label: 'REPORTES', icon: <IdcardFilled style={{ fontSize: iconSize }} />, path: '/admin/perfil' },
+  { key: '13', label: 'ESTADIAS', icon: <IdcardFilled style={{ fontSize: iconSize }} />, path: '/admin/' },
+  { key: '14', label: 'EVALUACIÓN 360', icon: <IdcardFilled style={{ fontSize: iconSize }} />, path: '/admin/' },
+  { key: '15', label: 'IDIOMAS', icon: <IdcardFilled style={{ fontSize: iconSize }} />, path: '/admin/' },
+  { key: '16', label: 'REPORTES', icon: <IdcardFilled style={{ fontSize: iconSize }} />, path: '/admin/' },
   {
-    key: '14',
+    key: '17',
     label: 'REGISTRAR',
     icon: <FactCheckIcon style={{ fontSize: iconSize }} />,
     children: [
-      { key: '15', label: 'ALUMNOS', icon: <FeedIcon style={{ fontSize: iconSize }} />, path: '/admin/registrar/alumnos' },
-      { key: '16', label: 'ADMINISTRATIVOS', icon: <GroupsIcon style={{ fontSize: iconSize }} />, path: '/admin/registrar/administrativos' },
-    ]
-  },
-  {
-    key: '17',
-    label: 'USUARIOS',
-    icon: <FactCheckIcon style={{ fontSize: iconSize }} />,
-    children: [
-      { key: '18', label: 'GENERAL', icon: <GroupsIcon style={{ fontSize: iconSize }} />, path: '/admin/usuarios/general' },
-      { key: '19', label: 'ALUMNOS', icon: <GroupsIcon style={{ fontSize: iconSize }} />, path: '/admin/usuarios/alumnos' },
-      { key: '20', label: 'DOCENTES', icon: <GroupsIcon style={{ fontSize: iconSize }} />, path: '/admin/usuarios/docentes' },
+      { key: '18', label: 'ALUMNOS', icon: <FeedIcon style={{ fontSize: iconSize }} />, path: '/admin/registrar/alumnos' },
+      { key: '19', label: 'ADMINISTRATIVOS', icon: <GroupsIcon style={{ fontSize: iconSize }} />, path: '/admin/registrar/administrativos' },
     ]
   },
 

@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
+import { collection, getDocs, deleteDoc, doc, getDoc } from 'firebase/firestore';
 import { db } from 'firebase.config';
 import { Container } from "reactstrap";
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import { Modal as AntdModal } from 'antd'; // Renombrado para evitar conflictos de nombres
+import { Modal as AntdModal } from 'antd';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import Checkbox from 'antd/lib/checkbox/Checkbox';
 import EditIcon from '@mui/icons-material/Edit';
 import { Link } from 'react-router-dom';
-import Pagination from '@mui/material/Pagination';
 
 const TablaDocentes = () => {
   const [docentes, setDocentes] = useState([]);
@@ -19,33 +18,39 @@ const TablaDocentes = () => {
 
   useEffect(() => {
     const fetchDocentes = async () => {
-      const docentesCollection = collection(db, 'docentes');
-      const docentesSnapshot = await getDocs(docentesCollection);
-      const docentesData = docentesSnapshot.docs.map((doc) => ({
-        id: doc.id,
-        nombres: doc.data().nombres,
-        apellidos: doc.data().apellidos,
-        genero: doc.data().genero,
-        telefono: doc.data().telefono,
-      }));
-      setDocentes(docentesData);
+      try {
+        const docentesCollection = collection(db, 'profesores');
+        const docentesSnapshot = await getDocs(docentesCollection);
+        const docentesData = await Promise.all(docentesSnapshot.docs.map(async (doc) => {
+          const docenteData = doc.data();
+          const gruposAsignados = docenteData.grupos_asignados || [];
+          const materiasAsignadas = docenteData.materias_asignadas || [];
+          return {
+            id: doc.id,
+            nombres: docenteData.nombre,
+            apellidos: docenteData.apellidos,
+            genero: docenteData.genero,
+            gruposAsignados,
+            materiasAsignadas
+          };
+        }));
+        setDocentes(docentesData);
+      } catch (error) {
+        console.error('Error al obtener docentes:', error);
+      }
     };
-
     fetchDocentes();
   }, []);
-
-  const handleSelectionChange = (newSelection) => {
-    setSelectedDocentes(newSelection);
-  };
 
   const deleteSelectedDocentes = async () => {
     try {
       const deletePromises = selectedDocentes.map(async (docenteId) => {
-        await deleteDoc(doc(db, 'docentes', docenteId));
+        await deleteDoc(doc(db, 'profesores', docenteId));
       });
       await Promise.all(deletePromises);
       setDocentes(docentes.filter((docente) => !selectedDocentes.includes(docente.id)));
       setSelectedDocentes([]);
+      setConfirmModalVisible(false);
     } catch (error) {
       console.error('Error eliminando Docentes: ', error);
     }
@@ -79,8 +84,8 @@ const TablaDocentes = () => {
               onClick={showConfirmModal}
               disabled={selectedDocentes.length === 0}
               variant="contained"
-              color="error" // Cambiado a color rojo
-              style={{ fontWeight: 'bold' }} // Cambiado a negrita y más grande
+              color="error"
+              style={{ fontWeight: 'bold' }}
             >
               Eliminar seleccionados
             </Button>
@@ -97,16 +102,16 @@ const TablaDocentes = () => {
           <DataGrid
             rows={docentes}
             columns={[
-              { 
-                field: 'checkbox', 
-                headerName: '', 
-                width: 50, 
+              {
+                field: 'checkbox',
+                headerName: '',
+                width: 50,
                 renderCell: (params) => (
-                  <Checkbox 
+                  <Checkbox
                     onChange={(e) => handleCheckboxChange(e, params.row.id)}
                     checked={selectedDocentes.includes(params.row.id)}
                   />
-                ) 
+                )
               },
               { field: 'id', headerName: 'ID', width: 150 },
               { field: 'nombres', headerName: 'Nombres', width: 150 },
@@ -114,17 +119,37 @@ const TablaDocentes = () => {
               { field: 'genero', headerName: 'Género', width: 130 },
               { field: 'telefono', headerName: 'Teléfono', width: 130 },
               {
+                field: 'gruposAsignados',
+                headerName: 'Grupos Asignados',
+                width: 180,
+                renderCell: (params) => (
+                  <div>
+                    {params.row.gruposAsignados.join(", ")}
+                  </div>
+                )
+              },
+              {
+                field: 'materiasAsignadas',
+                headerName: 'Materias Asignadas',
+                width: 200,
+                renderCell: (params) => (
+                  <div>
+                    {params.row.materiasAsignadas.join(", ")}
+                  </div>
+                )
+              },
+              {
                 field: 'editar',
                 headerName: 'Editar',
                 width: 100,
                 renderCell: (params) => (
                   <Link to={`/editar-docente/${params.row.id}`}>
-                    <Button 
-                      variant="contained" 
-                      color="warning" // Cambiado a color amarillo
-                      size="small" 
+                    <Button
+                      variant="contained"
+                      color="warning"
+                      size="small"
                       startIcon={<EditIcon />}
-                      style={{ fontWeight: 'bold' }} // Cambiado a negrita y más grande
+                      style={{ fontWeight: 'bold' }}
                     >
                       Editar
                     </Button>
@@ -144,12 +169,12 @@ const TablaDocentes = () => {
           </div>
         </Container>
       </div>
-      <AntdModal // Modificado el nombre del componente para evitar conflictos
+      <AntdModal
         title="Confirmar Eliminación"
         visible={confirmModalVisible}
         onCancel={() => setConfirmModalVisible(false)}
         onOk={handleEliminarClick}
-        style={{ zIndex: 9999 }} // Ajusta el z-index
+        style={{ zIndex: 9999 }}
       >
         <p>¿Está seguro de que desea eliminar los docentes seleccionados?</p>
       </AntdModal>

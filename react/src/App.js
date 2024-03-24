@@ -2,14 +2,15 @@ import "assets/plugins/nucleo/css/nucleo.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "assets/scss/argon-dashboard-react.scss";
 
-// Rutas buenas
 import React, { useState, useEffect } from "react";
 import { AuthProvider } from "context/AuthContext";
 import Home from "views/screens/Home";
+import Error500 from "../src/views/screens/Error500";
+import { Modal, Spin } from "antd";
 
 // Firebase
 import firebaseApp from "firebase.config";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 import Auth from "layouts/Auth";
 
@@ -18,6 +19,10 @@ const firestore = getFirestore(firebaseApp);
 
 function App() {
   const [user, setUser] = useState(null);
+  const [connectionError, setConnectionError] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [showErrorPage, setShowErrorPage] = useState(false);
+  const [countdown, setCountdown] = useState(10);
 
   let timeoutId;
 
@@ -27,11 +32,39 @@ function App() {
     }
 
     timeoutId = setTimeout(() => {
-      setUser(null);
-      console.log("¡Sesión cerrada por inactividad!");
-      window.location.href = "/auth/login";
-    }, 10 * 60 * 1000); // 10 minutos en milisegundos
+      signOut(auth)
+        .then(() => {
+          setUser(null);
+          console.log("¡Sesión cerrada por inactividad!");
+          window.location.href = "/auth/login";
+        })
+        .catch(error => console.error("Error al cerrar sesión:", error));
+    }, 10 * 60 * 1000);
   };
+
+  useEffect(() => {
+    const checkConnection = () => {
+      fetch("http://localhost:3000")
+        .then((res) => {
+          if (!res.ok) {
+            setConnectionError(true);
+            setShowModal(true);
+            resetTimer();
+          } else {
+            setConnectionError(false);
+          }
+        })
+        .catch(() => {
+          setConnectionError(true);
+          setShowModal(true);
+          resetTimer();
+        });
+    };
+
+    const intervalId = setInterval(checkConnection, 5000);
+
+    return () => clearInterval(intervalId);
+  }, []);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (usuarioFirebase) => {
@@ -43,19 +76,30 @@ function App() {
       }
     });
 
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
     return () => {
       unsubscribe();
-      window.removeEventListener("beforeunload", handleBeforeUnload);
       clearTimeout(timeoutId);
     };
   }, []);
 
-  const handleBeforeUnload = () => {
-    setUser(null);
-    console.log("¡Sesión cerrada antes de descargar la página!");
+  const handleUnload = () => {
+    if (user) {
+      signOut(auth)
+        .then(() => {
+          setUser(null);
+          console.log("¡Sesión cerrada antes de descargar la página!");
+        })
+        .catch(error => console.error("Error al cerrar sesión:", error));
+    }
   };
+
+  useEffect(() => {
+    window.addEventListener("unload", handleUnload);
+
+    return () => {
+      window.removeEventListener("unload", handleUnload);
+    };
+  }, [user]);
 
   async function getRol(uid) {
     const docuRef = doc(firestore, `usuarios/${uid}`);
@@ -75,11 +119,11 @@ function App() {
     console.log("userData final", userData);
   }
 
-  const handleUserActivity = () => {
-    resetTimer();
-  };
-
   useEffect(() => {
+    const handleUserActivity = () => {
+      resetTimer();
+    };
+
     window.addEventListener("mousemove", handleUserActivity);
     window.addEventListener("keypress", handleUserActivity);
 
@@ -89,10 +133,42 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    if (showModal && countdown > 0) {
+      const delayErrorPage = setTimeout(() => {
+        setCountdown(countdown - 1);
+      }, 1000); 
+
+      return () => clearTimeout(delayErrorPage);
+    } else if (countdown === 0) {
+      setShowErrorPage(true);
+    }
+  }, [showModal, countdown]);
+
   return (
     <AuthProvider>
       <>
-        {user ? <Home user={user} /> : <Auth />}
+        {showErrorPage ? (
+          <Error500 />
+        ) : (
+          <>
+            {connectionError ? (
+              <Modal
+                title="Error de conexión"
+                visible={showModal}
+                footer={null}
+                closable={false}
+              >
+                <h3>Estamos tratando de volver a conectar con el servidor</h3><Spin />
+                <p>La página se cerrará en {countdown} segundos.</p>
+              </Modal>
+            ) : (
+              <>
+                {user ? <Home user={user} /> : <Auth />}
+              </>
+            )}
+          </>
+        )}
       </>
     </AuthProvider>
   );
