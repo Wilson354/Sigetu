@@ -33,6 +33,7 @@ import Error500 from "views/screens/Error500";
 
 //docente
 import Iniciod from "views/sigetu/docentes/HomeDocentes";
+import AsignarAlumn from "views/sigetu/admin/grupos/AsignarAlumn";
 
 
 var routes = [
@@ -141,6 +142,12 @@ var routes = [
     path: "/asignar/grupos",
     name: "asignar",
     component: <AsignarGrupos/>,
+    layout: "/admin",
+  },
+  {
+    path: "/asignar/grupos/alumnos",
+    name: "asignar",
+    component: <AsignarAlumn/>,
     layout: "/admin",
   },
 

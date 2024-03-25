@@ -46,6 +46,7 @@ const items = [
     icon: <FactCheckIcon style={{ fontSize: iconSize }} />,
     children: [
       { key: '8', label: 'ASIGNAR GRUPOS', icon: <GroupsIcon style={{ fontSize: iconSize }} />, path: '/admin/asignar/grupos' },
+      { key: '20', label: 'ASIGNAR GRUPOS ALUMNOS', icon: <GroupsIcon style={{ fontSize: iconSize }} />, path: '/admin/asignar/grupos/alumnos' },
       { key: '9', label: 'GRUPOS', icon: <FeedIcon style={{ fontSize: iconSize }} />, path: '/admin/grupos' },
       { key: '10', label: 'USUARIOS', icon: <GroupsIcon style={{ fontSize: iconSize }} />, path: '/admin/usuarios/general' },
       { key: '11', label: 'ALUMNOS', icon: <GroupsIcon style={{ fontSize: iconSize }} />, path: '/admin/usuarios/alumnos' },

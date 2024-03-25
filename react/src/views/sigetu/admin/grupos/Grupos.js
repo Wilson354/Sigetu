@@ -141,7 +141,8 @@ const Grupos = () => {
                         <Stack direction="row" spacing={1} sx={{ mb: 1 }}>
                             <select value={selectedGrupo} onChange={handleGrupoChange}>
                                 <option value="">Seleccionar Grupo</option>
-                                <option value="8IDS1">1ISM2</option>
+                                <option value="1TSM2">1TSM2</option>
+                                <option value="7IDS1">7IDS1</option>
                                 <option value="8IDS1">8IDS1</option>
                                 <option value="9IDS1">9IDS1</option>
                                 <option value="10IDS1">10IDS1</option>
