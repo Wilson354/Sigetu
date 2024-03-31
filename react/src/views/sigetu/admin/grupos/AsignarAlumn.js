@@ -11,6 +11,8 @@ const AddGroupForm = () => {
   const [alumnos, setAlumnos] = useState([]);
   const [grupos, setGrupos] = useState([]);
   const [grupoId, setGrupoId] = useState(null);
+  const [materiasGrupo, setMateriasGrupo] = useState([]);
+  const [grupoNombres, setGrupoNombres] = useState({});
 
   useEffect(() => {
     const fetchAlumnos = async () => {
@@ -30,10 +32,17 @@ const AddGroupForm = () => {
     const fetchGrupos = async () => {
       try {
         const gruposSnapshot = await getDocs(collection(db, 'grados', 'ING', 'grupos'));
-        const gruposData = gruposSnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
+        const gruposData = gruposSnapshot.docs.map(doc => {
+          const grupoData = doc.data();
+          setGrupoNombres(prevState => ({
+            ...prevState,
+            [doc.id]: grupoData.nombre // Almacenar nombre del grupo por ID
+          }));
+          return {
+            id: doc.id,
+            ...grupoData
+          };
+        });
         setGrupos(gruposData);
       } catch (error) {
         console.error('Error al obtener los grupos:', error);
@@ -44,6 +53,41 @@ const AddGroupForm = () => {
     fetchAlumnos();
     fetchGrupos();
   }, []);
+
+  useEffect(() => {
+    const fetchMateriasGrupo = async () => {
+      if (grupoId) {
+        try {
+          const grupoDoc = await getDoc(doc(db, 'grados','ING', 'grupos',grupoId));
+          if (grupoDoc.exists()) {
+            const { materias_pred } = grupoDoc.data();
+  
+            // Array para almacenar los nombres de las materias
+            const materiasNombres = [];
+  
+            // Recorre las referencias de materias y obtén los nombres de las materias
+            for (const materiaRef of materias_pred) {
+              const materiaDoc = await getDoc(materiaRef);
+              if (materiaDoc.exists()) {
+                const { nombre } = materiaDoc.data();
+                materiasNombres.push(nombre);
+              }
+            }
+  
+            // Actualiza el estado con los nombres de las materias
+            setMateriasGrupo(materiasNombres);
+          } else {
+            setMateriasGrupo([]);
+          }
+        } catch (error) {
+          console.error('Error al obtener las materias del grupo:', error);
+          message.error('Hubo un error al cargar las materias del grupo. Por favor, inténtelo de nuevo más tarde.');
+        }
+      }
+    };
+  
+    fetchMateriasGrupo();
+  }, [grupoId]);
 
   const onFinish = async (values) => {
     setLoading(true);
@@ -65,29 +109,6 @@ const AddGroupForm = () => {
         });
       }
   
-      // Crear la subcolección "evaluaciones_grupo" para el alumno si no existe
-      const evaluacionesGrupoRef = doc(db, `alumnos/${alumnoId}/evaluaciones_grupo/${grupoId}`);
-  
-      // Crear los campos de materia dentro del documento del grupo si no existen
-      const materias = ["Materia1", "Materia2", "Materia3", "Materia4","Materia5","Materia6","Materia7"];
-      const evaluaciones = {
-        Parcial1: "SE",
-        Parcial2: "SE",
-        Parcial3: "SE",
-        Final: "SE",
-        Fecha: [],
-        Descripcion: "",
-        Nota: "",
-        Materia_ref: ""
-      };
-  
-      const updates = {};
-      for (const materia of materias) {
-        updates[materia] = evaluaciones;
-      }
-  
-      await setDoc(evaluacionesGrupoRef, updates);
-  
       // Agregar al alumno al grupo seleccionado en la subcolección "alumnos" dentro del grupo
       await setDoc(doc(db, `grados/ING/grupos/${grupoId}/alumnos`, alumnoId), {
         alumno_ref: doc(db, 'alumnos', alumnoId),
@@ -103,7 +124,11 @@ const AddGroupForm = () => {
     }
   };
   
-
+  const handleLimpiar = () => {
+    form.resetFields();
+    setMateriasGrupo([]);
+  };
+  
   return (
     <Form form={form} layout="vertical" onFinish={onFinish}>
       <Form.Item name="alumnoId" label="Seleccionar Alumno" rules={[{ required: true, message: 'Por favor, seleccione un alumno.' }]}>
@@ -118,7 +143,15 @@ const AddGroupForm = () => {
         <Select placeholder="Seleccione un grupo" onChange={value =>
           setGrupoId(value)}>
           {grupos.map(grupo => (
-            <Option key={grupo.id} value={grupo.id}>{grupo.nombre}</Option>
+            <Option key={grupo.id} value={grupo.id}>{grupoNombres[grupo.id]}</Option>
+          ))}
+        </Select>
+      </Form.Item>
+
+      <Form.Item label="Materias del Grupo">
+        <Select mode="multiple" value={materiasGrupo}>
+          {materiasGrupo.map(materia => (
+            <Option key={materia} value={materia}>{materia}</Option>
           ))}
         </Select>
       </Form.Item>
@@ -127,7 +160,7 @@ const AddGroupForm = () => {
         <Button type="primary" htmlType="submit" loading={loading}>
           Asignar Alumno al Grupo
         </Button>
-        <Button onClick={() => form.resetFields()} style={{ marginLeft: 8 }}>
+        <Button onClick={handleLimpiar} style={{ marginLeft: 8 }}>
           Limpiar
         </Button>
       </Form.Item>

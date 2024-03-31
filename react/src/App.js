@@ -104,19 +104,28 @@ function App() {
   async function getRol(uid) {
     const docuRef = doc(firestore, `usuarios/${uid}`);
     const docuCifrada = await getDoc(docuRef);
-    const infoFinal = docuCifrada.data().rol;
-    return infoFinal;
+  
+    if (docuCifrada.exists()) {
+      const infoFinal = docuCifrada.data().rol;
+      return infoFinal;
+    } else {
+      return null;
+    }
   }
 
   async function setUserWithFirebaseAndRol(usuarioFirebase) {
     const rol = await getRol(usuarioFirebase.uid);
-    const userData = {
-      uid: usuarioFirebase.uid,
-      email: usuarioFirebase.email,
-      rol: rol,
-    };
-    setUser(userData);
-    console.log("userData final", userData);
+    if (rol) {
+      const userData = {
+        uid: usuarioFirebase.uid,
+        email: usuarioFirebase.email,
+        rol: rol,
+      };
+      setUser(userData);
+      console.log("userData final", userData);
+    } else {
+      console.error("No se pudo obtener el rol del usuario.");
+    }
   }
 
   useEffect(() => {

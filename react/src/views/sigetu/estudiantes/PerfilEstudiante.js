@@ -1,90 +1,16 @@
 import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  FormGroup,
-  Form,
-  Input,
-  Container,
-  Row,
-  Col,
-  Modal,
-  Label,
-  FormText,
-  Table
+  Button, Card, CardHeader, CardBody, FormGroup, Form, Input, Container, Row, Col, Modal, Label, FormText, Table
 } from "reactstrap";
 import React, { useState, useEffect } from "react";
 import { useAuth } from "context/AuthContext";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc,collection, getDocs  } from "firebase/firestore";
 import { db, auth } from '../../../firebase.config';
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { message, Upload } from 'antd';
-import { format } from 'date-fns';
+import { notification, Upload, Image } from 'antd';
 
 
-const user = auth.currentUser;
-if (user) {
-  const userId = user.uid;
-  console.log(userId);
-} else {
-  console.log('No hay usuario autenticado');
-}
+const PerfilEstudiante = () => {
 
-const getBase64 = (img, callback) => {
-  const reader = new FileReader();
-  reader.addEventListener('load', () => callback(reader.result));
-  reader.readAsDataURL(img);
-};
-const beforeUpload = (file) => {
-  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-  if (!isJpgOrPng) {
-    message.error('You can only upload JPG/PNG file!');
-  }
-  const isLt2M = file.size / 1024 / 1024 < 2;
-  if (!isLt2M) {
-    message.error('Image must smaller than 2MB!');
-  }
-  return isJpgOrPng && isLt2M;
-};
-
-
-const Perfil = () => {
-  const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState();
   const [userData, setUserData] = useState(null);
-
-  const handleChange = (info) => {
-    if (info.file.status === 'uploading') {
-      setLoading(true);
-      return;
-    }
-    if (info.file.status === 'done') {
-      getBase64(info.file.originFileObj, (url) => {
-        setLoading(false);
-        setImageUrl(url);
-      });
-    }
-  };
-  const uploadButton = (
-    <button
-      style={{
-        border: 0,
-        background: 'none',
-      }}
-      type="button"
-    >
-      {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div
-        style={{
-          marginTop: 8,
-        }}
-      >
-        Upload
-      </div>
-    </button>
-  );
-
   const [defaultModal, setDefaultModal] = useState(false);
   const [AdeudoModal, setAdeudoModal] = useState(false);
   const [solicitudModal, setSolicitudModal] = useState(false);
@@ -114,8 +40,26 @@ const Perfil = () => {
         const user = auth.currentUser;
         if (user) {
           const userId = user.uid;
-          const userData = await getAlumnoById(userId);
-          setUserData(userData);
+          const userDocRef = doc(db, 'alumnos', userId);
+          const userDocSnap = await getDoc(userDocRef);
+          if (userDocSnap.exists()) {
+            const userData = userDocSnap.data();
+            setUserData(userData); // Establece los datos del documento principal de alumno
+  
+            // Ahora, dentro de esta lógica, puedes acceder a la subcolección 'informacion'
+            const informacionRef = collection(userDocRef, 'informacion');
+            const informacionSnapshot = await getDocs(informacionRef);
+            if (!informacionSnapshot.empty) {
+              const informacionData = informacionSnapshot.docs[0].data(); // Suponiendo que solo hay un documento en la subcolección
+              console.log('Informacion:', informacionData);
+              // Actualiza el estado local userData con los datos adicionales de la subcolección
+              setUserData(prevUserData => ({ ...prevUserData, curp: informacionData.curp, otroCampo: informacionData.otroCampo }));
+            } else {
+              console.log('No hay datos en la subcolección "informacion"');
+            }
+          } else {
+            console.log('No se encontraron datos para el usuario con el ID proporcionado');
+          }
         } else {
           console.log('No hay usuario autenticado');
         }
@@ -123,610 +67,260 @@ const Perfil = () => {
         console.error('Error al cargar los datos del usuario:', error);
       }
     };
+  
     fetchUserData();
   }, []);
-
-  const getAlumnoById = async (userId) => {
-    try {
-      const docRef = doc(db, 'usuarios', userId);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        const userData = docSnap.data();
-        console.log(userData);
-        return userData;
-      } else {
-        console.log('No se encontraron datos para el usuario con el ID proporcionado');
-        return null;
-      }
-    } catch (error) {
-      console.error('Error al obtener los datos del usuario:', error);
-      return null;
-    }
-  };
+  
+  
+  
 
   return (
     <>
       <Container fluid>
         <Row>
-          <Col className="order-xl-6 mb-5 mb-xl-0" xl="3">
+          <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
             <Card className="card-profile shadow">
-              <CardHeader CardHeader className=" border-0 text-center">
-                <Upload
-                  name="avatar"
-                  listType="picture-card"
-                  className="avatar-uploader"
-                  showUploadList={false}
-                  action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-                  beforeUpload={beforeUpload}
-                  onChange={handleChange}
-                >
-                  {imageUrl ? (
-                    <img
-                      src={imageUrl}
-                      alt="..."
-                      style={{
-                        maxWidth: '100%', // Limita el ancho de la imagen al ancho máximo del contenedor
-                        maxHeight: '100%', // Limita la altura de la imagen a la altura máxima del contenedor
-                        width: 'auto', // Hace que la imagen se ajuste automáticamente al ancho máximo permitido
-                        height: 'auto',
-                      }}
-                    />
-                  ) : (
-                    uploadButton
-                  )}
-                </Upload>
+              <CardHeader className="text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
+                <Image
+                  alt="Perfil"
+                  width={200}
+                  src={userData && userData.imgperfil}
+                />
               </CardHeader>
-              <hr className="my-1" />
-              <CardBody className="bg-dark shadow">
+              <CardBody className="pt-0 pt-md-4">
                 <Row>
-                  <Col md="12">
-                    <Button
-                      block
-                      className="mb-3"
-                      color="success"
-                      type="button"
-                    >
-                      <span className="btn-inner--icon">
-                        <i className="ni ni-bag-17" />
-                      </span>
-                      Biblioteca digital
-                    </Button>
-                  </Col>
-
-                  <Col md="12">
-                    <Button
-                      block
-                      className="mb-3"
-                      color="info"
-                      type="button"
-                    >
-                      <span className="btn-inner--icon">
-                        <i className="ni ni-bag-17" />
-                      </span>
-                      Horario
-                    </Button>
-                  </Col>
-
-{/* 
-=============================================================================================================================================================
-
-SECCION DE CREDENCIAL              
-El form es para hacer cambios a la credencial del estudiante se debe editar el form
-
-==============================================================================================================================================================
-*/}
-                  <Col md="12">
-                    <Button
-                      block
-                      className="mb-3"
-                      color="info"
-                      type="button"
-                      isOpen={defaultModal}
-                      onClick={() => toggleModal("defaultModal")}
-                    >
-                      <span className="btn-inner--icon">
-                        <i className="ni ni-bag-17" />
-                      </span>
-                      cedula de identificacion
-                    </Button>
-                    <Modal
-                      className="modal-dialog-centered"
-                      isOpen={defaultModal}
-                      toggle={() => toggleModal("defaultModal")}
-                    >
-                      <div className="modal-header">
-                        <h6 className="modal-title" id="modal-title-default">
-                          Type your modal title
-                        </h6>
-                        <button
-                          aria-label="Close"
-                          className="close"
-                          data-dismiss="modal"
-                          type="button"
-                          onClick={() => toggleModal("defaultModal")}
-                        >
-                          <span aria-hidden={true}>×</span>
-                        </button>
+                  <div className="col">
+                    <div className="card-profile-stats d-flex justify-content-center mt-md-5">
+                      <div>
+                        <span className="heading">22</span>
+                        <span className="description">Friends</span>
                       </div>
-                      <div className="modal-body">
-                        <Form>
-                          <FormGroup>
-                            <Label for="exampleEmail">
-                              Email
-                            </Label>
-                            <Input
-                              id="exampleEmail"
-                              name="email"
-                              placeholder="with a placeholder"
-                              type="email"
-                            />
-                          </FormGroup>
-                          <FormGroup>
-                            <Label for="examplePassword">
-                              Password
-                            </Label>
-                            <Input
-                              id="examplePassword"
-                              name="password"
-                              placeholder="password placeholder"
-                              type="password"
-                            />
-                          </FormGroup>
-                          <FormGroup>
-                            <Label for="exampleSelect">
-                              Select
-                            </Label>
-                            <Input
-                              id="exampleSelect"
-                              name="select"
-                              type="select"
-                            >
-                              <option>
-                                1
-                              </option>
-                              <option>
-                                2
-                              </option>
-                              <option>
-                                3
-                              </option>
-                              <option>
-                                4
-                              </option>
-                              <option>
-                                5
-                              </option>
-                            </Input>
-                          </FormGroup>
-                          <FormGroup>
-                            <Label for="exampleSelectMulti">
-                              Select Multiple
-                            </Label>
-                            <Input
-                              id="exampleSelectMulti"
-                              multiple
-                              name="selectMulti"
-                              type="select"
-                            >
-                              <option>
-                                1
-                              </option>
-                              <option>
-                                2
-                              </option>
-                              <option>
-                                3
-                              </option>
-                              <option>
-                                4
-                              </option>
-                              <option>
-                                5
-                              </option>
-                            </Input>
-                          </FormGroup>
-                          <FormGroup>
-                            <Label for="exampleText">
-                              Text Area
-                            </Label>
-                            <Input
-                              id="exampleText"
-                              name="text"
-                              type="textarea"
-                            />
-                          </FormGroup>
-                          <FormGroup>
-                            <Label for="exampleFile">
-                              File
-                            </Label>
-                            <Input
-                              id="exampleFile"
-                              name="file"
-                              type="file"
-                            />
-                            <FormText>
-                              This is some placeholder block-level help text for the above input. It‘s a bit lighter and easily wraps to a new line.
-                            </FormText>
-                          </FormGroup>
-                          <FormGroup tag="fieldset">
-                            <legend>
-                              Radio Buttons
-                            </legend>
-                            <FormGroup check>
-                              <Input
-                                name="radio1"
-                                type="radio"
-                              />
-                              {' '}
-                              <Label check>
-                                Option one is this and that—be sure to include why it‘s great
-                              </Label>
-                            </FormGroup>
-                            <FormGroup check>
-                              <Input
-                                name="radio1"
-                                type="radio"
-                              />
-                              {' '}
-                              <Label check>
-                                Option two can be something else and selecting it will deselect option one
-                              </Label>
-                            </FormGroup>
-                            <FormGroup
-                              check
-                              disabled
-                            >
-                              <Input
-                                disabled
-                                name="radio1"
-                                type="radio"
-                              />
-                              {' '}
-                              <Label check>
-                                Option three is disabled
-                              </Label>
-                            </FormGroup>
-                          </FormGroup>
-                          <FormGroup check>
-                            <Input type="checkbox" />
-                            {' '}
-                            <Label check>
-                              Check me out
-                            </Label>
-                          </FormGroup>
-                          <Button>
-                            Submit
-                          </Button>
-                        </Form>
+                      <div>
+                        <span className="heading">10</span>
+                        <span className="description">Photos</span>
                       </div>
-                      <div className="modal-footer">
-                        <Button color="primary" type="button">
-                          Aceptar
-                        </Button>
-                        <Button
-                          className="ml-auto"
-                          color="link"
-                          data-dismiss="modal"
-                          type="button"
-                          onClick={() => toggleModal("defaultModal")}
-                        >
-                          Cerrar
-                        </Button>
+                      <div>
+                        <span className="heading">89</span>
+                        <span className="description">Comments</span>
                       </div>
-                    </Modal>
-                  </Col>
-
-                  {/* MODALES PARA LAS NOTIFICACIONES DEBEN TENER EL MISMO NOMBRE PARA FUNCIONAR EN CONJUNTO DEPENDIENDO DE CADA COL*/}
-                  <Col md="12">
-                    <Button
-                      block
-                      className="mb-3"
-                      color="warning"
-                      type="button"
-                      onClick={() => toggleModal("AdeudoModal")}
-                    >
-                      <span className="btn-inner--icon">
-                        <i className="ni ni-bag-17" />
-                      </span>
-                      Adeudos
-                    </Button>
-                    <Modal
-                      className="modal-dialog-centered"
-                      isOpen={AdeudoModal}
-                      toggle={() => toggleModal("AdeudoModal")}
-                    >
-                      <div className="modal-header">
-                        <h6 className="modal-title" id="modal-title-default">
-                          Type your modal title
-                        </h6>
-                        <button
-                          aria-label="Close"
-                          className="close"
-                          data-dismiss="modal"
-                          type="button"
-                          onClick={() => toggleModal("AdeudoModal")}
-                        >
-                          <span aria-hidden={true}>×</span>
-                        </button>
-                      </div>
-                      <div className="modal-body">
-                        <p>
-                          Far far away, behind the word mountains, far from the
-                          countries Vokalia and Consonantia, there live the blind
-                          texts. Separated they live in Bookmarksgrove right at the
-                          coast of the Semantics, a large language ocean.
-                        </p>
-                        <p>
-                          A small river named Duden flows by their place and supplies
-                          it with the necessary regelialia. It is a paradisematic
-                          country, in which roasted parts of sentences fly into your
-                          mouth.
-                        </p>
-                      </div>
-                      <div className="modal-footer">
-                        <Button color="primary" type="button">
-                          Aceptar
-                        </Button>
-                        <Button
-                          className="ml-auto"
-                          color="link"
-                          data-dismiss="modal"
-                          type="button"
-                          onClick={() => toggleModal("AdeudoModal")}
-                        >
-                          Cerrar
-                        </Button>
-                      </div>
-                    </Modal>
-                  </Col>
-                  <Col md="12">
-                    <Button
-                      block
-                      className="mb-3"
-                      color="warning"
-                      type="button"
-                      onClick={() => toggleModal("solicitudModal")}
-                    >
-                      <span className="btn-inner--icon">
-                        <i className="ni ni-bag-17" />
-                      </span>
-                      Solicitud cambio carrera
-                    </Button>
-                    <Modal
-                      className="modal-dialog-centered modal-danger"
-                      contentClassName="bg-gradient-danger"
-                      isOpen={solicitudModal}
-                      toggle={() => toggleModal("solicitudModal")}
-                    >
-                      <div className="modal-header">
-                        <button
-                          aria-label="Close"
-                          className="close"
-                          data-dismiss="modal"
-                          type="button"
-                          onClick={() => toggleModal("solicitudModal")}
-                        >
-                          <span aria-hidden={true}>x</span>
-                        </button>
-                      </div>
-                      <div className="modal-body">
-                        <div className="py-3 text-center">
-                          <i className="ni ni-bell-55 ni-3x" />
-                          <h4 className="heading mt-4">No puedes cambiar de carrera en INGENIERIA PENDEJO!</h4>
-                          <p>
-                            jajajaja el menso
-                          </p>
-                        </div>
-                      </div>
-                      <div className="modal-footer">
-                        <Button className="btn-white" color="default" type="button">
-                          ENTERADO
-                        </Button>
-                        <Button
-                          className="text-white ml-auto"
-                          color="link"
-                          data-dismiss="modal"
-                          type="button"
-                          onClick={() => toggleModal("solicitudModal")}
-                        >
-                          Close
-                        </Button>
-                      </div>
-                    </Modal>
-                  </Col>
-
-                  <Col md="12">
-                    <Button
-                      block
-                      className="mb-3"
-                      color="danger"
-                      type="button"
-                      onClick={() => toggleModal("notificationModal")}
-                    >
-                      <span className="btn-inner--icon">
-                        <i className="ni ni-bag-17" />
-                      </span>
-                      Referencia bancaria
-                    </Button>
-                    <Modal
-                      className="modal-dialog-centered modal-danger"
-                      contentClassName="bg-gradient-danger"
-                      isOpen={notificationModal}
-                      toggle={() => toggleModal("notificationModal")}
-                    >
-                      <div className="modal-header">
-                        <h6 className="modal-title" id="modal-title-notification">
-                          Your attention is required
-                        </h6>
-                        <button
-                          aria-label="Close"
-                          className="close"
-                          data-dismiss="modal"
-                          type="button"
-                          onClick={() => toggleModal("notificationModal")}
-                        >
-                          <span aria-hidden={true}>×</span>
-                        </button>
-                      </div>
-                      <div className="modal-body">
-                        <div className="py-3 text-center">
-                          <i className="ni ni-bell-55 ni-3x" />
-                          <h4 className="heading mt-4">You should read this!</h4>
-                          <p>
-                            A small river named Duden flows by their place and
-                            supplies it with the necessary regelialia.
-                          </p>
-                        </div>
-                      </div>
-                      <div className="modal-footer">
-                        <Button className="btn-white" color="default" type="button">
-                          Ok, Got it
-                        </Button>
-                        <Button
-                          className="text-white ml-auto"
-                          color="link"
-                          data-dismiss="modal"
-                          type="button"
-                          onClick={() => toggleModal("notificationModal")}
-                        >
-                          Close
-                        </Button>
-                      </div>
-                    </Modal>
-                  </Col>
-
-                  <Col>
-                    <Button
-                      block
-                      className="mb-3"
-                      color="danger"
-                      type="button"
-                    >
-                      <span className="btn-inner--icon">
-                        <i className="ni ni-bag-17" />
-                      </span>
-                      cambio contraseña
-                    </Button>
-                  </Col>
+                    </div>
+                  </div>
                 </Row>
+                <div className="text-center">
+                  <h3>
+                    {userData && userData.nombres} {userData && userData.apellidos}
+                  </h3>
+                  <div className="h5 font-weight-300">
+                    <i className="ni location_pin mr-2" />
+                    Bucharest, Romania
+                  </div>
+                  <div className="h5 mt-4">
+                    <i className="ni business_briefcase-24 mr-2" />
+                    Solution Manager - Creative Tim Officer
+                  </div>
+                  <div>
+                    <i className="ni education_hat mr-2" />
+                    University of Computer Science
+                  </div>
+                  <hr className="my-4" />
+                  <p>
+                    Ryan — the name taken by Melbourne-raised, Brooklyn-based
+                    Nick Murphy — writes, performs and records all of his own
+                    music.
+                  </p>
+                  <a href="#pablo" onClick={(e) => e.preventDefault()}>
+                    Show more
+                  </a>
+                </div>
               </CardBody>
             </Card>
           </Col>
 
-{/*
-============================================================================================================================
-
-                          seccion de datos personales
-
-============================================================================================================================
-*/}
-          <Col className="order-xl-1" xl="9">
+          <Col className="order-xl-1" xl="8">
             <Card className="bg-secondary shadow">
-              <CardBody className="pt-0 pt-md-4">
-                <Col>
-                  <Row className="align-items-center">
-                    <div className="col">
-                      <h2 className="text-muted mb-2">
-                        Informacion personal
-                      </h2>
-                    </div>
-                  </Row>
-                  <Table borderless size="sm" className="align-items-center table-flush" responsive>
-                    <tbody>
-                      <tr>
-                        <th><h3>Matricula</h3></th>
-                        <td><h3>{userData && userData.matricula}</h3></td>
-                      </tr>
-                      <tr>
-                        <th><h3>Nombre completo</h3></th>
-                        <td>
-                        <h3>{userData && userData.nombres} {userData && userData.apellidos}</h3>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th><h3>Estado civil</h3></th>
-                        <td><h3>{userData && userData.civil}</h3></td>
-                      </tr>
-                      <tr>
-                        <th><h3>Curp</h3></th>
-                        <td><h3>{userData && userData.curp}</h3></td>
-                      </tr>
-                    </tbody>
-                  </Table>
-                </Col>
-
-                <hr className="my-2" />
-                <Col>
-                  <Row className="align-items-center">
-                    <div className="col">
-                      <h2 className="text-muted mb-1">
-                        Informacion Escolar
-                      </h2>
-                    </div>
-                  </Row>
-                  <Table borderless size="sm" className="align-items-center table-flush" responsive>
-                    <tbody>
-                      <tr>
-                        <th><h3>Carrera</h3></th>
-                        <td><h3>{userData && userData.carrera}</h3></td>
-                      </tr>
-                      <tr>
-                        <th><h3>Area</h3></th>
-                        <td><h3>{userData && userData.area}</h3></td>
-                      </tr>
-                      <tr>
-                        <th><h3>Grado</h3></th>
-                        <td><h3>{userData && userData.grado}</h3></td>
-                      </tr>
-                      <tr>
-                        <th><h3>Grupo</h3></th>
-                        <td><h3>{userData && userData.grupo}</h3></td>
-                      </tr>
-                      <tr>
-                        <th><h3>Grupo idioma</h3></th>
-                        <td><h3>{userData && userData.grupoi}</h3></td>
-                      </tr>
-                      <tr>
-                        <th><h3>Periodo</h3></th>
-                        <td><h3>{userData && userData.periodo}</h3></td>
-                      </tr>
-                      <tr>
-                        <th><h3>Vidas academicas</h3></th>
-                        <td><h3>{userData && userData.vidas}</h3></td>
-                      </tr>
-                      <tr>
-                        <th><h3>situacion</h3></th>
-                        <td><h3>{userData && userData.situacion}</h3></td>
-                      </tr>
-                    </tbody>
-                  </Table>
-                </Col>
-                <hr className="my-2" />
-                <Col>
-                  <Row className="align-items-center">
-                    <div className="col">
-                      <h2 className="text-muted mb-1">
-                        Numero de afiliacion de seguro facultativo
-                      </h2>
-                    </div>
-                  </Row>
-                  <Table borderless size="sm" className="align-items-center table-flush" responsive>
-                    <tbody>
-                      <tr>
-                        <th><h3>Institucion</h3></th>
-                        <td><h3>{userData && userData.institucion}</h3></td>
-                      </tr>
-                      <tr>
-                        <th><h3>numero de afilicacion</h3></th>
-                        <td><h3>{userData && userData.afiliacion}</h3></td>
-                      </tr>
-                      <tr>
-                        <th><h3>clinica</h3></th>
-                        <td><h3>{userData && userData.clinica}</h3></td>
-                      </tr>
-                    </tbody>
-                  </Table>
-                </Col>
+              <CardHeader className="bg-white border-0">
+                <Row className="align-items-center">
+                  <Col xs="8">
+                    <h3 className="mb-0">Mi cuenta</h3>
+                  </Col>
+                  <Col className="text-right" xs="4">
+                    <Button
+                      color="primary"
+                      href="#pablo"
+                      onClick={(e) => e.preventDefault()}
+                      size="sm"
+                    >
+                      AYUDA
+                    </Button>
+                  </Col>
+                </Row>
+              </CardHeader>
+              <CardBody>
+                <Form>
+                  <h6 className="heading-small text-muted mb-4">
+                    Informacion Personal
+                  </h6>
+                  <div className="pl-lg-4">
+                    <Row>
+                      <Col lg="6">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                          >
+                            Matricula
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            value={userData && userData.matricula}
+                            type="text"
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col lg="6">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-email"
+                          >
+                            Correo
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            value={userData && userData.correo}
+                            id="input-email"
+                            type="email"
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col lg="6">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                          >
+                            Curp
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            value={userData && userData.curp}
+                            type="text"
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col lg="6">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-last-name"
+                          >
+                            Apellidos
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            value={userData && userData.apellidos}
+                            id="input-last-name"
+                            placeholder="Last name"
+                            type="text"
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                  </div>
+                  <hr className="my-4" />
+                  <h6 className="heading-small text-muted mb-4">
+                    Contact information
+                  </h6>
+                  <div className="pl-lg-4">
+                    <Row>
+                      <Col md="12">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-address"
+                          >
+                            Address
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            defaultValue="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
+                            id="input-address"
+                            placeholder="Home Address"
+                            type="text"
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col lg="4">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-city"
+                          >
+                            City
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            defaultValue="New York"
+                            id="input-city"
+                            placeholder="City"
+                            type="text"
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col lg="4">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-country"
+                          >
+                            Country
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            defaultValue="United States"
+                            id="input-country"
+                            placeholder="Country"
+                            type="text"
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col lg="4">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-country"
+                          >
+                            Postal code
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            id="input-postal-code"
+                            placeholder="Postal code"
+                            type="number"
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                  </div>
+                  <hr className="my-4" />
+                  {/* Description */}
+                  <h6 className="heading-small text-muted mb-4">About me</h6>
+                  <div className="pl-lg-4">
+                    <FormGroup>
+                      <label>About Me</label>
+                      <Input
+                        className="form-control-alternative"
+                        placeholder="A few words about you ..."
+                        rows="4"
+                        defaultValue="A beautiful Dashboard for Bootstrap 4. It is Free and
+                        Open Source."
+                        type="textarea"
+                      />
+                    </FormGroup>
+                  </div>
+                </Form>
               </CardBody>
             </Card>
           </Col>
@@ -736,4 +330,4 @@ El form es para hacer cambios a la credencial del estudiante se debe editar el f
   );
 };
 
-export default Perfil;
+export default PerfilEstudiante;

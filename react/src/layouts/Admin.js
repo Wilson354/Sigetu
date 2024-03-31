@@ -64,6 +64,7 @@ const items = [
     children: [
       { key: '18', label: 'ALUMNOS', icon: <FeedIcon style={{ fontSize: iconSize }} />, path: '/admin/registrar/alumnos' },
       { key: '19', label: 'ADMINISTRATIVOS', icon: <GroupsIcon style={{ fontSize: iconSize }} />, path: '/admin/registrar/administrativos' },
+      { key: '21', label: 'DOCENTES', icon: <GroupsIcon style={{ fontSize: iconSize }} />, path: '/admin/registrar/docentes' },
     ]
   },
 

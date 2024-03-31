@@ -93,15 +93,15 @@ function RegAlumno() {
     async function registrarUsuario(email, password, rol, values) {
         try {
             setLoading(true);
-
+    
             const matriculaExistente = await verificarMatriculaExistente(matricula);
             if (matriculaExistente) {
                 message.error("La matrícula ingresada ya está en uso. Por favor, elige otra.");
                 return;
             }
-
+    
             const idDocumento = matricula;
-
+    
             const userDataUsuarios = {
                 correo: email,
                 rol: rol,
@@ -109,32 +109,35 @@ function RegAlumno() {
                 apellidos: values.apellidos,
                 matricula: matricula,
             };
-
+    
             // Crear una cuenta de usuario en Firebase Authentication
             const auth = getAuth(firebaseApp);
             const infoUsuario = await createUserWithEmailAndPassword(auth, email, password);
-
-            const docuRefUsuarios = doc(firestore, `usuarios/${infoUsuario.user.uid}`);
+    
+            // Utilizar la misma matrícula como ID para ambos documentos
+            const docuRefUsuarios = doc(firestore, `usuarios/${idDocumento}`);
             await setDoc(docuRefUsuarios, userDataUsuarios);
-
+    
             let userDataAdicional = {
                 nombres: values.nombres,
                 apellidos: values.apellidos,
                 genero: values.genero,
+                matricula: matricula,
+                correo: email,
             };
-
+    
             const collectionPath = "alumnos";
             const docuRefAdicional = doc(firestore, `${collectionPath}/${idDocumento}`);
             await setDoc(docuRefAdicional, userDataAdicional);
             console.log(`Información adicional para alumno guardada correctamente.`);
-
+    
             // Incrementar el contador de matrículas
             const contadorRef = doc(firestore, 'contadores', 'matricula');
             const docSnap = await getDoc(contadorRef);
             const ultimoNumero = docSnap.data().ultimoNumero;
             const nuevoNumero = ultimoNumero + 1;
             await setDoc(contadorRef, { ultimoNumero: nuevoNumero });
-
+    
             message.success("¡Usuario registrado exitosamente!");
         } catch (error) {
             message.error("Error al registrar usuario: " + error.message);
@@ -142,7 +145,6 @@ function RegAlumno() {
             setLoading(false);
         }
     }
-
     async function verificarMatriculaExistente(matricula) {
         const docSnap = await getDoc(doc(firestore, `usuarios/${matricula}`));
         return docSnap.exists();
@@ -222,7 +224,7 @@ function RegAlumno() {
                                     >
                                         <Input.Password />
                                     </Form.Item>
-
+                                    
                                     <Form.Item
                                         name="nombres"
                                         label="Nombres"

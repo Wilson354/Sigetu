@@ -11,7 +11,10 @@ const AsignarG = () => {
   const [materias, setMaterias] = useState([]);
   const [grupos, setGrupos] = useState([]);
   const [gradoId, setGradoId] = useState(null);
-  const [form] = Form.useForm(); 
+  const [form] = Form.useForm();
+  const [grupoId, setGrupoId] = useState(null);
+  const [materiasGrupo, setMateriasGrupo] = useState([]);
+  const [grupoNombres, setGrupoNombres] = useState({});
 
   useEffect(() => {
     let unsubscribeGrados;
@@ -97,6 +100,42 @@ const AsignarG = () => {
     };
   }, [gradoId]);
 
+  useEffect(() => {
+    const fetchMateriasGrupo = async () => {
+      if (grupoId) {
+        try {
+          const grupoDoc = await getDoc(doc(db, 'grados','ING', 'grupos',grupoId));
+          if (grupoDoc.exists()) {
+            const { materias_pred } = grupoDoc.data();
+  
+            // Array para almacenar los nombres de las materias
+            const materiasNombres = [];
+  
+            // Recorre las referencias de materias y obtén los nombres de las materias
+            for (const materiaRef of materias_pred) {
+              const materiaDoc = await getDoc(materiaRef);
+              if (materiaDoc.exists()) {
+                const { nombre } = materiaDoc.data();
+                materiasNombres.push(nombre);
+              }
+            }
+  
+            // Actualiza el estado con los nombres de las materias
+            setMateriasGrupo(materiasNombres);
+          } else {
+            setMateriasGrupo([]);
+          }
+        } catch (error) {
+          console.error('Error al obtener las materias del grupo:', error);
+          notification.error('Hubo un error al cargar las materias del grupo. Por favor, inténtelo de nuevo más tarde.');
+        }
+      }
+    };
+  
+    fetchMateriasGrupo();
+  }, [grupoId]);
+  
+
   const onFinish = async (values) => {
     try {
       const { profesorId, materiaNombre, grupoId } = values;
@@ -173,10 +212,11 @@ const handleReset = () => {
           ))}
         </Select>
       </Form.Item>
-      <Form.Item name="grupoId" label="Seleccionar Grupo" rules={[{ required: true, message: 'Por favor selecciona un grupo.' }]}>
-        <Select>
+      <Form.Item name="grupoId" label="Seleccionar Grupo" rules={[{ required: true, message: 'Por favor, seleccione un grupo.' }]}>
+        <Select placeholder="Seleccione un grupo" onChange={value =>
+          setGrupoId(value)}>
           {grupos.map(grupo => (
-            <Option key={grupo.id} value={grupo.id}>{grupo.nombre}</Option>
+            <Option key={grupo.id} value={grupo.id}>{grupoNombres[grupo.id]}</Option>
           ))}
         </Select>
       </Form.Item>
@@ -187,13 +227,13 @@ const handleReset = () => {
           ))}
         </Select>
       </Form.Item>
-      <Form.Item name="materiaNombre" label="Nombre de la Materia" rules={[{ required: true, message: 'Por favor ingresa el nombre de la materia.' }]}>
-        <Select>
-          {materias.map(materia => (
-            <Option key={materia.id} value={materia.id}>{materia.nombre}</Option>
-          ))}
-        </Select>
-      </Form.Item>
+      <Form.Item name="materiaNombre" label="Materias del Grupo" rules={[{ required: true, message: 'Por favor selecciona una materia.' }]}>
+  <Select onChange={value => form.setFieldsValue({ materiaNombre: value })}>
+    {materiasGrupo.map(materia => (
+      <Option key={materia} value={materia}>{materia}</Option>
+    ))}
+  </Select>
+</Form.Item>
       <Form.Item>
       <Button type="primary" htmlType="submit">Asignar Grupo</Button>
       <Button onClick={handleReset}>Limpiar Formulario</Button>

@@ -76,7 +76,7 @@ export default function HomeWrapper(props) {
   console.log("Rendering HomeWrapper component");
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/auth/login" />} />
+      <Route path="/" element={<AuthLayouth/>} />
       {/* Rutas de alumnos */}
       <Route path="/alumno/*" element={<AlumnoLayout />}>
         <Route path="inicio" element={<Inicio />} />

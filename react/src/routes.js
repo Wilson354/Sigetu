@@ -24,6 +24,7 @@ import AlumnadoS from "views/sigetu/admin/tablas/TablaAlumnado"
 import DocenteS from "views/sigetu/admin/tablas/TablaDocentes"
 import Grupos from "views/sigetu/admin/grupos/Grupos";
 import AsignarGrupos from "views/sigetu/admin/grupos/AsignarG";
+import RegDocente from "views/sigetu/admin/registros/RegDocente";
 
 //auth
 import Login from "views/screens/Login"
@@ -98,6 +99,12 @@ var routes = [
     path: "/registrar/administrativos",
     name: "registrar",
     component: <Administrativos/>,
+    layout: "/admin",
+  },
+  {
+    path: "/registrar/docentes",
+    name: "registrar",
+    component: <RegDocente/>,
     layout: "/admin",
   },
   {

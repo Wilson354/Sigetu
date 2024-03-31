@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Button, Col, Form, Input, Row, Select, Card, message } from 'antd';
 import { CardHeader, Container } from 'reactstrap';
 import firebaseApp from "../../../../firebase.config";
-import { getAuth } from "firebase/auth";
-import { getFirestore, doc, setDoc, getDoc, increment } from "firebase/firestore";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 
 const auth = getAuth(firebaseApp);
 
@@ -48,7 +48,8 @@ function RegAdmin() {
     const [generatedPassword, setGeneratedPassword] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
     const [loading, setLoading] = useState(false);
-    const [matricula, setMatricula] = useState(""); // Inicializa el estado matricula con un valor vacío
+    const [matricula, setMatricula] = useState("");
+    
 
     useEffect(() => {
         async function obtenerUltimaMatricula() {
@@ -99,6 +100,10 @@ function RegAdmin() {
     async function registrarUsuario(values) {
         try {
             setLoading(true);
+            const { email, password } = values;
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const { user } = userCredential;
+
 
             const matriculaExistente = await verificarMatriculaExistente(matricula);
             if (matriculaExistente) {
@@ -125,9 +130,6 @@ function RegAdmin() {
             };
             let collectionPath = "";
             switch (values.select) {
-                case "alumno":
-                    collectionPath = "alumnos";
-                    break;
                 case "docente":
                     collectionPath = "profesores";
                     break;
@@ -241,21 +243,21 @@ function RegAdmin() {
                                     </Form.Item>
 
                                     <Form.Item
-    label="Rol"
-    name="select"  // Nombre del campo para recopilar el valor del rol
-    rules={[
-        {
-            required: true,
-            message: 'Por favor, selecciona un rol!',
-        },
-    ]}
->
-    <Select defaultValue="admin" onChange={(value) => setRol(value)}>
-        <Select.Option value="admin">Administrador</Select.Option>
-        <Select.Option value="docente">Docente</Select.Option>
-        {/* Agrega más opciones de rol según sea necesario */}
-    </Select>
-</Form.Item>
+                                        label="Rol"
+                                        name="select"  // Nombre del campo para recopilar el valor del rol
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: 'Por favor, selecciona un rol!',
+                                            },
+                                        ]}
+                                    >
+                                        <Select defaultValue="" onChange={(value) => setRol(value)}>
+                                            <Select.Option value="admin">Administrador</Select.Option>
+                                            <Select.Option value="docente">Docente</Select.Option>
+                                            {/* Agrega más opciones de rol según sea necesario */}
+                                        </Select>
+                                    </Form.Item>
 
                                     <Form.Item
                                         name="nombres"
