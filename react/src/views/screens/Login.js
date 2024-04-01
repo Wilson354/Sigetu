@@ -103,7 +103,6 @@ const Login = () => {
 
         // Incrementar el contador de intentos de inicio de sesión fallidos
   setLoginAttempts(prevAttempts => prevAttempts + 1);
-  
         // Manejar errores de autenticación
         if (errorCode === "auth/wrong-password" || errorCode === "auth/user-not-found") {
           setError("Usuario o contraseña incorrectos");
@@ -113,6 +112,8 @@ const Login = () => {
           setError("Credenciales inválidas. Por favor, verifica tu correo y contraseña e intenta de nuevo.");
         } else if (errorCode === "auth/too-many-requests") {
           setError("Tu cuenta ha sido temporalmente deshabilitada debido a demasiados intentos fallidos de inicio de sesión. Puedes restaurarla inmediatamente restableciendo tu contraseña o puedes intentarlo de nuevo más tarde.");
+        } else if (errorCode === "auth/user-disabled") {
+          setError("Tienes adeudos pendientes por completar, favor de acudir a tu edificio y solicitar la activacion");
         } else {
           setError(errorMessage);
         }

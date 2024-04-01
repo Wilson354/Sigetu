@@ -1,19 +1,53 @@
-
-import {
-    Button,
-    Card,
-    CardHeader,
-    CardBody,
-    FormGroup,
-    Form,
-    Input,
-    Container,
-    Row,
-    Col,
-  } from "reactstrap";
-  // core components
+import { Card, CardHeader, CardBody, FormGroup, Form, Input, Container, Row, Col, Modal, } from "reactstrap";
+import React, { useState, useEffect } from "react";
+import { useAuth } from "context/AuthContext";
+import { doc, getDoc, collection, getDocs } from "firebase/firestore";
+import { db, auth } from '../../../firebase.config';
+import { Button, Image, Flex,Table } from 'antd';
 
   const PerfilAdmin = () => {
+
+    const [userData, setUserData] = useState(null);
+
+    useEffect(() => {
+      const fetchUserData = async () => {
+        try {
+          const user = auth.currentUser;
+          if (user) {
+            const userId = user.uid;
+            const userDocRef = doc(db, 'administradores', userId);
+            const userDocSnap = await getDoc(userDocRef);
+            if (userDocSnap.exists()) {
+              const userData = userDocSnap.data();
+              setUserData(userData); // Establece los datos del documento principal de alumno
+  
+              // Accede a la subcolección 'informacion'
+              const informacionRef = collection(userDocRef, 'informacion');
+              const informacionSnapshot = await getDocs(informacionRef);
+              if (!informacionSnapshot.empty) {
+                const informacionData = {};
+                informacionSnapshot.forEach(doc => {
+                  informacionData[doc.id] = doc.data();
+                });
+                console.log('Datos de la subcolección "informacion":', informacionData);
+                setUserData(prevUserData => ({ ...prevUserData, informacion: informacionData }));
+              } else {
+                console.log('No hay datos en la subcolección "informacion"');
+              }
+            } else {
+              console.log('No se encontraron datos para el usuario con el ID proporcionado');
+            }
+          } else {
+            console.log('No hay usuario autenticado');
+          }
+        } catch (error) {
+          console.error('Error al cargar los datos del usuario:', error);
+        }
+      };
+  
+      fetchUserData();
+    }, []);
+
     return (
       <>
         <Container fluid>
@@ -124,179 +158,195 @@ import {
                   </Row>
                 </CardHeader>
                 <CardBody>
-                  <Form>
-                    <h6 className="heading-small text-muted mb-4">
-                      User information
-                    </h6>
-                    <div className="pl-lg-4">
-                      <Row>
-                        <Col lg="6">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-username"
-                            >
-                              Username
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              defaultValue="lucky.jesse"
-                              id="input-username"
-                              placeholder="Username"
-                              type="text"
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col lg="6">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-email"
-                            >
-                              Email address
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              id="input-email"
-                              placeholder="jesse@example.com"
-                              type="email"
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col lg="6">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-first-name"
-                            >
-                              First name
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              defaultValue="Lucky"
-                              id="input-first-name"
-                              placeholder="First name"
-                              type="text"
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col lg="6">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-last-name"
-                            >
-                              Last name
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              defaultValue="Jesse"
-                              id="input-last-name"
-                              placeholder="Last name"
-                              type="text"
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                    </div>
-                    <hr className="my-4" />
-                    {/* Address */}
-                    <h6 className="heading-small text-muted mb-4">
-                      Contact information
-                    </h6>
-                    <div className="pl-lg-4">
-                      <Row>
-                        <Col md="12">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-address"
-                            >
-                              Address
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              defaultValue="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
-                              id="input-address"
-                              placeholder="Home Address"
-                              type="text"
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col lg="4">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-city"
-                            >
-                              City
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              defaultValue="New York"
-                              id="input-city"
-                              placeholder="City"
-                              type="text"
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col lg="4">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-country"
-                            >
-                              Country
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              defaultValue="United States"
-                              id="input-country"
-                              placeholder="Country"
-                              type="text"
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col lg="4">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-country"
-                            >
-                              Postal code
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              id="input-postal-code"
-                              placeholder="Postal code"
-                              type="number"
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                    </div>
-                    <hr className="my-4" />
-                    {/* Description */}
-                    <h6 className="heading-small text-muted mb-4">About me</h6>
-                    <div className="pl-lg-4">
-                      <FormGroup>
-                        <label>About Me</label>
-                        <Input
-                          className="form-control-alternative"
-                          placeholder="A few words about you ..."
-                          rows="4"
-                          defaultValue="A beautiful Dashboard for Bootstrap 4. It is Free and
-                          Open Source."
-                          type="textarea"
-                        />
-                      </FormGroup>
-                    </div>
-                  </Form>
-                </CardBody>
+                <Form>
+                  <h6 className="heading-small text-muted mb-4">
+                    Informacion Personal
+                  </h6>
+                  <div className="pl-lg-4">
+                    <Row>
+                      <Col lg="6">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                          >
+                            Matricula
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            value={userData && userData.matricula}
+                            type="text"
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col lg="6">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-email"
+                          >
+                            Correo
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            value={userData && userData.correo}
+                            id="input-email"
+                            type="email"
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col lg="6">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                          >
+                            Curp
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            value={userData && userData.informacion && userData.informacion.datos_personales && userData.informacion.datos_personales.curp}
+                            type="text"
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col lg="6">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-last-name"
+                          >
+                            Vidas academicas
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            value={userData && userData.vidas}
+                            id="input-last-name"
+                            placeholder="Last name"
+                            type="text"
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                  </div>
+                  <hr className="my-4" />
+                  <h6 className="heading-small text-muted mb-4">
+                    Información Escolar
+                  </h6>
+                  <div className="pl-lg-4">
+                    <Row>
+                      <Col md="6">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                          >
+                            Carrera
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            value={userData && userData.informacion && userData.informacion.escolar && userData.informacion.escolar.carrera}
+                            type="text"
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col md="6">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                          >
+                            Carrera
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            value={userData && userData.informacion && userData.informacion.escolar && userData.informacion.escolar.area}
+                            type="text"
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col lg="4">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                          >
+                            Grupo
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            value={userData && userData.informacion && userData.informacion.escolar && userData.informacion.escolar.grupo}
+                            type="text"
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col lg="4">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                          >
+                            Grupo inglés
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            value={userData && userData.informacion && userData.informacion.escolar && userData.informacion.escolar.grupo_i}
+                            type="text"
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col lg="4">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-country"
+                          >
+                            situacion
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            value={userData && userData.informacion && userData.informacion.escolar && userData.informacion.escolar.situacion}
+                            type="text"
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                  </div>
+                  <hr className="my-4" />
+                  <h6 className="heading-small text-muted mb-4">Seguro Facultativo</h6>
+                  <div className="pl-lg-4">
+                    <Row>
+                      <Col lg="6">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                          >
+                            Institucion
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            value={userData && userData.informacion && userData.informacion.datos_personales && userData.informacion.datos_personales.institucion}
+                            type="text"
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col lg="6">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-email"
+                          >
+                            Número de afiliación
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            value={userData && userData.informacion && userData.informacion.datos_personales && userData.informacion.datos_personales.nss}
+                            type="text"
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                  </div>
+                </Form>
+              </CardBody>
               </Card>
             </Col>
           </Row>
